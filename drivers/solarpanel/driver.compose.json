@@ -1,0 +1,29 @@
+{
+  "name": { "nl": "Zonnepanelen",
+            "en": "Solarpanels" },
+  "class": "sensor",
+  "capabilities": [
+    "measure_power",
+    "meter_power.daily",
+    "meter_power"
+  ],
+  "settings": [
+    { "id": "username", "type": "text", "label": { "nl": "Gebruikersnaam" , "en" : "Username"}, "required": true },
+    { "id": "password", "type": "password", "label": { "nl": "Wachtwoord" , "en": "Password"}, "required": true }
+  ],
+  "pair": [
+  {
+    "id": "enterkeys",
+    "template": "list_devices",
+          "navigation": {
+      "next": "add_devices"
+      }
+  },
+      {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+
+]
+
+}

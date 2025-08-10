@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": { "en": "Power generated",
+             "nl": "Gegenereerd vermogen",
+             "de": "Erzeugte Leistung",
+             "fr": "Énergie produite"},
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "W"},
+  "insights": true,
+  "icon" : "/assets/icons/measure_power.svg"
+}

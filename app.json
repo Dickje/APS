@@ -1,0 +1,416 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "nl.dj.aps",
+  "version": "1.1.5",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "APsystems Solar Panels"
+  },
+  "brandColor": "#FD8103",
+  "description": {
+    "en": "Read power and energy from APsystems Solar Panels",
+    "nl": "Vermogen en productie van APsystems zonnepanelen uitlezen",
+    "fr": "Lire la puissance et l'énergie des panneaux solaires APsystems",
+    "de": "Lesen Sie Leistung und Energie von APsystems-Solarmodulen"
+  },
+  "category": "energy",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "author": {
+    "name": "Dick Juffermans",
+    "email": "dick.juffermans@gmail.com"
+  },
+  "tags": {
+    "en": [
+      "Solar",
+      "Solar panel",
+      "Solarpanel",
+      "Energy",
+      "AP systems",
+      "APsystems",
+      "AP Systems",
+      "APSystems",
+      "ECU"
+    ],
+    "nl": [
+      "Zonne energie",
+      "Zonnepanelen",
+      "Zonnepaneel",
+      "AP systems",
+      "APsystems",
+      "AP Systems",
+      "APSystems",
+      "ECU"
+    ],
+    "fr": [
+      "Énergie solaire ",
+      "Panneaux solaires",
+      "Panneau solaire",
+      "Systèmes AP",
+      "Systemes AP",
+      "APSystems",
+      "ECU"
+    ],
+    "de": [
+      "Solarenergie",
+      "Solarmodule",
+      "Solarmodul",
+      "AP-Systeme",
+      "AP-Systeme",
+      "AP-Systeme",
+      "AP-Systeme",
+      "ECU"
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "@DickJuffermans"
+      }
+    }
+  },
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Error in retreiving ECU-data",
+          "nl": "Fout bij het ophalen van ECU-gegevens",
+          "de": "Fehler beim Abrufen der ECU-Daten",
+          "fr": "Erreur lors de la récupération des données ECU"
+        },
+        "hint": {
+          "en": "Let's you know when the ECU is not communicating",
+          "nl": "Laat je weten dat de ECU niet communiceert",
+          "de": "Informiert Sie darüber, dass die ECU nicht kommuniziert",
+          "fr": "Vous permet de savoir que l'ECU ne communique pas"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "No connection to ECU",
+              "fr": "Aucune connexion à l'ECU",
+              "de": "Keine Verbindung zur ECU",
+              "nl": "Geen verbinding met ECU"
+            }
+          }
+        ],
+        "id": "ECU_error"
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "ECU"
+      },
+      "energy": {
+        "meterPowerExportedCapability": "meter_power.exported"
+      },
+      "class": "solarpanel",
+      "capabilities": [
+        "measure_voltage",
+        "measure_temperature",
+        "meter_power.exported",
+        "peak_power",
+        "measure_power",
+        "inverters_online"
+      ],
+      "capabilitiesOptions": {
+        "measure_power": {
+          "title": {
+            "en": "Power",
+            "nl": "Vermogen",
+            "fr": "Pouvoir",
+            "de": "Leistung"
+          },
+          "icon": "assets/icons/measure_power.svg"
+        },
+        "measure_voltage": {
+          "title": {
+            "en": "Voltage",
+            "nl": "Spanning",
+            "de": "Spannung",
+            "fr": "Tension"
+          }
+        },
+        "meter_power.exported": {
+          "title": {
+            "en": "Generated energy",
+            "nl": "Opgewekte energie",
+            "fr": "Énergie générée",
+            "de": "Erzeugte Energie"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/ecu/assets/images/small.png",
+        "large": "/drivers/ecu/assets/images/large.png",
+        "xlarge": "/drivers/ecu/assets/images/xlarge.png"
+      },
+      "measure_temperature": {
+        "name": {
+          "en": "My Driver"
+        },
+        "images": {
+          "small": "/drivers/my_driver/assets/images/small.png",
+          "large": "/drivers/my_driver/assets/images/large.png"
+        }
+      },
+      "pair": [
+        {
+          "id": "enterkeys",
+          "options": {
+            "logo": "APSlogo.png"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "ecu",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "ECU data",
+            "nl": "ECU gegevens",
+            "de": "Steuergerätedaten",
+            "fr": "Données de l'ECU"
+          },
+          "children": [
+            {
+              "id": "ECU_ID",
+              "type": "text",
+              "label": {
+                "en": "The serial number of the ECU",
+                "nl": "Het serienummer van de ECU",
+                "fr": "Le numéro de série de l'ECU",
+                "de": "Die Seriennummer der ECU"
+              },
+              "value": "123456789012",
+              "hint": {
+                "en": "The number is on the device.",
+                "nl": "Het nummer op het apparaat ",
+                "fr": "Le numéro sur l'appareil",
+                "de": "Die Nummer auf dem Gerät"
+              }
+            },
+            {
+              "id": "ECU_address",
+              "type": "text",
+              "label": {
+                "en": "The IP adress of ECU",
+                "nl": "Het IP adres van de ECU",
+                "fr": "L'adresse IP de l'ECU",
+                "de": "Die IP-Adresse der ECU"
+              },
+              "value": "192.192.192.192",
+              "hint": {
+                "en": "The wifi IP address.",
+                "nl": "Het wifi IP adres",
+                "fr": "L'adresse IP du Wi-Fi",
+                "de": "Die WLAN-IP-Adresse"
+              }
+            },
+            {
+              "id": "ECU_firmware",
+              "type": "label",
+              "label": {
+                "en": "The current firmware of ECU",
+                "nl": "De firmware van de ECU",
+                "fr": "Le firmware actuel de l'ECU",
+                "de": "Die aktuelle Firmware des Steuergerätes"
+              },
+              "value": "",
+              "setable": false,
+              "hint": {
+                "en": "This cannot be changed by the user",
+                "nl": "Deze kan niet gewijzigd worden door de gebruiker",
+                "fr": "Cela ne peut pas être modifié par l'utilisateur",
+                "de": "Dies kann vom Benutzer nicht geändert werden"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Polling data",
+            "nl": "Polling gegevens",
+            "de": "Umfragedaten",
+            "fr": "Données de sondage"
+          },
+          "children": [
+            {
+              "id": "pause_start",
+              "type": "text",
+              "label": {
+                "en": "Pause start time (HH:MM)",
+                "nl": "Pauze start tijd (HH:MM)",
+                "de": "Pausenbeginn (HH:MM)",
+                "fr": "Heure de début de la pause (HH:MM)"
+              },
+              "default": "23:00"
+            },
+            {
+              "id": "pause_end",
+              "type": "text",
+              "label": {
+                "en": "Pause end time (HH:MM)",
+                "nl": "Pauze eind tijd (HH:MM)",
+                "de": "Endzeit der Pause (HH:MM)",
+                "fr": "Heure de fin de pause (HH:MM)"
+              },
+              "default": "06:00"
+            },
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Polling interval (minutes)",
+                "nl": "Polling interval (minuten)",
+                "de": "Abfrageintervall (Minuten)",
+                "fr": "Intervalle d'interrogation (minutes)"
+              },
+              "default": 1,
+              "units": {
+                "en": "minutes",
+                "nl": "minuten",
+                "de": "Minuten",
+                "fr": "minutes"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "nl": "Zonnepanelen",
+        "en": "Solarpanels"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "meter_power.daily",
+        "meter_power"
+      ],
+      "settings": [
+        {
+          "id": "username",
+          "type": "text",
+          "label": {
+            "nl": "Gebruikersnaam",
+            "en": "Username"
+          },
+          "required": true
+        },
+        {
+          "id": "password",
+          "type": "password",
+          "label": {
+            "nl": "Wachtwoord",
+            "en": "Password"
+          },
+          "required": true
+        }
+      ],
+      "pair": [
+        {
+          "id": "enterkeys",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "solarpanel"
+    }
+  ],
+  "capabilities": {
+    "inverters_online": {
+      "type": "string",
+      "title": {
+        "en": "Inverters online",
+        "nl": "Inverters online",
+        "fr": "Onduleurs en ligne",
+        "de": "Wechselrichter online"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "insights": false,
+      "icon": "/assets/icons/inverters_online.svg"
+    },
+    "measure_power": {
+      "type": "number",
+      "title": {
+        "en": "Power generated",
+        "nl": "Gegenereerd vermogen",
+        "de": "Erzeugte Leistung",
+        "fr": "Énergie produite"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "W"
+      },
+      "insights": true,
+      "icon": "/assets/icons/measure_power.svg"
+    },
+    "peak_power": {
+      "type": "number",
+      "title": {
+        "en": "Peak power",
+        "nl": "Piekvermogen",
+        "fr": "Puissance de crête",
+        "de": "Spitzenleistung"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "W"
+      },
+      "insights": false,
+      "icon": "/assets/icons/peak_power.svg"
+    }
+  }
+}
