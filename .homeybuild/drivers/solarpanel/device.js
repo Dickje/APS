@@ -6,7 +6,7 @@ const { login, getData } = require('../../lib/apsystems');
 class ZonnepanelenDevice extends Device {
 
   async onInit() {
-    this.log('Zonnepanelen device gestart');
+    this.log('Solarpanels intializing');
     this.startPolling();
   }
 
@@ -17,23 +17,36 @@ class ZonnepanelenDevice extends Device {
   }
 
   async updateData() {
-    try {
-      // const username = this.getSetting('username');
-      // const password = this.getSetting('password');
-      const username = "Juffermans";
-      const password = "lM67M^pfp&V5L"
+      // const Username = this.homey.settings.get("User_name");
+      // const Password = this.homey.settings.get("Pass_word");
+      const Username = "Juffermans";
+      const Password = "lM67M^pfp&V5L";
 
-      const cookie = await login(username, password);
+
+      const cookie = await login(Username, Password);
       const data = await getData(cookie);
 
       await this.setCapabilityValue('measure_power', data.currentPower);
       await this.setCapabilityValue('meter_power.daily', data.today);
       await this.setCapabilityValue('meter_power', data.lifetime);
 
-      this.log('Gegevens bijgewerkt:', data);
-    } catch (err) {
-      this.error('Fout bij ophalen zonnepanelen data:', err);
-    }
+//     try {
+
+//       const Username = this.homey.settings.get("User_name");
+//       const Password = this.homey.settings.get("Pass_word");
+// console.log('Username:', Username);
+// console.log('Password:', Password);
+//       const cookie = await login(Username, Password);
+//       const data = await getData(cookie);
+
+//       await this.setCapabilityValue('measure_power', data.currentPower);
+//       await this.setCapabilityValue('meter_power.daily', data.today);
+//       await this.setCapabilityValue('meter_power', data.lifetime);
+
+//       this.log('Data updated:', data);
+//     } catch (err) {
+//       this.error('Error in retrieving datda:', err);
+//     }
   }
 
   onDeleted() {

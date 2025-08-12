@@ -13,27 +13,26 @@ module.exports = class Solardriver extends Homey.Driver {
     this.log("Web credentials received");
 
 console.log("data",data);
-    //const { ECU_ID, ECU_address } = data;
-    const { ECU_address } = data;
-   // this.homey.settings.set("ECU_ID", ECU_ID);
-    this.homey.settings.set("ECU_address", ECU_address);
+    const { Username, Password } = data;
+    this.homey.settings.set("User_name", Username);
+    this.homey.settings.set("Pass_word", Password);
 
     console.log('Pairing...');
 
-    //console.log('ECU ID:', ECU_ID);
   });
 
     session.setHandler("list_devices", async () => {
     console.log("Listing devices...");
 
-    const { Username, Password } = data;
-    this.homey.settings.set("User_name", Username);
-    this.homey.settings.set("Pass_word", Password);
+    const Username = this.homey.settings.get("User_name");
+    const Password = this.homey.settings.get("Pass_word");
     const id = Username+Password;
-
+    console.log ("ID:",id)
 
     try {
-      const data = await ECU_connection.fetchData(ECU_address, ECU_command);
+      if (!Username || !Password) {
+        throw new Error("Username or Password not set");
+      }
 
       const devices = {
         name: 'APsystems web access',
