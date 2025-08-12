@@ -1,0 +1,90 @@
+{
+  "id": "nl.dj.aps",
+  "version": "1.1.5",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "APsystems Solar Panels"
+  },
+  "brandColor": "#FD8103",
+  "description": {
+    "en": "Read power and energy from APsystems Solar Panels",
+    "nl": "Vermogen en productie van APsystems zonnepanelen uitlezen",
+    "fr": "Lire la puissance et l'énergie des panneaux solaires APsystems",
+    "de": "Lesen Sie Leistung und Energie von APsystems-Solarmodulen"
+  },
+  "category": "energy",
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png"
+  },
+  "author": {
+    "name": "Dick Juffermans",
+    "email": "dick.juffermans@gmail.com"
+  },
+  "tags": {
+    "en": [
+      "Solar",
+      "Solar panel",
+      "Solarpanel",
+      "Energy",
+      "AP systems",
+      "APsystems",
+      "AP Systems",
+      "APSystems",
+      "ECU"
+        ],
+    "nl": [
+      "Zonne energie",
+      "Zonnepanelen",
+      "Zonnepaneel",
+      "AP systems",
+      "APsystems",
+      "AP Systems",
+      "APSystems",
+      "ECU"
+    ],
+    "fr": [
+      "Énergie solaire ",
+      "Panneaux solaires",
+      "Panneau solaire",
+      "Systèmes AP",
+      "Systemes AP",
+      "APSystems",
+      "ECU"
+    ],
+    "de": [
+      "Solarenergie",
+      "Solarmodule",
+      "Solarmodul",
+      "AP-Systeme",
+      "AP-Systeme",
+      "AP-Systeme",
+      "AP-Systeme",
+      "ECU"
+    ]
+  },
+  "drivers": [
+    {
+      "id": "zonnepanelen",
+      "name": { "nl": "Zonnepanelen" ,
+                "en": "Solarpanels"},
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "meter_power.daily",
+        "meter_power"
+      ]
+    }
+  ],
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "@DickJuffermans"
+      }}}
+
+}

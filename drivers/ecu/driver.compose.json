@@ -1,0 +1,83 @@
+{
+  "name": {
+    "en": "ECU"
+  },
+  "energy": {
+    "meterPowerExportedCapability": "meter_power.exported"
+  },
+  "class": "solarpanel",
+  "capabilities": [
+    "measure_voltage",
+    "measure_temperature",
+    "meter_power.exported",
+    "peak_power",
+    "measure_power",
+    "inverters_online"
+  ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "title": {
+        "en": "Power",
+        "nl": "Vermogen",
+        "fr": "Pouvoir",
+        "de": "Leistung"
+      },
+      "icon" : "assets/icons/measure_power.svg"
+    },
+    "measure_voltage": {
+      "title": {
+        "en": "Voltage",
+        "nl": "Spanning",
+        "de": "Spannung",
+        "fr": "Tension"
+      }
+    },
+    "meter_power.exported": {
+      "title": {
+        "en": "Generated energy",
+        "nl": "Opgewekte energie",
+        "fr": "Énergie générée",
+        "de": "Erzeugte Energie"
+      }
+    }
+  },
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "lan"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "measure_temperature": {
+    "name": {
+      "en": "My Driver"
+    },
+    "images": {
+      "small": "/drivers/my_driver/assets/images/small.png",
+      "large": "/drivers/my_driver/assets/images/large.png"
+    }
+  },
+  "pair": [
+    {
+      "id": "enterkeys",
+      "options": {
+        "logo": "APSlogo.png"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+      "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ]
+}
