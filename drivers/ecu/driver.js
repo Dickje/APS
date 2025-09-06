@@ -11,43 +11,36 @@ module.exports = class ECUdriver extends Homey.Driver {
  
   async onPair(session) {
     session.setHandler("keys_entered", async (data) => {
-    this.log("ECU credentials received");
+    this.log("ECU IP address received");
 
-
-    //const { ECU_ID, ECU_address } = data;
     const { ECU_address } = data;
-   // this.homey.settings.set("ECU_ID", ECU_ID);
     this.homey.settings.set("ECU_address", ECU_address);
 
     console.log('Pairing...');
     console.log('IP address:', ECU_address);
-    //console.log('ECU ID:', ECU_ID);
   });
 
     session.setHandler("list_devices", async () => {
     const ECU_connection = new ECU_connector();
     console.log("Listing devices...");
 
-    //const ECU_ID = this.homey.settings.get("ECU_ID");
     const ECU_address = this.homey.settings.get("ECU_address");
     const ECU_command = 'APS1100160001END';
 
     try {
       const data = await ECU_connection.fetchData(ECU_address, ECU_command);
-
       const buffer = Buffer.from(data.data)
       var Segment = buffer.subarray(55,60); // The ECU type bytes
       var decodedString = Segment.toString('utf8'); // Of 'ascii', afhankelijk van de codering
       this.homey.settings.set("ECU_ID", decodedString);
 
-      //if (data && data.length > 16 && decodedString.substring(0,3) === "ECU")
-        if (decodedString.substring(0,3) === "ECU"){
+      if (decodedString.substring(0,3) === "ECU"){
         console.log("✅ " + decodedString + "detected");
       } else {  
         console.log("❌ Error: No ECU detected");
       }
       const hexSegment = buffer.slice(13,25); // The ECU ID bytes
-      decodedString = hexSegment.toString('utf8'); // Of 'ascii', afhankelijk van de codering
+      decodedString = hexSegment.toString('utf8'); 
       const ECU_ID = decodedString
       this.homey.settings.set("ECU_ID",ECU_ID);
 

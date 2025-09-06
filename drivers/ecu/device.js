@@ -12,8 +12,9 @@ let firmware='';
 let pauseStartStr;
 let pauseEndStr;
 let pollingInterval=1;
+let dataerror=false;
 
-module.exports = class MyDevice extends Homey.Device {
+module.exports = class MyECU extends Homey.Device {
 
   /**
    * onInit is called when the device is initialized.
@@ -94,44 +95,24 @@ getEnergyData = async()=>{
     buffer = await this.getECUdata('APS1100280002', ECU_ID, ECU_address);
     console.log('Type of buffer:', typeof(buffer));
     if (buffer != null ){
-    this.hexdumpall(buffer);
-    const payload = buffer.subarray(16, 194); // The relevant data
-    const blockSize = 21; //Number of bytes per inverter
+        this.hexdumpall(buffer);
+        const payload = buffer.subarray(16, 194); // The relevant data
+        const blockSize = 21; //Number of bytes per inverter
 
-    //Get data from the response
-    for (let i = 10; i < payload.length; i += blockSize) {
-    // const record = payload.slice(i, i + blockSize);
-    // const volt = parseInt(record[16], 10);
-    // const temp = (record[11] << 8 | record[12])- 100; // Combine two bytes and correct -100
-    // const online = parseInt(record[6]);
+        //Get data from the response
+        for (let i = 0; i < payload.length; i += blockSize) {
 
-  //const baseOffset = 16; // Start van eerste record
-  const baseOffset = -5; // Start van eerste record. Kan straks +5 worden wanneer de for-loop begint met i=0.
-  // nog wel het aantal inverters mee laten tellen in de loop.
-
-  const recordStart = baseOffset + (i + blockSize);
-  const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in dat record
-  const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
-  const online = parseInt(buffer[recordStart + 6], 10);
-  
-      // console.log('Temp oude wijze:', temp);
-      // //const volt2 = parseInt(buffer[36],10);
-      // console.log('Temp wijze', temp2);
-
-      // console.log('Inv. oude wijze:', online);
-      // //const volt2 = parseInt(buffer[36],10);
-      // console.log('Inv. wijze', online2);
-
-      // console.log('Spanning oude wijze:', volt);
-      // //const volt2 = parseInt(buffer[36],10);
-      // console.log('Nieuwe wijze', volt2);
-
-
-    if(online == 1){ 
-    totalVoltage += volt;
-    totalTemperature += temp;
-    totalRecords++;}
-    }
+              const baseOffset = 5; // Start of first record 
+              const recordStart = baseOffset + (i + blockSize);
+              const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in record
+              const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
+              const online = parseInt(buffer[recordStart + 6], 10);
+        
+          if(online == 1){ 
+              totalVoltage += volt;
+              totalTemperature += temp;
+              totalRecords++;}
+        }
 
   // Recap
   const averageVoltage = totalVoltage / totalRecords;
@@ -148,77 +129,53 @@ getEnergyData = async()=>{
   this.setCapabilityValue("measure_temperature",averageTemp);
  }
 }
+
 async getPowerData() {
   console.log('Getting powerdata');
   buffer = await this.getECUdata('APS1100160001','', ECU_address);
+
   if (buffer != null) {
-  this.hexdumpall(buffer);
-  const lifeEnergy = ((buffer[27] << 24) | (buffer[28] << 16) | (buffer[29] << 8) | buffer[30]) >>> 0;
-  const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
-  const todaysEnergy = (((buffer[35] << 24) | (buffer[36] << 16) | (buffer[37] << 8) | buffer[38]) >>> 0)/ 100;
-  const invertersOnline = parseInt(buffer[49],10);
-  console.log('lifeEnergy', lifeEnergy);
-  console.log('currentPower', currentPower);
-  console.log('todaysEnergy', todaysEnergy);
-  console.log('Inverters online', invertersOnline);
- 
+    this.hexdumpall(buffer);
+    const lifeEnergy = ((buffer[27] << 24) | (buffer[28] << 16) | (buffer[29] << 8) | buffer[30]) >>> 0;
+    const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
+    const todaysEnergy = (((buffer[35] << 24) | (buffer[36] << 16) | (buffer[37] << 8) | buffer[38]) >>> 0)/ 100;
+    const invertersOnline = parseInt(buffer[49],10);
+    console.log('lifeEnergy', lifeEnergy);
+    console.log('currentPower', currentPower);
+    console.log('todaysEnergy', todaysEnergy);
+    console.log('Inverters online', invertersOnline);
 
-const hexSegment = buffer.subarray(55,60); // of buffer.slice(13, eindIndex) als je een eind hebt
+    if (currentPower > this.getStoreValue("peak_power")){
+      peak_power = currentPower;
+      this.setStoreValue("peak_power", peak_power);
+    };
 
-// Decodeer het naar string
-const decodedString = hexSegment.toString('utf8'); // Of 'ascii', afhankelijk van de codering
-
-console.log('ECUID:', decodedString);
-
-
-  if (currentPower > peak_power){
-    peak_power = currentPower;
-    this.setStoreValue("peakpower", peak_power);
+    await this.setCapabilityValue("meter_power.exported", todaysEnergy);
+    await this.setCapabilityValue("measure_power", currentPower);
+    await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
+    await this.setCapabilityValue("peak_power", peak_power);
+    if (invertersOnline == 0) {
+      this.setCapabilityValue("measure_power",null);
+      this.setCapabilityValue("measure_voltage",null);
+      this.setCapabilityValue("measure_temperature", null);
+    
+      const time = await this.getTime();
+      if (time === "23:59") {
+        peak_power = 0;
+        this.setStoreValue("peak_power", peak_power);
+        console.log("Peak power reset");
+        this.addToTimeline("Peak power resetted");
+        await this.setCapabilityValue("peak_power", peak_power)
+      }
+    };  
   };
-
-  console.log("Piek uit de storevalue ", this.getStoreValue("peakpower"));
-
-  await this.setCapabilityValue("meter_power.exported", todaysEnergy);
-  await this.setCapabilityValue("measure_power", currentPower);
-  await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
-  await this.setCapabilityValue("peak_power", peak_power);
-  if (invertersOnline == 0) {
-    this.setCapabilityValue("measure_power",null);
-    this.setCapabilityValue("measure_voltage",null);
-    this.setCapabilityValue("measure_temperature", null);
-   
-    const time = await this.getTime();
-    if (time === "23:59") {
-      peak_power = 0;
-      console.log("Peak power reset");
-      this.addToTimeline("Peak power resetted");
-      await this.setCapabilityValue("peak_power", peak_power)
-    }
-    };
-  
-
-  // A bit of logging because of power peaks of 55kW...
-  const hexDumpString = await this.hexdumpall(buffer);
-  //  if (currentPower > 6000 && this && this.homey && this.homey.notifications) {
-  //   const boodschap = `Te hoog vermogen ${currentPwr}\nHexdump:\n${hexDumpString}`;
-  //   await this.homey.notifications.createNotification({
-  //       excerpt: `${boodschap}`
-  //   })};
-     if (currentPower > 6000) {
-    const boodschap = `Te hoog vermogen ${currentPwr}\nHexdump:\n${hexDumpString}`;
-   this.addToTimeline(boodschap);
-    };
-}
 };
 
-  /**
-   * onAdded is called when the user adds the device, called just after pairing.
-   */
-  async onAdded() {
-    this.log('ECU has been added');
-  }
+async onAdded() {
+  this.log('ECU has been added');
+}
 
- async onSettings({ oldSettings, newSettings, changedKeys }) {
+async onSettings({ oldSettings, newSettings, changedKeys }) {
   this.log('ECU settings were changed');
   console.log('🔧 Old settings:', oldSettings);
   console.log('🆕 New settings:', newSettings);
@@ -262,57 +219,44 @@ console.log('ECUID:', decodedString);
   return messages.join('\n');
  }
 
-  /**
-   * onRenamed is called when the user updates the device's name.
-   * This method can be used this to synchronise the name to the device.
-   * @param {string} name The new name
-   */
-  async onRenamed(name) {
+async onRenamed(name) {
     this.log('ECU was renamed');
   }
 
-  /**
-   * onDeleted is called when the user deleted the device.
-   */
-  async onDeleted() {
+async onDeleted() {
     this.log('ECU has been deleted');
   }
-
-//}
 
 async getNumberOfInverters(){
   let inverters;
   try {
- //let buffer =  await this.extractECUdata()
   buffer =  await this.extractECUdata();
         inverters = (buffer[46] << 8) | buffer[47];
       if (isNaN(inverters)) {
         throw new Error("❗ Failed to parse inverter count from buffer.");
       }
-    } catch(err){
-        console.error(`❌ Error in getNumberOfInverters: ${err.message}`);
-        return null;
-    }
-        return inverters;
+  } catch(err){
+      console.error(`❌ Error in getNumberOfInverters: ${err.message}`);
+      return null;
+  }
+    return inverters;
 }
 
 async getFirmwareVersion() {
   let firmware;   //declare outside try-catch block
   try {
-   //let buffer =  await this.extractECUdata();
-      buffer =  await this.extractECUdata();
+  buffer =  await this.extractECUdata();
       const sliced = buffer.subarray(61, 67); // Byte 61-67 for firmware version
       firmware = sliced.toString('utf8'); 
       if (firmware == null) {
       throw new Error("❗ Failed to get firmware from buffer.");
       }
-    } catch(err){
-        console.error(`❌ Error in getFirmwareVersion: ${err.message}`);
-        return null;
-    }
-        return firmware;
+  } catch(err){
+      console.error(`❌ Error in getFirmwareVersion: ${err.message}`);
+      return null;
+  }
+      return firmware;
 }
-
 
 async extractECUdata() {
   try {
@@ -363,17 +307,17 @@ async hexdumpall(buffer) {
 }
 
 async getECUdata(command, ECU_ID, ECU_address) {
-//test:
-    //await this.homey.flow.getTriggerCard('ECU_not_responding').trigger({error: "Testing"});
 
 try {
     const ECU_command = command + ECU_ID + 'END';
     const ECU_connection = new ECU_connector();
     const ecudata = await ECU_connection.fetchData(ECU_address, ECU_command);
     console.log('getECUdata result:', ecudata);
-     
+    if (!ecudata || !ecudata.data) {
+      console.error('❗ Geen geldige ECU data ontvangen.');
+      return null;
+    }
     const buffer = Buffer.from(ecudata.data);
-
     return buffer;
     } catch (error) {
     if (error.message == null){error.message= 'Undefined'};
@@ -383,10 +327,8 @@ try {
     console.log("Type return from ECU:", (typeof(buffer)));
     console.log("Buffer ", buffer);
 
-    // Optioneel: log ook de code en stacktrace
-    if (error.code) console.error("🔹 Errorcode:", error.code);
-    //console.error("🔹 Stacktrace:", error.stack);
 
+    if (error.code) console.error("🔹 Errorcode:", error.code);
 
     if (this && this.homey && this.homey.notifications) {
       this.addToTimeline(this.homey.__("ECU_data_failure") + error.message);
@@ -441,10 +383,6 @@ async pollLoop() {
   const currentTime = await this.getTime(); 
   const [hour, minute] = currentTime.split(':').map(Number);
   const nowMinutes = hour * 60 + minute;
-
-  // pauseStartStr = this.homey.settings.get('pause_start') || "23:00";
-  // pauseEndStr = this.homey.settings.get('pause_end') || "06:00";
-  // pollingInterval = parseInt(this.homey.settings.get('poll_interval')) || "2";
 
   if (!isValidTimeFormat(pauseStartStr)) {
     console.error("pause_start is no valid time!")
