@@ -26,5 +26,10 @@
   "1.1.5": {
     "en": "Deleted a line of code that in some cases seem to crash the app"
   },
-  "Volgende versie": { "en": "The peak power is now reset every day. Added a setting to pause the ECU polling within a timeframe. Added an input for the ECU polling interval."}
+  "Volgende versie": {
+    "en": "The peak power is now reset every day. Added a setting to pause the ECU polling within a timeframe. Added an input for the ECU polling interval."
+  },
+  "1.2.0": {
+    "en": "Discarded web access, no more need to put in ECU ID"
+  }
 }

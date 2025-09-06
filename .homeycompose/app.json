@@ -1,6 +1,6 @@
 {
   "id": "nl.dj.aps",
-  "version": "1.1.5",
+  "version": "1.2.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -37,7 +37,7 @@
       "AP Systems",
       "APSystems",
       "ECU"
-        ],
+    ],
     "nl": [
       "Zonne energie",
       "Zonnepanelen",
@@ -71,8 +71,10 @@
   "drivers": [
     {
       "id": "zonnepanelen",
-      "name": { "nl": "Zonnepanelen" ,
-                "en": "Solarpanels"},
+      "name": {
+        "nl": "Zonnepanelen",
+        "en": "Solarpanels"
+      },
       "class": "sensor",
       "capabilities": [
         "measure_power",
@@ -85,6 +87,7 @@
     "donate": {
       "paypal": {
         "username": "@DickJuffermans"
-      }}}
-
+      }
+    }
+  }
 }
