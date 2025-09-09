@@ -8,7 +8,8 @@ class MyApp extends Homey.App {
    */
   async onInit() {
     console.log("The app has been initialized");
-    this.cartTriggerError = this.homey.flow.getTriggerCard("ECU_error") 
+    const ECU_error = this.homey.flow.getTriggerCard("ECU_error") 
+    //const ECU_power_changed = this.homey.flow.getTriggerCard("ECU_power_changed");
 
   }
 };

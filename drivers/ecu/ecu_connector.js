@@ -6,6 +6,8 @@ const net = require('net');
     ECU_address = ECU_address.split('.').map(Number).join('.'); // Normalize the IP
     console.log('Command', ECU_command, 'to IP address', ECU_address);
 
+    //throw new Error("timeoutError")
+
     return new Promise((resolve, reject) => {
       const client = new net.Socket();
       client.setTimeout(5000); // 5 seconds timeout
@@ -13,20 +15,20 @@ const net = require('net');
 
       client.connect(8899, ECU_address, () => { client.write(ECU_command, 'utf-8'); });
 
-      client.on('error', (connectionError) => {
-        console.error('❗ Connection error:', connectionError.message);
+      client.on('error', () => {
+        console.error('❗ Connection error');
         client.destroy();
         if (hasError) return;
         hasError = true;
-         reject (new Error(connectionError));
+         reject (new Error('connectionError'));
       });
 
-      client.on('timeout', (timeoutError) => {
-        console.error('⏱️ Timeout error:', timeoutError.message);
+      client.on('timeout', () => {
+        console.error('⏱️ Timeout error');
         client.destroy();
         if (hasError) return;
         hasError = true;
-        reject (new Error(timeoutError));
+        reject (new Error('timeoutError'));
       });
 
       client.on('data', (data) => {

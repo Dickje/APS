@@ -11,8 +11,9 @@ let peak_power=0;
 let firmware='';
 let pauseStartStr;
 let pauseEndStr;
-let pollingInterval=1;
-let dataerror=false;
+let pollingInterval=2;
+let lastPower=0;
+
 
 module.exports = class MyECU extends Homey.Device {
 
@@ -56,15 +57,19 @@ module.exports = class MyECU extends Homey.Device {
 
     ECU_address = this.homey.settings.get('ECU_address');
     ECU_ID = this.homey.settings.get("ECU_ID");
+  
     
     console.log('On init ECU address', ECU_address);
-    console.log('On init ECU ID', ECU_ID);
+    console.log('On init ECU ID', ECU_ID,' of type ', (typeof(ECU_ID)));
+
 
     console.log("Getting number of inverters.");
     inverters = await this.getNumberOfInverters();
+    console.log('Number of inverters:', inverters, ' of type ', (typeof(inverters))); 
 
     console.log("Getting firmware version.");
     firmware = await this.getFirmwareVersion();
+    console.log('Firmware version:', firmware, ' of type ', (typeof(firmware)));
 
     // Get polling settings
     pauseStartStr = this.homey.settings.get('pause_start') || "23:00";
@@ -133,6 +138,7 @@ getEnergyData = async()=>{
 async getPowerData() {
   console.log('Getting powerdata');
   buffer = await this.getECUdata('APS1100160001','', ECU_address);
+  const ECU_power_changed = this.homey.flow.getTriggerCard("ECU_power_changed");
 
   if (buffer != null) {
     this.hexdumpall(buffer);
@@ -145,11 +151,13 @@ async getPowerData() {
     console.log('todaysEnergy', todaysEnergy);
     console.log('Inverters online', invertersOnline);
 
-    if (currentPower > this.getStoreValue("peak_power")){
+    if (peak_power==0) {peak_power=currentPower}
+
+    if (currentPower > this.getStoreValue("peak_power") && currentPower<6500){
       peak_power = currentPower;
       this.setStoreValue("peak_power", peak_power);
     };
-
+    console.log('Peak power', peak_power);
     await this.setCapabilityValue("meter_power.exported", todaysEnergy);
     await this.setCapabilityValue("measure_power", currentPower);
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
@@ -158,7 +166,16 @@ async getPowerData() {
       this.setCapabilityValue("measure_power",null);
       this.setCapabilityValue("measure_voltage",null);
       this.setCapabilityValue("measure_temperature", null);
+    };  
+
+      if (lastPower !== currentPower) {
+      console.log('Power changed from', lastPower, 'to', currentPower);
+      ECU_power_changed.trigger({"new_power": Math.random(currentPower)*100 });
+      lastPower = currentPower
+      }
     
+      if (currentPower>6500){this.addToTimeline("Unrealistic power value, probably an error in communication with the ECU.", currentPower, " dump ", this.hexdumpall(buffer))};
+
       const time = await this.getTime();
       if (time === "23:59") {
         peak_power = 0;
@@ -167,7 +184,6 @@ async getPowerData() {
         this.addToTimeline("Peak power resetted");
         await this.setCapabilityValue("peak_power", peak_power)
       }
-    };  
   };
 };
 
@@ -237,7 +253,9 @@ async getNumberOfInverters(){
       }
   } catch(err){
       console.error(`❌ Error in getNumberOfInverters: ${err.message}`);
-      return null;
+      ECU_error.trigger({ error_message: err.message });
+    
+      return null;  
   }
     return inverters;
 }
@@ -253,7 +271,9 @@ async getFirmwareVersion() {
       }
   } catch(err){
       console.error(`❌ Error in getFirmwareVersion: ${err.message}`);
-      return null;
+      ECU_error.trigger({ error_message: err.message });
+
+      return 'unkown';
   }
       return firmware;
 }
@@ -271,7 +291,8 @@ async extractECUdata() {
     checkOk = this.checkSum(buffer); 
 
     if (checkOk) {
-      if (!buffer || buffer.length < 48) { throw new Error("❗ Buffer too short to extract data.");  }
+      if (!buffer || buffer.length < 48) { throw new Error("❗ Buffer too short to extract data.");
+       }
     } 
     return buffer;
 
@@ -320,18 +341,18 @@ try {
     const buffer = Buffer.from(ecudata.data);
     return buffer;
     } catch (error) {
-    if (error.message == null){error.message= 'Undefined'};
-    if (error.message == "timeoutError"){error_message = this.homey.__("ECU_timeout")}
-    await this.homey.flow.getTriggerCard('ECU_error').trigger({'error_message':error.message});
-    console.error("❗ Error in retreiving ECU-data:");
-    console.log("Type return from ECU:", (typeof(buffer)));
-    console.log("Buffer ", buffer);
-
+      console.error("❗ Error in retreiving ECU-data:");
+      console.log("Type return from ECU:", (typeof(buffer)));
+      console.log("Buffer ", buffer);
+      if (error ==='timeoutError'){return null};
+      if (error ==='connectionError'){
+        this.addToTimeline(this.homey.__("ECU_connection_failure "));
+        return null};
 
     if (error.code) console.error("🔹 Errorcode:", error.code);
 
     if (this && this.homey && this.homey.notifications) {
-      this.addToTimeline(this.homey.__("ECU_data_failure") + error.message);
+      this.addToTimeline(this.homey.__("ECU_data_failure ") + error.message);
       };
      
     return null;
@@ -419,7 +440,7 @@ async pollLoop() {
   } catch (err) {
     console.warn("Polling error:", err);
   } finally {
-    console.log(`⏸️ Polling is running.`);
+    console.log(`⏸️ Polling on ECU is running.`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
   }
 }

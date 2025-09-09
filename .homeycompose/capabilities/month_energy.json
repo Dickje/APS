@@ -1,14 +1,14 @@
 {
   "type": "number",
   "title": { 
-      "en": "Power generated",
-      "nl": "Gegenereerd vermogen",
-      "de": "Erzeugte Leistung",
-      "fr": "Énergie produite"},
+      "en": "Energy this month",
+      "nl": "Energie deze maand",
+      "fr": "Puissance ce mois-ci",
+      "de": "Leistung diesen Monat"},
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,
-  "units": { "en": "W"},
+  "units": { "en": "kWh"},
   "insights": true,
   "icon" : "/assets/icons/measure_power.svg"
 }

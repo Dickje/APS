@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+      "en": "Todays power",
+      "nl": "Vermogen vandaag",
+      "fr": "Performance aujourd'hui",
+      "de": "Leistung heute"},
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "kWh"},
+  "insights": true,
+  "icon" : "/assets/icons/measure_power.svg"
+}

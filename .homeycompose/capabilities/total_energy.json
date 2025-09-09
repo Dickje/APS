@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+      "en": "Total energy",
+      "nl": "Totaal vermogen",
+      "fr": "Puissance totale",
+      "de": "Gesamtleistung"},
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "kWh"},
+  "insights": true,
+   "icon" : "/assets/icons/measure_power.svg"
+}

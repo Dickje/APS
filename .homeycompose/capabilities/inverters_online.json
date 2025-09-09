@@ -1,9 +1,10 @@
 {
   "type": "string",
-  "title": { "en": "Inverters online",
-             "nl": "Inverters online",
-             "fr": "Onduleurs en ligne",
-             "de": "Wechselrichter online"},
+  "title": { 
+     "en": "Inverters online",
+     "nl": "Inverters online",
+     "fr": "Onduleurs en ligne",
+     "de": "Wechselrichter online"},
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,

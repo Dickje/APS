@@ -1,0 +1,51 @@
+[
+    {
+    "type": "group",
+  "label": { "en": "Polling data",
+             "nl": "Polling gegevens",
+             "de": "Umfragedaten",
+             "fr": "Données de sondage"},
+  "children": 
+  [
+    {
+    "id": "pause_start",
+    "type": "text",
+    "label": {
+      "en": "Pause start time (HH:MM)",
+      "nl": "Pauze start tijd (HH:MM)",
+      "de": "Pausenbeginn (HH:MM)",
+      "fr": "Heure de début de la pause (HH:MM)"
+    },
+    "default": "23:00"
+  },
+  {
+    "id": "pause_end",
+    "type": "text",
+    "label": {
+      "en": "Pause end time (HH:MM)",
+      "nl": "Pauze eind tijd (HH:MM)",
+      "de": "Endzeit der Pause (HH:MM)",
+      "fr": "Heure de fin de pause (HH:MM)"
+    },
+    "default": "06:00"
+  },
+ {
+   "id": "poll_interval",
+   "type": "number",
+   "label": {
+     "en": "Polling interval (minutes)",
+     "nl": "Polling interval (minuten)",
+     "de": "Abfrageintervall (Minuten)",
+     "fr": "Intervalle d'interrogation (minutes)"
+   },
+   "default": 10,
+   "units": {
+     "en": "minutes",
+     "nl": "minuten",
+     "de": "Minuten",
+     "fr": "minutes"
+
+   }
+  
+ }]}
+]

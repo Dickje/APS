@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {  
+      "en": "This years energy",
+      "nl": "Vermogen dit jaar",
+      "fr": "Puissance de cette année",
+      "de": "Leistung diesen Jahr"},
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "kWh"},
+  "insights": true,
+   "icon" : "/assets/icons/measure_power.svg"
+}

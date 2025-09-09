@@ -5,5 +5,7 @@
     "ECU_ID_invalid": "L'ID ECU doit contenir 12 chiffres.",
     "Connection_error": "Erreur de connexion",
     "ECU_timeout": "Aucune réponse de l'ECU",
-    "ECU_token": "Données de réponse de l'ECU"
+    "ECU_token": "Données de réponse de l'ECU",
+    "ECU_data_failure ": "Erreur lors de la récupération des données de l'ECU: ",
+    "ECU_connection_failure ": "Erreur de connexion à l'ECU"
 }  

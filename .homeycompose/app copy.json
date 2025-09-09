@@ -68,6 +68,21 @@
       "ECU"
     ]
   },
+  "drivers": [
+    {
+      "id": "zonnepanelen",
+      "name": {
+        "nl": "Zonnepanelen",
+        "en": "Solarpanels"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "meter_power.daily",
+        "meter_power"
+      ]
+    }
+  ],
   "flow": {
     "triggers": [
       {
