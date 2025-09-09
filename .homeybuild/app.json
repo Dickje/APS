@@ -398,9 +398,9 @@
         "cloud"
       ],
       "images": {
-        "small": "/drivers/solarpanels/assets/images/small.png",
-        "large": "/drivers/solarpanels/assets/images/large.png",
-        "xlarge": "/drivers/solarpanels/assets/images/xlarge.png"
+        "small": "/drivers/solarpanels/assets/images/small.jpg",
+        "large": "/drivers/solarpanels/assets/images/large.jpg",
+        "xlarge": "/drivers/solarpanels/assets/images/xlarge.jpg"
       },
       "pair": [
         {
