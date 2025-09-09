@@ -31,5 +31,8 @@
   },
   "1.2.0": {
     "en": "Discarded web access, no more need to put in ECU ID"
+  },
+  "1.2.1": {
+    "en": "Fixed a bugfix..."
   }
 }
