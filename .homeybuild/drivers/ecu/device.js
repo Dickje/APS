@@ -152,13 +152,20 @@ async getPowerData() {
     console.log('Inverters online', invertersOnline);
 
     if (peak_power==0) {peak_power=currentPower}
-
+   
     if (currentPower > this.getStoreValue("peak_power") && currentPower<6500){
       peak_power = currentPower;
       this.setStoreValue("peak_power", peak_power);
     };
     console.log('Peak power', peak_power);
     await this.setCapabilityValue("meter_power.exported", todaysEnergy);
+    if (currentPower>6500){
+        this.addToTimeline("Unrealistic power value, (", currentPower, " kW) probably an error in communication with the ECU.")}
+    else { await this.setCapabilityValue("measure_power", currentPower);
+          peak_power = currentPower
+    };
+
+
     await this.setCapabilityValue("measure_power", currentPower);
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
     await this.setCapabilityValue("peak_power", peak_power);
@@ -170,12 +177,11 @@ async getPowerData() {
 
       if (lastPower !== currentPower) {
       console.log('Power changed from', lastPower, 'to', currentPower);
-      ECU_power_changed.trigger({"new_power": Math.random(currentPower)*100 });
+      ECU_power_changed.trigger({"new_power": currentPower });
       lastPower = currentPower
       }
     
-      if (currentPower>6500){this.addToTimeline("Unrealistic power value, probably an error in communication with the ECU.", currentPower, " dump ", this.hexdumpall(buffer))};
-
+    
       const time = await this.getTime();
       if (time === "23:59") {
         peak_power = 0;

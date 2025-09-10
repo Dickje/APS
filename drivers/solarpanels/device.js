@@ -35,7 +35,6 @@ module.exports = class MyDevice extends Homey.Device {
     }
 
     console.log('Solarpanel has been initialized');
-    this.getTodaysEnergy(); //Once on init, then on the interval selected
     // Get polling settings
     pauseStartStr = this.homey.settings.get('pause_start') || "23:00";
     pauseEndStr = this.homey.settings.get('pause_start') || "05:00";
