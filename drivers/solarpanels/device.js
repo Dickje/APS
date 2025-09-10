@@ -167,10 +167,9 @@ async pollLoop() {
   console.log("Paused ", isPaused);
   try {
     if (!isPaused) {
-    await Promise.all([
       console.log(`▶️ Polling data at ${currentTime}`),
-      this.getTodaysEnergy
-    ])};
+      await this.getTodaysEnergy()
+    };
   } catch (err) {
     console.warn("Polling error:", err);
   } finally {
