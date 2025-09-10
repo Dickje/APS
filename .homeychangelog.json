@@ -34,5 +34,8 @@
   },
   "1.2.1": {
     "en": "Fixed a bugfix..."
+  },
+  "1.2.2": {
+    "en": "1.2.1 was a test version, published too soon"
   }
 }
