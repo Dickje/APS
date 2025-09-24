@@ -6,10 +6,8 @@ module.exports = class MyApi extends Homey.Api {
     async fetchData(request_path, request_param, http_method, api_Key, api_Secret) {
  
         console.log('API request called');
-        //const crypto = require("crypto");
+
         const axios = require("axios"); 
-        //const { v4: uuidv4 } = require("uuid");
-        //const nonce = uuidv4().replace(/-/g, "");
         const timestamp = Date.now().toString();
         const myUUID = uuidFromTimestamp(Date.now());
         const nonce = myUUID.replace(/-/g, "");
@@ -22,6 +20,11 @@ module.exports = class MyApi extends Homey.Api {
         const urlSegments = request_path.split("/");
         const lastSegment = urlSegments[urlSegments.length - 1];
         const stringToSign = `${timestamp}/${nonce}/${apiKey}/${lastSegment}/${http_method}/${signature_method}`;
+
+        console.log('Request path:', request_path);
+        console.log('Last segment:', lastSegment);
+        console.log('String to sign:', stringToSign);
+
 
         const hmacSha256 = crypto.createHmac("sha256", apiSecret);
         hmacSha256.update(stringToSign);
@@ -42,6 +45,9 @@ module.exports = class MyApi extends Homey.Api {
         try {
             const response = await axios.get(url, { headers });
             console.log("API Response:", response.data);
+            if (response.code == 2005) {
+                throw new Error("API call rejected");
+             }
             return response.data;
         } catch (error) {
             console.error("Fout bij API-aanvraag:", error.message);
@@ -49,10 +55,9 @@ module.exports = class MyApi extends Homey.Api {
         }
     }
 }
+
 function uuidFromTimestamp(timestamp) {
   const hexTimestamp = timestamp.toString(16);
-  const randomPart = crypto.getRandomValues(new Uint8Array(8))
-    .reduce((str, byte) => str + byte.toString(16).padStart(2, '0'), '');
-  
+  const randomPart = crypto.randomBytes(8).toString('hex');
   return `${hexTimestamp}-${randomPart.slice(0,4)}-${randomPart.slice(4,8)}-${randomPart.slice(8,12)}-${randomPart.slice(12,16)}`;
 }

@@ -33,11 +33,19 @@ module.exports = class MyDriver extends Homey.Driver {
       sid = this.homey.settings.get("sid");
       apiKey =  this.homey.settings.get("apiKey");
       apiSecret = this.homey.settings.get("apiSecret");
-      //console.log(sid,' ', apiKey,' ', apiSecret);
+ 
 
       const pairApi = new MyApi;
       const returndata = await pairApi.fetchData('/user/api/v2/systems/details/' + sid,''
                                         , 'GET', apiKey, apiSecret);
+      console.log(returndata);
+      if (returndata == null) {
+        throw new Error("No data received from API, please check your credentials");
+      }
+      if (returndata.code == 2005) {
+        throw new Error("API call rejected, max API calls are reached");
+      }
+    
       devices = 
         {
         name: 'APsystems web API',

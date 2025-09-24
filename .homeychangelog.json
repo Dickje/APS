@@ -37,5 +37,8 @@
   },
   "1.2.2": {
     "en": "1.2.1 was a test version, published too soon"
+  },
+  "1.2.3": {
+    "en": "Added a check for the checksum of the received data"
   }
 }

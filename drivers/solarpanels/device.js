@@ -2,6 +2,7 @@
 
 const Homey = require('homey');
 const MyApi = require('./api');
+const { isValidTimeFormat } = require('../../lib/time');
 let pauseStartStr;
 let pauseEndStr;
 let pollingInterval=10;
@@ -35,18 +36,19 @@ module.exports = class MyDevice extends Homey.Device {
     }
 
     console.log('Solarpanel has been initialized');
-    // Get polling settings
-    pauseStartStr = this.homey.settings.get('pause_start') || "23:00";
-    pauseEndStr = this.homey.settings.get('pause_start') || "05:00";
-    pollingInterval = parseInt(this.homey.settings.get('poll_interval')) || "10"; 
+    // Get polling settings 
+    pauseStartStr = this.getSetting('pause_start') || "23:00";
+    pauseEndStr = this.getSetting('pause_end') || "05:00";
+    pollingInterval = parseInt(this.getSetting('poll_interval')) || "10"; 
+
 
     this.pollLoop(); // Get data and repeat
     }
 
-
   async getTodaysEnergy() {
-    var sid='';
-    var eid='';
+    console.log('Get todays energy called');
+    var sid=''; // System ID
+    var eid=''; // ECU ID
     var apiKey='';
     var apiSecret='';
 
@@ -58,6 +60,44 @@ module.exports = class MyDevice extends Homey.Device {
     const dateToday = this.epochToDate(Date.now().toString());
     console.log(dateToday);
 
+    var sid='';
+    var eid='';
+    var apiKey='';
+    var apiSecret='';
+
+    sid = this.homey.settings.get("sid");
+    eid = this.homey.settings.get("eid");
+    apiKey =  this.homey.settings.get("apiKey");
+    apiSecret = this.homey.settings.get("apiSecret");
+ 
+    const DeviceApi = new MyApi;
+    const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/summary/' + sid , ' ', 'GET', apiKey, apiSecret);
+    deviceapi.fetchdata()
+    .then(ApiResult => {
+
+    console.log(ApiResult.data); // See https://apps.developer.homey.app/the-basics/devices/energy
+    const total_energy=ApiResult.data.lifetime*1;
+    const year_energy=ApiResult.data.year*1;
+    const month_energy=ApiResult.data.month*1;
+    const today_energy=ApiResult.data.today*1;
+
+    this.setCapabilityValue("total_energy",Math.round(total_energy));
+    this.setCapabilityValue("year_energy",Math.round(year_energy));
+    this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
+    this.setCapabilityValue("today_energy",Math.round(100*today_energy)/100);
+
+    console.log('Solarpanel data updated');
+
+  })
+  .catch(error => {
+    console.error('Fout bij het ophalen van data:', error);
+  });
+}
+
+  async getCurrentEnergy() {
+    console.log('Get current energy called');
+   const dateToday = this.epochToDate(Date.now().toString());
+   console.log(dateToday);
       var sid='';
       var eid='';
       var apiKey='';
@@ -69,43 +109,13 @@ module.exports = class MyDevice extends Homey.Device {
       apiSecret = this.homey.settings.get("apiSecret");
 
      const DeviceApi = new MyApi;
-     const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/summary/' + sid , '', 'GET', apiKey, apiSecret);
-      
-    //console.log(ApiResult.data.lifetime); // See https://apps.developer.homey.app/the-basics/devices/energy
-    const total_energy=ApiResult.data.lifetime*1;
-    const year_energy=ApiResult.data.year*1;
-    const month_energy=ApiResult.data.month*1;
-    const today_energy=ApiResult.data.today*1;
+     const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/' + sid , 
+       '/devices/inverter/batch/energy/' + eid +'?energy_level=power&date_range=' + dateToday, 'GET', apiKey, apiSecret);
+//const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/energy/' + sid, '?energy_level=hourly&date_range=2025-09-09', 'GET', apiKey, apiSecret  );
 
-    await this.setCapabilityValue("total_energy",Math.round(total_energy));
-    await this.setCapabilityValue("year_energy",Math.round(year_energy));
-    await this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
-    await this.setCapabilityValue("today_energy",Math.round(100*today_energy)/100);
+        console.log(ApiResult);
 
-    console.log('Solarpanel data updated');
-
-     }
-
-  // async getCurrentEnergy() {
-  //  const dateToday = this.epochToDate(Date.now().toString());
-  //  console.log(dateToday);
-  //     var sid='';
-  //     var eid='';
-  //     var apiKey='';
-  //     var apiSecret='';
-
-  //     sid = this.homey.settings.get("sid");
-  //     eid = this.homey.settings.get("eid");
-  //     apiKey =  this.homey.settings.get("apiKey");
-  //     apiSecret = this.homey.settings.get("apiSecret");
-
-  //    const DeviceApi = new MyApi;
-  //    const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/' + sid , 
-  //       '/devices/inverter/batch/energy/' + eid +'?energy_level=power&date_range=' + dateToday, 'GET', apiKey, apiSecret);
-
-  //       console.log(ApiResult);
-
-  // }
+  }
   
    
 epochToDate(epoch) {
@@ -162,15 +172,16 @@ async pollLoop() {
     ? nowMinutes >= pauseStart && nowMinutes < pauseEnd
     : nowMinutes >= pauseStart || nowMinutes < pauseEnd;
 
-  if (isPaused) { console.log(`⏸️ Polling paused between ${pauseStartStr} and ${pauseEndStr} (${currentTime})`); } 
+  if (isPaused) { console.log(`⏸️ Web polling paused between ${pauseStartStr} and ${pauseEndStr} (${currentTime})`); } 
   console.log("Paused ", isPaused);
   try {
     if (!isPaused) {
-      console.log(`▶️ Polling data at ${currentTime}`),
-      await this.getTodaysEnergy()
+      console.log(`▶️ Web polling data at ${currentTime}`),
+      await this.getTodaysEnergy();
+      await this.getCurrentEnergy();
     };
   } catch (err) {
-    console.warn("Polling error:", err);
+    console.warn("Web polling error:", err);
   } finally {
     console.log(`⏸️ Polling on web is running at an interval of ${pollingInterval} minutes`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
@@ -199,8 +210,8 @@ async getTime() {
 
 }
 
-function isValidTimeFormat(timeStr) {
-  // Accepteert HH:MM, waarbij HH van 00 t/m 23 en MM van 00 t/m 59
-  const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  return timeRegex.test(timeStr);
-}
+// function isValidTimeFormat(timeStr) {
+//   // Accepteert HH:MM, waarbij HH van 00 t/m 23 en MM van 00 t/m 59
+//   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+//   return timeRegex.test(timeStr);
+// }
