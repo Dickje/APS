@@ -40,5 +40,8 @@
   },
   "1.2.3": {
     "en": "Added a check for the checksum of the received data"
+  },
+  "1.2.4": {
+    "en": "Added some error handling. Web api still under construction"
   }
 }
