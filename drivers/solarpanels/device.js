@@ -2,7 +2,7 @@
 
 const Homey = require('homey');
 const MyApi = require('./api');
-const { isValidTimeFormat } = require('../../lib/time');
+const { isValidTimeFormat } = require('../../lib/apslib');
 let pauseStartStr;
 let pauseEndStr;
 let pollingInterval=10;
@@ -209,9 +209,3 @@ async getTime() {
   }
 
 }
-
-// function isValidTimeFormat(timeStr) {
-//   // Accepteert HH:MM, waarbij HH van 00 t/m 23 en MM van 00 t/m 59
-//   const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
-//   return timeRegex.test(timeStr);
-// }
