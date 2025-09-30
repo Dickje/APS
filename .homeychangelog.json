@@ -46,5 +46,8 @@
   },
   "1.2.5": {
     "en": "Fixed an issue with a flowcard"
+  },
+  "1.2.6": {
+    "en": "Repaired the ECU_error flowcard"
   }
 }
