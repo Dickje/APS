@@ -61,8 +61,6 @@
       "large": "/drivers/my_driver/assets/images/large.png"
     }
   },
-  "discovery" : "dunno",
-  
   "pair": [
     {
       "id": "enterkeys",

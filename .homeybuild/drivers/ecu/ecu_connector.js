@@ -6,6 +6,7 @@ const net = require('net');
     ECU_address = ECU_address.split('.').map(Number).join('.'); // Normalize the IP
     console.log(`Command ${ECU_command} to IP address ${ECU_address}`);
 
+    //throw new Error('connectionError');
     return new Promise((resolve, reject) => {
       const client = new net.Socket();
       client.setTimeout(5000); // 5 seconds timeout
