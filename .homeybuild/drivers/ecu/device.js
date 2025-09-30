@@ -19,6 +19,7 @@ let lastPower=0;
 let peakJustReset = false; 
 let ECU_query = 'APS1100160001';
 let Inverter_query = 'APS1100280002';
+
 //let Signal_query = 'APS1100200030';
 
 

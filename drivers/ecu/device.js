@@ -242,7 +242,8 @@ async getFirmwareAndInverters() {
 
     } catch(err){
         console.error(`❌ Error getting firmware and inverter count: ${err.message}`);
-        ECU_error.trigger({ error_message: err.message });
+        if (typeof error.message === "string") {       
+        ECU_error.trigger({ error_message: err.message });}
         return null;
     }
         console.log('Number of inverters:', inverters);
@@ -318,8 +319,9 @@ try {
       console.log("Buffer ", buffer);
       if (error ==='timeoutError'){return null};
       if (error ==='connectionError'){
-        ECU_error.trigger({ error_message: this.homey.__("ECU_connection_failure ") }); 
-        messages.push(this.homey.__("ECU_connection_failure x",error));
+                if (typeof error.message === "string") {       
+              ECU_error.trigger({ error_message: this.homey.__("ECU_connection_failure ") }); 
+        messages.push(this.homey.__("ECU_connection_failure x",error));}
      
 this.homey.notifications.create({
     title: "Important Alert", // The main title for your notification
@@ -333,9 +335,12 @@ this.homey.notifications.create({
     if (error.code) console.error("🔹 Errorcode:", error.code);
 
     if (this && this.homey && this.homey.notifications) {
-      ECU_error.trigger({ error_message: this.homey.__("ECU_data ") })
-      };
-     
+      if (typeof error.message === "string") {
+        ECU_error.trigger({ error_message: this.homey.__("ECU_data ") });
+      } else {
+        ECU_error.trigger({ "": this.homey.__("ECU_data_unknown ") });
+      }
+    };
     return null;
   }
 }
