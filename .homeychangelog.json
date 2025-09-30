@@ -43,5 +43,8 @@
   },
   "1.2.4": {
     "en": "Added some error handling. Web api still under construction"
+  },
+  "1.2.5": {
+    "en": "Fixed an issue with a flowcard"
   }
 }
