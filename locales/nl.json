@@ -7,5 +7,11 @@
     "ECU_timeout": "Geen reactie van ECU",
     "ECU_token": "Gegevens van de ECU respons",
     "ECU_data_failure ": "Fout bij het ophalen van gegevens van de ECU: ",
-    "ECU_connection_failure ": "Fout bij het verbinden met de ECU"  
+    "ECU_connection_failure ": "Fout bij het verbinden met de ECU" ,
+    "Pause_start_changed" : "De pauze starttijd is gewijzigd",
+    "Pause_start_incorrect" : "De pauze starttijd is onjuist",
+    "Pause_end_changed" : "De pauze eindtijd is gewijzigd",
+    "Pause_end_incorrect" : "De pauze eindtijd is onjuist",
+    "Polling_interval_changed": "Polling interval gewijzigd"
+       
 }  

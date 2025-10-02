@@ -7,5 +7,11 @@
     "ECU_timeout": "Keine Antwort von der ECU",
     "ECU_token": "ECU-Antwortdaten",
     "ECU_data_failure ": "Fehler beim Abrufen der Daten von der ECU: ",
-    "ECU_connection_failure ": "Fehler beim Verbinden mit der ECU"
+    "ECU_connection_failure ": "Fehler beim Verbinden mit der ECU", 
+    "Pause_start_changed" : "Der Pausenbeginn hat sich geändert",
+    "Pause_start_incorrect" : "Die Pausenbeginnzeit ist falsch",
+    "Pause_end_changed" : "Die Pausenendzeit hat sich geändert",
+    "Pause_end_incorrect" : "Die Pausenendzeit ist falsch",
+    "Polling_interval_changed": "Abfrageintervall geändert"
+    
 }  

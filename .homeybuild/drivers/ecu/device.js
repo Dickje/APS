@@ -193,10 +193,8 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
       const isValidECU_ID = /^\d{12}$/.test(value);
       if (isValidECU_ID) {
         this.homey.settings.set("ECU_ID", value);
-        //messages.push('✅ ECU_ID was successfully saved.');
         messages.push(this.homey.__("ECU_ID_saved"));
       } else {
-        //messages.push('❌ ECU_ID must be exactly 12 digits.');
         messages.push(this.homey.__("ECU_ID_invalid"));
       }
     }
@@ -206,14 +204,48 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
       const isValidIP = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(value);
       if (isValidIP) {
         this.homey.settings.set("ECU_address", value);
-        //messages.push('✅ IP address was successfully saved.');
         messages.push('✅ ' + this.homey.__("IP_address_saved"));
       } else {
-        //messages.push('❌ Invalid IP address.');
         messages.push('❌ ' +  this.homey.__("IP_address_invalid"));        
       }
     }
+  
+      if (key === 'pause_start') {
+        if (isValidTimeFormat(pauseStartStr)) {
+          this.homey.settings.set("pause_start", value);
+              messages.push(this.homey.__("Pause_start_changed"));
+        } else {
+              messages.push(this.homey.__("Pause_start_incorrect"));
+        }
+      }
+  
+      if (key === 'pause_end') {
+        if (isValidTimeFormat(pauseStartStr)) {
+          this.homey.settings.set("pause_start", value);
+              messages.push(this.homey.__("Pause_end_changed"));
+        } else {
+              messages.push(this.homey.__("Pause_end_incorrect"));
+        }
+      }
+  
+      if (key === 'poll_interval') {
+         const pollingIntervalnum = Number(pollingInterval);
+         if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 1 && pollingIntervalnum < 61) {
+           this.homey.settings.set("polling_interval", pollingInterval);
+           messages.push(this.homey.__("Polling_interval_changed"));
+         } else {
+              messages.push(this.homey.__("Polling_interval_incorrect"));
+         }
+      }
+  
+  
+  
+  
   }
+
+
+
+
 
   // Combine all messages into a single return value
   Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit

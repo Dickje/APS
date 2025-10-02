@@ -6,7 +6,7 @@
     "total_energy",
     "year_energy",
     "month_energy",
-    "today_energy"
+    "meter_todays_energy"
   ],
   "class": "solarpanel",
     "capabilitiesOptions": {
@@ -34,7 +34,7 @@
         "de": "Energie diesen Monat"
       }
     },
-    "today_energy": {
+    "meter_todays_energy": {
       "title": {
         "en": "Todays energy",
         "nl": "Energie vandaag",
