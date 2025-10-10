@@ -12,6 +12,8 @@
     "Pause_start_incorrect" : "Die Pausenbeginnzeit ist falsch",
     "Pause_end_changed" : "Die Pausenendzeit hat sich geändert",
     "Pause_end_incorrect" : "Die Pausenendzeit ist falsch",
-    "Polling_interval_changed": "Abfrageintervall geändert"
+    "Polling_interval_changed": "Abfrageintervall geändert",
+    "pause_by_flowcard_changed" : "Umfrageergebnis geändert",
+    "pause_by_flowcard_incorrect" : "Fehler bei der Änderung der Umfrageauswahl"
     
 }  

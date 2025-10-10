@@ -1,5 +1,6 @@
     
 async function setCapabilities() {    
+    
     // Current power
     if (!this.hasCapability("measure_power")) {
     await this.addCapability("measure_power");
@@ -26,13 +27,6 @@ async function setCapabilities() {
     await this.addCapability("inverters_online");
     await this.setCapabilityOptions("inverters_online", {});
     }
-
-    // Maximum power that day
-    if (!this.hasCapability("peak_power")) {
-    await this.addCapability("peak_power");
-    await this.setCapabilityOptions("peak_power", {});
-    }
-
     console.log("Capabilities are set.");
 }
 module.exports = { setCapabilities }

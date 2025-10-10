@@ -44,8 +44,18 @@
      "nl": "minuten",
      "de": "Minuten",
      "fr": "minutes"
-
    }
-  
- }]}
+  },
+  {
+   "id": "pause_by_flowcard",
+   "type": "checkbox",
+   "value": false,
+   "label" :{
+     "en": "Perform pauses through flowcards",
+     "nl": "Pauze uitvoeren door flowcards",
+     "de": "Pausen durch Flowcards durchführen",
+     "fr": "Effectuer des pauses à travers des flowcards"
+   }
+  }
+ ]}
 ]

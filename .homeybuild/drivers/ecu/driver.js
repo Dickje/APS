@@ -54,7 +54,7 @@ module.exports = class ECUdriver extends Homey.Driver {
       return [devices];
 
     } catch (err) {
-      console.error("Error in retreiving data ", err);
+      console.log("Error in retreiving data ", err);
       return [];
     }
   });

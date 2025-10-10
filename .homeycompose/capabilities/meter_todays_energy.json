@@ -1,8 +1,8 @@
 {
   "type": "number",
   "title": {
-      "en": "Todays power",
-      "nl": "Vermogen vandaag",
+      "en": "Todays energy",
+      "nl": "Energie vandaag",
       "fr": "Performance aujourd'hui",
       "de": "Leistung heute"},
   "uiComponent": "sensor",

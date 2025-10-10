@@ -1,0 +1,35 @@
+    
+async function setCapabilities() {    
+    
+    // Maximum power that day
+    if (!this.hasCapability("peak_power")) {
+    await this.addCapability("peak_power");
+    await this.setCapabilityOptions("peak_power", {});
+    }
+
+    //Lifetime energy
+    if (!this.hasCapability("total_energy")) {
+    await this.addCapability("total_energy");
+    await this.setCapabilityOptions("total_energy", {});
+    }
+
+    //This years energy
+    if (!this.hasCapability("year_energy")) {
+    await this.addCapability("year_energy");
+    await this.setCapabilityOptions("year_energy", {});
+    }
+
+    //This months energy
+    if (!this.hasCapability("month_energy")) {
+    await this.addCapability("month_energy");
+    await this.setCapabilityOptions("month_energy", {});
+    }
+
+    //Todays energy
+    if (!this.hasCapability("meter_todays_energy")) {
+    await this.addCapability("meter_todays_energy");
+    await this.setCapabilityOptions("meter_todays_energy", {});
+    console.log("Capabilities are set.");
+}
+}
+module.exports = { setCapabilities }

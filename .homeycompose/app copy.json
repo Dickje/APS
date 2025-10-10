@@ -68,6 +68,37 @@
       "ECU"
     ]
   },
+  "flow": {
+    "triggers": [
+      {
+        "id": "ECU_power_changed",
+        "title": {
+          "en": "Power changed",
+          "nl": "Vermogen veranderd",
+          "fr": "Puissance modifiée",
+          "de": "Leistung geändert"
+        },
+        "args": [
+          {
+            "name": "power",
+            "type": "number",
+            "label": {
+              "en": "Power",
+              "nl": "Vermogen",
+              "fr": "Puissance",
+              "de": "Leistung"
+            },
+            "units": {
+              "en": "W",
+              "nl": "W",
+              "fr": "W",
+              "de": "W"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "contributing": {
     "donate": {
       "paypal": {

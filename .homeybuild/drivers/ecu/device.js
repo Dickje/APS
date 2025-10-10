@@ -2,7 +2,7 @@
 
 const Homey = require('homey');
 const { isValidTimeFormat, getTime, isPaused } = require('../../lib/apslib');
-const { setCapabilities } = require('../../lib/setcapabilities');
+const { setCapabilities } = require('../../lib/setECUcapabilities');
 const ECU_connector = require('./ecu_connector');
 
 let ECU_ID = '';
@@ -19,7 +19,8 @@ let lastPower=0;
 let peakJustReset = false; 
 let ECU_query = 'APS1100160001';
 let Inverter_query = 'APS1100280002';
-
+let polling_on = true;
+let pause_by_flowcard = false;
 
 //let Signal_query = 'APS1100200030';
 
@@ -34,7 +35,7 @@ module.exports = class MyECU extends Homey.Device {
     
     try {
     await setCapabilities.call(this);
-
+    
     ECU_address = this.homey.settings.get('ECU_address') ?? '';
     ECU_ID = this.homey.settings.get("ECU_ID") ?? '';
     this.setStoreValue("peak_power", null);
@@ -44,12 +45,15 @@ module.exports = class MyECU extends Homey.Device {
 
     await this.getFirmwareAndInverters(firmware, inverters);
 
-    pauseStartStr = this.getSetting('pause_start') || "23:00";
-    pauseEndStr = this.getSetting('pause_end') || "05:00";
-    pollingInterval = parseInt(this.getSetting('poll_interval')) || "2"; 
-    console.log('ECU polling interval (minutes):', pollingInterval);
-    console.log('ECU pause start time:', pauseStartStr);
-    console.log('ECU pause end time:', pauseEndStr);
+    await this.getAppSettings()
+
+    this.homey.flow.getActionCard('polling_pause').registerRunListener(async (args, state) => {
+    console.log('Flowcard polling_pause triggered');
+    polling_on = false;});
+  
+    this.homey.flow.getActionCard('polling_start').registerRunListener(async (args, state) => {
+    console.log('Flowcard polling_start triggered');
+    polling_on = true;});
 
     await this.setSettings({
       ECU_ID: ECU_ID,
@@ -60,15 +64,27 @@ module.exports = class MyECU extends Homey.Device {
 
     //Checks the time every minute and calls datareset
     setInterval(() => {this.datareset(); }, 60 * 1000); 
+    // Get data and repeat
+    this.pollLoop(); // Get data and repeat
 
     console.log('ECU has been initialized');
     console.log('');
     
-    this.pollLoop(); // Get data and repeat
-  } catch (error) {
-    this.log(`❌ Error in onInit: ${error.message}`);
+    //this.pollLoop(); // Get data and repeat
+  } catch (err) {
+    console.log(`❌ Error in onInit: ${err.message}`); 
   }
 };
+
+async getAppSettings(){
+    pauseStartStr = this.getSetting('pause_start') || "23:00";
+    pauseEndStr = this.getSetting('pause_end') || "05:00";
+    pollingInterval = parseInt(this.getSetting('poll_interval')) || "2"; 
+
+    console.log('ECU pause start time:', pauseStartStr);
+    console.log('ECU pause end time:', pauseEndStr);
+    console.log('ECU polling interval (minutes):', pollingInterval);
+}
 
 getInverterdata = async()=>{ 
   console.log('');
@@ -80,7 +96,7 @@ getInverterdata = async()=>{
 
     buffer = await this.getECUdata(Inverter_query, ECU_ID, ECU_address);
     console.log('Type of buffer:', typeof(buffer));
-    //if (buffer != null && this.checkSum(buffer)){
+    //if (buffer != null && this.bufferValid(buffer)){
       if (buffer != null ){
         this.hexdumpall(buffer);
         const payload = buffer.subarray(16, 194); // The relevant data
@@ -88,9 +104,24 @@ getInverterdata = async()=>{
 
         //Get data from the response
         for (let i = 0; i < payload.length; i += blockSize) {
-
               const baseOffset = 5; // Start of first record 
               const recordStart = baseOffset + (i + blockSize);
+              const invertermodel = [...buffer.subarray(recordStart)].map(b => b.toString(16).padStart(2, '0')).join('').slice(0,3)
+              console.log("InverterModel:", invertermodel);
+
+               if (invertermodel === "703") {console.log("DS3 inverter");}
+            //   const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in record
+            //   const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
+            //   const online = parseInt(buffer[recordStart + 6], 10);
+            // }
+
+            //   if (invertermodel == '901') {//QS1 inverter
+            //   const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in record
+            //   const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
+            //   const online = parseInt(buffer[recordStart + 6], 10);
+            // }
+
+
               const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in record
               const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
               const online = parseInt(buffer[recordStart + 6], 10);
@@ -112,6 +143,11 @@ getInverterdata = async()=>{
   //Push data to app
   this.setCapabilityValue("measure_voltage",numVoltage);
   this.setCapabilityValue("measure_temperature",averageTemp);
+
+  //And get power data
+  await this.getPowerData();
+  //And the firmware and # of inverters
+  await this.getFirmwareAndInverters();
  }
   } catch (err) {
   console.log(`❌ Error in getInverterdata: ${err.message}`);       
@@ -124,8 +160,7 @@ async getPowerData() {
   try {
   buffer = await this.getECUdata(ECU_query,'', ECU_address);
   const ECU_power_changed = this.homey.flow.getTriggerCard("ECU_power_changed");
-
-  if (buffer != null && this.checkSum(buffer)) {
+  if (buffer != null && this.bufferValid(buffer)) {
     this.hexdumpall(buffer);
 
     const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
@@ -221,7 +256,7 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
   
       if (key === 'pause_end') {
         if (isValidTimeFormat(pauseStartStr)) {
-          this.homey.settings.set("pause_start", value);
+          this.homey.settings.set("pause_end", value);
               messages.push(this.homey.__("Pause_end_changed"));
         } else {
               messages.push(this.homey.__("Pause_end_incorrect"));
@@ -238,18 +273,11 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
          }
       }
   
-  
-  
-  
+    
   }
-
-
-
-
-
-  // Combine all messages into a single return value
-  Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit
-  return messages.join('\n');
+    // Combine all messages into a single return value
+    await this.getAppSettings();
+    return messages.join('\n');
 
   } catch (err) {
     console.log(`❌ Error in onSettings: ${err.message}`);
@@ -259,14 +287,21 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
 async getFirmwareAndInverters() {
 
   try {
-  buffer =  await this.extractECUdata();
+  //buffer =  await this.extractECUdata();
+
+      buffer = await this.getECUdata(ECU_query, '', ECU_address);
+      if (!buffer) {
+        throw new Error("❗ Failed to retreive ECU data.");
+      }
+
       const sliced = buffer.subarray(61, 67); // Byte 61-67 for firmware version
       
       firmware = sliced.toString('utf8'); 
       if (firmware == null) {
       throw new Error("❗ Failed to get firmware from buffer.");
       }
-        inverters = (buffer[46] << 8) | buffer[47];
+      
+      inverters = (buffer[46] << 8) | buffer[47];
       if (isNaN(inverters)) {
         throw new Error("❗ Failed to parse inverter count from buffer.");
       }
@@ -274,7 +309,7 @@ async getFirmwareAndInverters() {
     } catch(err){
         const ECU_error = this.homey.flow.getTriggerCard("ECU_error");
         console.log(`❌ Error getting firmware and inverter count: ${err.message}`);
-        if (typeof error.message === "string") {       
+        if (typeof err.message === "string") {       
         ECU_error.trigger({ "error_message": err.message });
         }
         return null;
@@ -291,11 +326,11 @@ async extractECUdata() {
 
     buffer = await this.getECUdata(ECU_query, '', ECU_address);
     if (!buffer) {
-      throw new Error("❗ Failed to retrieve ECU data.");
+      throw new Error("❗ Failed to retreive ECU data.");
     }
 
     this.hexdumpall(buffer);
-    checkOk = this.checkSum(buffer); 
+    checkOk = this.bufferValid(buffer); 
 
     if (checkOk) {
       if (!buffer || buffer.length < 48) { throw new Error("❗ Buffer too short to extract data.");
@@ -363,7 +398,7 @@ try {
 }
 
 
-async checkSum(buffer) {
+async bufferValid(buffer) {
   try {
     if (!Buffer.isBuffer(buffer)) {
       throw new TypeError("❗ Invalid buffer object: expected a Buffer.");
@@ -392,7 +427,7 @@ async checkSum(buffer) {
     return true;
 
   } catch (err) {
-    console.log(`❌ Error in checkSum: ${err.message}`);
+    console.log(`❌ Error in bufferValid: ${err.message}`);
 
     return false;
   }
@@ -401,10 +436,7 @@ async checkSum(buffer) {
 
 async pollLoop() {
   try {
-  const time = getTime(this.homey);
-  const [hour, minute] = time.split(':').map(Number);
-  const nowMinutes = hour * 60 + minute;
-
+      
   if (!isValidTimeFormat(pauseStartStr)) {
     console.log("pause_start is no valid time!")
     return;
@@ -418,19 +450,20 @@ async pollLoop() {
     return;
   }
 
-  if (isPaused(pauseStartStr, pauseEndStr, pollingInterval, this.homey)) { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr} (${time})`); } 
-
   try {
-    if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, this.homey)) {
-      console.log(`⏸️ Polling on ECU is running.`);
+    pause_by_flowcard = this.getSetting('pause_by_flowcard');
+    if (!isPaused( pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard, polling_on, this.homey)) {
+      console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}.`);
       await Promise.all([
         await this.getInverterdata(),
-        await this.getPowerData()
+        //await this.getPowerData()
       ]);
     }
   } catch (err) {
     console.warn("Polling error:", err);
   } finally {
+    pollingInterval = parseInt(this.getSetting('poll_interval'));
+    console.log(`⏸️ Polling on ECU is running at an interval of ${pollingInterval} minutes`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
   }
 } catch (err) {
@@ -441,7 +474,7 @@ async pollLoop() {
 async datareset() {
   try {
     const time = getTime(this.homey);
-    if (time == "00:00") { // Reset data at midnight
+    if (time == "00:00" || time == "24:00") { // Reset data at midnight
       console.log("Data reset");
       peak_power = null;
       peakJustReset = true;

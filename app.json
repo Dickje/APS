@@ -144,6 +144,38 @@
         ],
         "id": "ECU_power_changed"
       }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Pause polling",
+          "nl": "Pauzeer polling",
+          "de": "Umfrage pausieren",
+          "fr": "Suspendre le sondage"
+        },
+        "hint": {
+          "en": "This overrides pause start time",
+          "nl": "Dit overschrijft de pauze starttijd",
+          "de": "Dies überschreibt die Pausenstartzeit",
+          "fr": "Ceci remplace l'heure de début de la pause"
+        },
+        "id": "polling_pause"
+      },
+      {
+        "title": {
+          "en": "Start polling",
+          "nl": "Start polling",
+          "de": "Start Umfrage",
+          "fr": "Commencer le sondage"
+        },
+        "hint": {
+          "en": "This overrides pause end time",
+          "nl": "Dit overschrijft de pauze eindtijd",
+          "de": "Dies überschreibt die Pausenendzeit",
+          "fr": "Ceci remplace l'heure de fin de la pause"
+        },
+        "id": "polling_start"
+      }
     ]
   },
   "drivers": [
@@ -341,6 +373,17 @@
                 "de": "Minuten",
                 "fr": "minutes"
               }
+            },
+            {
+              "id": "pause_by_flowcard",
+              "type": "checkbox",
+              "value": false,
+              "label": {
+                "en": "Perform pauses through flowcards",
+                "nl": "Pauze uitvoeren door flowcards",
+                "de": "Pausen durch Flowcards durchführen",
+                "fr": "Effectuer des pauses à travers des flowcards"
+              }
             }
           ]
         }
@@ -467,6 +510,17 @@
                 "de": "Minuten",
                 "fr": "minutes"
               }
+            },
+            {
+              "id": "pause_by_flowcard",
+              "type": "checkbox",
+              "value": false,
+              "label": {
+                "en": "Perform pauses through flowcards",
+                "nl": "Pauze uitvoeren door flowcards",
+                "de": "Pausen durch Flowcards durchführen",
+                "fr": "Effectuer des pauses à travers des flowcards"
+              }
             }
           ]
         }
@@ -511,8 +565,8 @@
     "meter_todays_energy": {
       "type": "number",
       "title": {
-        "en": "Todays power",
-        "nl": "Vermogen vandaag",
+        "en": "Todays energy",
+        "nl": "Energie vandaag",
         "fr": "Performance aujourd'hui",
         "de": "Leistung heute"
       },
