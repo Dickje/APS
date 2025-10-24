@@ -1,9 +1,9 @@
 {
   "title": {
-    "en": "Pause polling",
-    "nl": "Pauzeer polling",
-    "de": "Umfrage pausieren",
-    "fr": "Suspendre le sondage"
+    "en": "Pause ECU polling",
+    "nl": "Pauzeer ECU polling",
+    "de": "Umfrage ECU pausieren",
+    "fr": "Suspendre le ECU sondage"
   },
   "hint": {
     "en": "This overrides pause start time",

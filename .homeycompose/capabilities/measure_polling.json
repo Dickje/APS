@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": { 
+     "en": "Polling this month",
+     "nl": "Polling deze maand",
+     "fr": "Sondage ce mois-ci",
+     "de": "Umfrage in diesem Monat "},
+  "uiComponent": "sensor",
+  "getable": true,  
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+  "icon" : ""
+}

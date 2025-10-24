@@ -42,18 +42,32 @@ module.exports = class MyApi extends Homey.Api {
         console.log('Complete URL:', url);
         //console.log('Laatste segment:', lastSegment);
 
-        try {
-            const response = await axios.get(url, { headers });
-            //console.log("API Response:", response.data);
-            if (response.code == 2005) {
-                throw new Error("API call rejected");
-             }
-            return response.data;
-        } catch (error) {
-            console.error("Fout bij API-aanvraag:", error.message);
-            return null;
-        }
+
+        return new Promise((resolve, reject) => {
+            axios.get(url, { headers })
+                .then(response => {
+                    console.log("API Response:", response.data, response.status, response.statusText, response.data.code);
+                    if (response.data.code == 2005) {
+                    throw new Error(JSON.stringify({
+                        message: "API call rejected",
+                        code: response.data.code,
+                        details: response.data  
+                        }));
+                    }
+                    resolve(response.data);
+                })
+                .catch(error => {
+                    //console.error("Error in making API request:", error.message);
+                    reject(error);
+                });
+        });
+            // For Node.js 18 fetch example
+            // No imports needed, fetch is globally available
+            // const response = await fetch(url);
+            // const data = await response.json();
+
     }
+
 }
 
 function uuidFromTimestamp(timestamp) {

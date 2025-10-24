@@ -80,6 +80,43 @@
     "triggers": [
       {
         "title": {
+          "en": "API call rejected ",
+          "nl": "API-aanroep afgewezen",
+          "de": "API-Aufruf abgelehnt",
+          "fr": "Appel API rejeté"
+        },
+        "hint": {
+          "en": "Check your API settings and amount of calls",
+          "nl": "Controleer uw API-instellingen en het aantal oproepen",
+          "de": "Überprüfen Sie Ihre API-Einstellungen und die Anzahl der Aufrufe",
+          "fr": "Vérifiez vos paramètres API et le nombre d'appels"
+        },
+        "tokens": [
+          {
+            "name": "API_return_code",
+            "type": "number",
+            "title": {
+              "en": "API Return Code",
+              "nl": "API Retourcode",
+              "de": "API-Rückgabecode",
+              "fr": "Code de retour API"
+            }
+          },
+          {
+            "name": "API_return_message",
+            "type": "string",
+            "title": {
+              "en": "API Return Message",
+              "nl": "API Retourbericht",
+              "de": "API-Rückgabemeldung",
+              "fr": "Message de retour API"
+            }
+          }
+        ],
+        "id": "API_call_rejected"
+      },
+      {
+        "title": {
           "en": "Error in retreiving ECU-data",
           "nl": "Fout bij het ophalen van ECU-gegevens",
           "de": "Fehler beim Abrufen der ECU-Daten",
@@ -148,10 +185,10 @@
     "actions": [
       {
         "title": {
-          "en": "Pause polling",
-          "nl": "Pauzeer polling",
-          "de": "Umfrage pausieren",
-          "fr": "Suspendre le sondage"
+          "en": "Pause ECU polling",
+          "nl": "Pauzeer ECU polling",
+          "de": "Umfrage ECU pausieren",
+          "fr": "Suspendre le ECU sondage"
         },
         "hint": {
           "en": "This overrides pause start time",
@@ -159,14 +196,29 @@
           "de": "Dies überschreibt die Pausenstartzeit",
           "fr": "Ceci remplace l'heure de début de la pause"
         },
-        "id": "polling_pause"
+        "id": "polling_pause_ECU"
       },
       {
         "title": {
-          "en": "Start polling",
-          "nl": "Start polling",
-          "de": "Start Umfrage",
-          "fr": "Commencer le sondage"
+          "en": "Pause solarpanel polling",
+          "nl": "Pauzeer zonnepaneel polling",
+          "de": "Solarpanel-Abfrage anhalten",
+          "fr": "Suspendre le sondage sur les panneaux solaires"
+        },
+        "hint": {
+          "en": "This overrides pause start time",
+          "nl": "Dit overschrijft de pauze starttijd",
+          "de": "Dies überschreibt die Pausenstartzeit",
+          "fr": "Ceci remplace l'heure de début de la pause"
+        },
+        "id": "polling_pause_panel"
+      },
+      {
+        "title": {
+          "en": "Start ECU polling",
+          "nl": "Start ECU polling",
+          "de": "Start ECU Umfrage",
+          "fr": "Commencer le sondage ECU"
         },
         "hint": {
           "en": "This overrides pause end time",
@@ -174,7 +226,22 @@
           "de": "Dies überschreibt die Pausenendzeit",
           "fr": "Ceci remplace l'heure de fin de la pause"
         },
-        "id": "polling_start"
+        "id": "polling_start_ECU"
+      },
+      {
+        "title": {
+          "en": "Start solarpanel polling",
+          "nl": "Start solarpanel polling",
+          "de": "Start solarpanel Umfrage",
+          "fr": "Commencer le sondage solarpanel"
+        },
+        "hint": {
+          "en": "This overrides pause end time",
+          "nl": "Dit overschrijft de pauze eindtijd",
+          "de": "Dies überschreibt die Pausenendzeit",
+          "fr": "Ceci remplace l'heure de fin de la pause"
+        },
+        "id": "polling_start_panel"
       }
     ]
   },
@@ -432,6 +499,24 @@
             "fr": "L'énergie aujourd'hui",
             "de": "Energie heute"
           }
+        },
+        "measure_polling": {
+          "type": "number",
+          "title": {
+            "en": "Polling counter",
+            "nl": "Polling teller",
+            "fr": "Compteur de sondage",
+            "de": "Abfragezähler"
+          },
+          "uiComponent": "null",
+          "getable": false,
+          "setable": true,
+          "units": {
+            "en": "times",
+            "nl": "keer",
+            "fr": "fois",
+            "de": "mal"
+          }
         }
       },
       "platforms": [
@@ -544,6 +629,23 @@
       },
       "insights": false,
       "icon": "/assets/icons/inverters_online.svg"
+    },
+    "measure_polling": {
+      "type": "number",
+      "title": {
+        "en": "Polling this month",
+        "nl": "Polling deze maand",
+        "fr": "Sondage ce mois-ci",
+        "de": "Umfrage in diesem Monat "
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "insights": false,
+      "icon": ""
     },
     "measure_power": {
       "type": "number",

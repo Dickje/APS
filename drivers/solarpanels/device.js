@@ -10,6 +10,7 @@ let pauseEndStr;
 let pollingInterval=15;
 let pause_by_flowcard = false;
 let polling_on = true;
+let measure_polling = 0;
 
 module.exports = class MyWebApi extends Homey.Device {
 
@@ -22,27 +23,11 @@ module.exports = class MyWebApi extends Homey.Device {
     //try {
     console.log('Initializing solarpanel');
 
-    // if (!this.hasCapability("total_energy")) {
-    // await this.addCapability("total_energy");
-    // await this.setCapabilityOptions("total_energy", {});
-    // }
-
-    // if (!this.hasCapability("year_energy")) {
-    // await this.addCapability("year_energy");
-    // await this.setCapabilityOptions("year_energy", {});
-    // }
-
-    // if (!this.hasCapability("month_energy")) {
-    // await this.addCapability("month_energy");
-    // await this.setCapabilityOptions("month_energy", {});
-    // }
-
-    // if (!this.hasCapability("meter_todays_energy")) {
-    // await this.addCapability("meter_todays_energy");
-    // await this.setCapabilityOptions("meter_todays_energy", {});
-    // }
-
     await setCapabilities.call(this)
+
+    const settings = this.getSettings();
+    console.log('Alle settings voor WEB:', settings);
+
     
     console.log('Solarpanel has been initialized');
     // Get polling settings 
@@ -50,6 +35,21 @@ module.exports = class MyWebApi extends Homey.Device {
     pauseEndStr = this.getSetting('pause_end') || "05:00";
     pollingInterval = parseInt(this.getSetting('poll_interval')) || "15"; 
 
+    this.homey.flow.getActionCard('polling_pause_panel').registerRunListener(async (args, state) => {
+    console.log('Flowcard polling_pause_panel triggered');
+    polling_on = false;});
+
+    this.homey.flow.getActionCard('polling_start_panel').registerRunListener(async (args, state) => {
+    console.log('Flowcard polling_start_panel triggered');
+    polling_on = true;});
+
+    this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
+    console.log('Flowcard API_call_rejected triggered');});
+
+    this.setStoreValue('measure_polling', measure_polling);
+
+    //Checks the time every 5 minutes and calls pollingCounterReset
+    setInterval(() => {this.pollingCounterReset(); }, 5*60 * 1000);
 
     this.pollLoop(); // Get data and repeat
   //}catch(error){
@@ -60,7 +60,8 @@ module.exports = class MyWebApi extends Homey.Device {
 
   async getTodaysEnergy() {
     console.log('Get todays energy called');
-    
+    const API_error = this.homey.flow.getTriggerCard('API_call_rejected')
+
     try{
     var sid=''; // System ID
     var eid=''; // ECU ID
@@ -73,80 +74,47 @@ module.exports = class MyWebApi extends Homey.Device {
     apiSecret = this.homey.settings.get("apiSecret");
 
     const dateToday = this.epochToDate(Date.now().toString());
+
     console.log(dateToday);
 
     const DeviceApi = new MyApi;
     const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/summary/' + sid , ' ', 'GET', apiKey, apiSecret);
-  
-    //console.log(ApiResult.data); // See https://apps.developer.homey.app/the-basics/devices/energy
+     
     const total_energy = ApiResult.data.lifetime*1;
     const year_energy = ApiResult.data.year*1;
     const month_energy = ApiResult.data.month*1;
     const meter_todays_energy = ApiResult.data.today*1;
+    measure_polling = this.getStoreValue('measure_polling')
 
     console.log('Total energy',total_energy);
     console.log('Year energy', year_energy);
     console.log('Month energy', month_energy);
     console.log('Todays energy', meter_todays_energy);
+    console.log('Measure polling', measure_polling);
 
     this.setCapabilityValue("total_energy",Math.round(total_energy));
     this.setCapabilityValue("year_energy",Math.round(year_energy));
     this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
     this.setCapabilityValue("meter_todays_energy",Math.round(100*meter_todays_energy)/100);
-
+    this.setCapabilityValue("measure_polling", measure_polling);
     console.log('Solarpanel data updated');
     this.getCurrentEnergy();
-
+    
   }catch(error) {
-    console.error('Fout bij het ophalen van data:', error);
+    console.log('Error fetching todays energy:', error.message);
+    const errorData = JSON.parse(error.message);
+    console.log(errorData.message); // "API call rejected"
+    console.log(errorData.code);    // 2005
+    console.log(errorData.details); // response data
+
+    if (errorData.message === 'API call rejected' ){
+    //API_error.trigger({'API_return_code': errorData.code, 'API_return_message': errorData.message});
+    const errorMessage = this.homey.__('API call rejected');
+    API_error.trigger({'API_return_code': errorData.code, 'API_return_message': errorMessage});
+    }
   };
 }
-
-//   async getCurrentEnergy() {
-//     // dit werkt nog niet
-//     try {
-//       console.log('Get current energy called');
-//       const dateToday = this.epochToDate(Date.now().toString());
-//       console.log(dateToday);
-//       var sid = '';
-//       var eid = '';
-//       var apiKey='';
-//       var apiSecret='';
-
-//       sid = this.homey.settings.get("sid");
-//       eid = this.homey.settings.get("eid");
-//       apiKey =  this.homey.settings.get("apiKey");
-//       apiSecret = this.homey.settings.get("apiSecret");
-//       console.log('SID:', sid, 'EID:', eid, 'API Key:', apiKey, ' API Secret:', apiSecret);
-
-
-//      const DeviceApi = new MyApi;
-//      const ApiResult = await DeviceApi.fetchData('/user/api/v2/systems/' + sid +'/devices/ecu/energy/' + eid, '?energy_level=minutely&date_range=' + dateToday, 'GET', apiKey, apiSecret );
-
-
-//         console.log('ApiResult:', ApiResult);
-
-
-
-
-// const data = await ApiResult
-// const length = Math.min(data.time.length, data.power.length, data.energy.length);
-
-// // Combineren tot één array van objecten
-// const combined = Array.from({ length }, (_, i) => ({
-//   time: data.time[i],
-//   power: data.power[i],
-//   energy: parseFloat(data.energy[i]) // optioneel: omzetten naar getal
-// }));
-
-// console.log(combined);
-
-
-//     } catch (error) {
-//       console.error('Error in fetching current energy data:', error);
-//     }
-//   }
-  
+ 
    
 epochToDate(epoch) {
   try {
@@ -268,6 +236,8 @@ async pollLoop() {
       console.log(`⏸️ Web polling paused between ${pauseStartStr} and ${pauseEndStr}.`);
       await Promise.all([
         await this.getTodaysEnergy(),
+        measure_polling++,
+        this.setStoreValue('measure_polling', measure_polling)
       ]);
     }
   } catch (err) {
@@ -282,73 +252,42 @@ async pollLoop() {
   }
 };
 
+async pollingCounterReset() {
+    try {
+      const firstDay = await this.isFirstDay();
+      if (firstDay) {
+        console.log("It's the first day of the month, resetting polling counter.");
+        measure_polling = 0;
+        this.setStoreValue('measure_polling', measure_polling)
+      }
+    } catch (error) {
+      console.error("Error in pollingCounterReset:", error);
+    }
+  }
 
-
-
-
-// async pollLoop() {
-//   try{
-//   const currentTime = await this.getTime(); 
-//   const [hour, minute] = currentTime.split(':').map(Number);
-//   const nowMinutes = hour * 60 + minute;
-
-//   if (!isValidTimeFormat(pauseStartStr)) {
-//     console.error("pause_start is no valid time!")
-//     return;
-//   }
-//   if (!isValidTimeFormat(pauseEndStr)) {
-//     console.error("pause_end is no valid time!");
-//     return;
-//   }
-//   if (isNaN(pollingInterval) || pollingInterval < 1) {
-//     console.error("poll_interval must be greater or equal to 1.");
-//     return;
-//   }
-
-//   const [pauseStartHour, pauseStartMinute] = pauseStartStr.split(':').map(Number);
-//   const [pauseEndHour, pauseEndMinute] = pauseEndStr.split(':').map(Number);
-//   const pauseStart = pauseStartHour * 60 + pauseStartMinute;
-//   const pauseEnd = pauseEndHour * 60 + pauseEndMinute;
-
-//   const isPaused = pauseStart < pauseEnd
-//     ? nowMinutes >= pauseStart && nowMinutes < pauseEnd
-//     : nowMinutes >= pauseStart || nowMinutes < pauseEnd;
-
-//   if (isPaused) { console.log(`⏸️ Web polling paused between ${pauseStartStr} and ${pauseEndStr} (${currentTime})`); } 
-//   console.log("Paused ", isPaused);
-  
-//     if (!isPaused) {
-//       console.log(`▶️ Web polling data at ${currentTime}`),
-//       await this.getTodaysEnergy();
-//       await this.getCurrentEnergy();
-//     };
-//   } catch (err) {
-//     console.warn("Web polling error:", err);
-//   } finally {
-//     pollingInterval = parseInt(this.getSetting('poll_interval'));
-//     console.log(`⏸️ Polling on web is running at an interval of ${pollingInterval} minutes`);
-//     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
-//   }
-// }
-
-// async getTime() {
+async isFirstDay() {
  
-//     const tz = this.homey.clock.getTimezone();
-//     console.log(`The timezone is ${tz}`);
+    const tz = this.homey.clock.getTimezone();
+    console.log(`The timezone is ${tz}`);
 
-//     // Define a function to get the time in a specific timezone
-//     const formatter = new Intl.DateTimeFormat([], {
-//       hour: '2-digit',
-//       minute: '2-digit',
-//       hour12: false, // Use 24-hour format
-//       timeZone: tz,
-//     });
-//     const timeParts = formatter.formatToParts(new Date());
-//     const hour = timeParts.find(part => part.type === 'hour').value;
-//     const minute = timeParts.find(part => part.type === 'minute').value;
+    // Define a function to get the time in a specific timezone
+    const formatter = new Intl.DateTimeFormat([], {
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // Use 24-hour format
+      timeZone: tz,
+    });
+    const day = timeParts.find(part => part.type === 'day').value;
+    const timeParts = formatter.formatToParts(new Date());
+    const hour = timeParts.find(part => part.type === 'hour').value;
+    const minute = timeParts.find(part => part.type === 'minute').value;
 
-//     console.log(`The time is ${hour}:${minute}`);
-//     return `${hour}:${minute}`;
-//   }
+if (day === '01' && hour === '00' && minute < '15') {
+  return true;
+} else {
+  return false;
+}
+  }
 
 }

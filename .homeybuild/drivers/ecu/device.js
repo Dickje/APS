@@ -47,11 +47,11 @@ module.exports = class MyECU extends Homey.Device {
 
     await this.getAppSettings()
 
-    this.homey.flow.getActionCard('polling_pause').registerRunListener(async (args, state) => {
-    console.log('Flowcard polling_pause triggered');
+    this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
+    console.log('Flowcard polling_pause_ECU triggered');
     polling_on = false;});
   
-    this.homey.flow.getActionCard('polling_start').registerRunListener(async (args, state) => {
+    this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async (args, state) => {
     console.log('Flowcard polling_start triggered');
     polling_on = true;});
 
@@ -185,7 +185,6 @@ async getPowerData() {
     else { await this.setCapabilityValue("measure_power", currentPower);
     };
 
-    //await this.setCapabilityValue("measure_power", currentPower);
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
     await this.setCapabilityValue("peak_power", peak_power);
     if (invertersOnline == 0) {

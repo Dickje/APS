@@ -41,7 +41,25 @@
         "fr": "L'énergie aujourd'hui",
         "de": "Energie heute"
       }
-    }
+    },
+    "measure_polling": {
+      "type": "number",
+      "title": {
+        "en": "Polling counter",
+        "nl": "Polling teller",
+        "fr": "Compteur de sondage",
+        "de": "Abfragezähler"
+      },
+        "uiComponent": "null",
+        "getable": false,
+        "setable": true,
+        "units": {
+          "en": "times",
+          "nl": "keer",
+          "fr": "fois",
+          "de": "mal"
+      }
+      }
   },
   "platforms": [
     "local"
@@ -67,5 +85,5 @@
        "id": "add_devices",
        "template": "add_devices"
     } 
-    ]  
+    ]
 }

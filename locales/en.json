@@ -14,6 +14,7 @@
     "Pause_end_incorrect" : "The pause end time is incorrect",
     "Polling_interval_changed": "Polling interval changed",
     "pause_by_flowcard_changed" : "Polling choice changed",
-    "pause_by_flowcard_incorrect" : "Error in polling choice change"
+    "pause_by_flowcard_incorrect" : "Error in polling choice change",
+    "API call rejected": "API call rejected"
 
 }  

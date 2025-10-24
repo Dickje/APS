@@ -30,6 +30,13 @@ async function setCapabilities() {
     await this.addCapability("meter_todays_energy");
     await this.setCapabilityOptions("meter_todays_energy", {});
     console.log("Capabilities are set.");
-}
+    }
+
+    //Polling counter
+    if (!this.hasCapability("measure_polling")) {
+    await this.addCapability("measure_polling");
+    await this.setCapabilityOptions("measure_polling", {});
+    console.log("Capabilities are set.");
+   }   
 }
 module.exports = { setCapabilities }

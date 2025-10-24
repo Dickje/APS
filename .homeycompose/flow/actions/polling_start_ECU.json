@@ -1,9 +1,9 @@
 {
   "title": {
-    "en": "Start polling",
-    "nl": "Start polling",
-    "de": "Start Umfrage",
-    "fr": "Commencer le sondage"
+    "en": "Start ECU polling",
+    "nl": "Start ECU polling",
+    "de": "Start ECU Umfrage",
+    "fr": "Commencer le sondage ECU"
   },
   "hint": {
     "en": "This overrides pause end time",

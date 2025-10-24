@@ -15,6 +15,7 @@
     "Polling_interval_changed": "Polling interval gewijzigd",
     "polling_too_much": "Dit leidt tot meer dan 1000 API calls per maand",
     "pause_by_flowcard_changed" : "Polling keuze gewijzigd",
-    "pause_by_flowcard_incorrect" : "Fout in polling keuze wijziging"
+    "pause_by_flowcard_incorrect" : "Fout in polling keuze wijziging",
+    "API call rejected": "API-aanroep afgewezen"
        
 }  

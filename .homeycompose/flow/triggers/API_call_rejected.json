@@ -1,0 +1,35 @@
+{
+  "title": {
+    "en": "API call rejected ",
+    "nl": "API-aanroep afgewezen",
+    "de": "API-Aufruf abgelehnt",
+    "fr": "Appel API rejeté"
+  },
+  "hint": {
+    "en": "Check your API settings and amount of calls",
+    "nl": "Controleer uw API-instellingen en het aantal oproepen",
+    "de": "Überprüfen Sie Ihre API-Einstellungen und die Anzahl der Aufrufe",
+    "fr": "Vérifiez vos paramètres API et le nombre d'appels"
+  },
+  "tokens": [
+    {    
+      "name": "API_return_code",
+      "type": "number",
+      "title": {
+        "en": "API Return Code",
+        "nl": "API Retourcode",
+        "de": "API-Rückgabecode",
+        "fr": "Code de retour API"
+      }
+    },
+    {    
+      "name": "API_return_message",
+      "type": "string",
+      "title": {
+        "en": "API Return Message",
+        "nl": "API Retourbericht",
+        "de": "API-Rückgabemeldung",
+        "fr": "Message de retour API"
+      }
+    }]
+}

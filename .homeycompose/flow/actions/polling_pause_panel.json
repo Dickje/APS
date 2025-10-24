@@ -1,0 +1,14 @@
+{
+  "title": {
+    "en": "Pause solarpanel polling",
+    "nl": "Pauzeer zonnepaneel polling",
+    "de": "Solarpanel-Abfrage anhalten",
+    "fr": "Suspendre le sondage sur les panneaux solaires"
+  },
+  "hint": {
+    "en": "This overrides pause start time",
+    "nl": "Dit overschrijft de pauze starttijd",
+    "de": "Dies überschreibt die Pausenstartzeit",
+    "fr": "Ceci remplace l'heure de début de la pause"
+  }
+}
