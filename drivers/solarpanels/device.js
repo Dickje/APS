@@ -10,7 +10,7 @@ let pauseEndStr;
 let pollingInterval=15;
 let pause_by_flowcard = false;
 let polling_on = true;
-let measure_polling = 0;
+let measure_polling = 1;
 
 module.exports = class MyWebApi extends Homey.Device {
 
@@ -20,7 +20,7 @@ module.exports = class MyWebApi extends Homey.Device {
    * onInit is called when the device is initialized.
    */
   async onInit() {
-    //try {
+    try {
     console.log('Initializing solarpanel');
 
     await setCapabilities.call(this)
@@ -45,16 +45,19 @@ module.exports = class MyWebApi extends Homey.Device {
 
     this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
     console.log('Flowcard API_call_rejected triggered');});
-
-    this.setStoreValue('measure_polling', measure_polling);
+    
+    measure_polling = await this.getStoreValue('measure_polling');
+    if (measure_polling === undefined){
+      measure_polling = 1;
+    }
 
     //Checks the time every 5 minutes and calls pollingCounterReset
-    setInterval(() => {this.pollingCounterReset(); }, 5*60 * 1000);
+    setInterval(() => {this.pollingCounterReset(); }, 5 * 60 * 1000);
 
     this.pollLoop(); // Get data and repeat
-  //}catch(error){
-  //  console.log("Error initializing device", error);
- // }
+  }catch(error){
+   console.log("Error initializing device", error);
+ }
 
     }
 
@@ -64,12 +67,10 @@ module.exports = class MyWebApi extends Homey.Device {
 
     try{
     var sid=''; // System ID
-    var eid=''; // ECU ID
     var apiKey='';
     var apiSecret='';
 
     sid = this.homey.settings.get("sid");
-    eid = this.homey.settings.get("eid");
     apiKey =  this.homey.settings.get("apiKey");
     apiSecret = this.homey.settings.get("apiSecret");
 
@@ -84,7 +85,7 @@ module.exports = class MyWebApi extends Homey.Device {
     const year_energy = ApiResult.data.year*1;
     const month_energy = ApiResult.data.month*1;
     const meter_todays_energy = ApiResult.data.today*1;
-    measure_polling = this.getStoreValue('measure_polling')
+    measure_polling = await this.getStoreValue('measure_polling');
 
     console.log('Total energy',total_energy);
     console.log('Year energy', year_energy);
@@ -98,8 +99,7 @@ module.exports = class MyWebApi extends Homey.Device {
     this.setCapabilityValue("meter_todays_energy",Math.round(100*meter_todays_energy)/100);
     this.setCapabilityValue("measure_polling", measure_polling);
     console.log('Solarpanel data updated');
-    this.getCurrentEnergy();
-    
+        
   }catch(error) {
     console.log('Error fetching todays energy:', error.message);
     const errorData = JSON.parse(error.message);
@@ -108,8 +108,7 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log(errorData.details); // response data
 
     if (errorData.message === 'API call rejected' ){
-    //API_error.trigger({'API_return_code': errorData.code, 'API_return_message': errorData.message});
-    const errorMessage = this.homey.__('API call rejected');
+     const errorMessage = this.homey.__('API call rejected');
     API_error.trigger({'API_return_code': errorData.code, 'API_return_message': errorMessage});
     }
   };
@@ -135,9 +134,7 @@ epochToDate(epoch) {
      }
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {
-    this.log('Solarpanel settings where changed');
-
-  this.log('WEB API settings were changed');
+  console.log('Solarpanel settings where changed');
   console.log('🔧 Old settings:', oldSettings);
   console.log('🆕 New settings:', newSettings);
   console.log('🔑 Changed keys:', changedKeys);
@@ -160,7 +157,7 @@ epochToDate(epoch) {
     }
 
     if (key === 'pause_end') {
-      if (isValidTimeFormat(pauseStartStr)) {
+      if (isValidTimeFormat(pauseEndStr)) {
         this.homey.settings.set("pause_end", value);
             messages.push(this.homey.__("Pause_end_changed"));
       } else {
@@ -174,20 +171,33 @@ epochToDate(epoch) {
          this.homey.settings.set("polling_interval", value);
          pollingInterval=value;
          messages.push(this.homey.__("Polling_interval_changed"));
+         await this.pollLoop(); // Restart polling with new interval
        } else {
             messages.push(this.homey.__("Polling_interval_incorrect"));
        }
     }
- 
-    
   }
 
-  const pollingtime = pause_end.split(':').map(Number) - pause_start.split(':').map(Number);
-  console.log(pause_end, pause_start);
-  console.log('Pollingtime: ' , pollingtime);
-  const pollingperday = pollingtime/ pollingInterval
+  const [endHour, endMinute] = pauseEndStr.split(':').map(Number);
+  const [startHour, startMinute] = pauseStartStr.split(':').map(Number);
+  let pollingWindow = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+    if (pollingWindow < 0) {
+    pollingWindow = pollingWindow + 24 * 60; 
+  }
+  
+  console.log(pauseEndStr, pauseStartStr);
+  console.log('pollingWindow (minutes): ' , pollingWindow);
+  const pollingperday = pollingWindow / pollingInterval
+  console.log('pollingperday: ', pollingperday);
   if (pollingperday*30 > 1000) {
-    messages.push(this.homey.alert.__("polling_too_much"));
+    messages.push(this.homey.__("polling_too_much"));
+
+      //this.setWarning(this.homey.__('steamerError')).catch(this.error);
+      // zie: https://github.com/athombv/eu.huum/blob/d36061bd219cecd88019c4e9f507f1efc7061a67/lib/HuumDevice.js#L148
+      //zie ook: https://apps-sdk-v3.developer.homey.app/Device.html#setWarning
+
+      this.setWarning(this.homey.__('polling_too_much')); //Must be unset also
+
   }
 
 
@@ -235,9 +245,10 @@ async pollLoop() {
     if (!isPaused( pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard, polling_on, this.homey)) {
       console.log(`⏸️ Web polling paused between ${pauseStartStr} and ${pauseEndStr}.`);
       await Promise.all([
+        console.log('Polling active, getting data from web API'),
         await this.getTodaysEnergy(),
-        measure_polling++,
-        this.setStoreValue('measure_polling', measure_polling)
+        measure_polling = measure_polling + 1,
+        await this.setStoreValue('measure_polling', measure_polling)
       ]);
     }
   } catch (err) {
@@ -258,7 +269,8 @@ async pollingCounterReset() {
       if (firstDay) {
         console.log("It's the first day of the month, resetting polling counter.");
         measure_polling = 0;
-        this.setStoreValue('measure_polling', measure_polling)
+        await this.setStoreValue('measure_polling', measure_polling);
+        await this.pollLoop();
       }
     } catch (error) {
       console.error("Error in pollingCounterReset:", error);
@@ -278,12 +290,12 @@ async isFirstDay() {
       hour12: false, // Use 24-hour format
       timeZone: tz,
     });
-    const day = timeParts.find(part => part.type === 'day').value;
     const timeParts = formatter.formatToParts(new Date());
+    const day = timeParts.find(part => part.type === 'day').value;
     const hour = timeParts.find(part => part.type === 'hour').value;
     const minute = timeParts.find(part => part.type === 'minute').value;
 
-if (day === '01' && hour === '00' && minute < '15') {
+if (day === '01' && hour === '15' && minute < '15') {
   return true;
 } else {
   return false;

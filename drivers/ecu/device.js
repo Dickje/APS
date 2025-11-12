@@ -62,15 +62,14 @@ module.exports = class MyECU extends Homey.Device {
     })
 
 
-    //Checks the time every minute and calls datareset
-    setInterval(() => {this.datareset(); }, 60 * 1000); 
+    //Checks the time every 3 minutes and calls datareset
+    setInterval(() => {this.datareset(); }, 3 * 60 * 1000);
     // Get data and repeat
     this.pollLoop(); // Get data and repeat
 
     console.log('ECU has been initialized');
     console.log('');
     
-    //this.pollLoop(); // Get data and repeat
   } catch (err) {
     console.log(`❌ Error in onInit: ${err.message}`); 
   }
@@ -79,7 +78,7 @@ module.exports = class MyECU extends Homey.Device {
 async getAppSettings(){
     pauseStartStr = this.getSetting('pause_start') || "23:00";
     pauseEndStr = this.getSetting('pause_end') || "05:00";
-    pollingInterval = parseInt(this.getSetting('poll_interval')) || "2"; 
+    pollingInterval = parseInt(this.getSetting('poll_interval')) || "5"; 
 
     console.log('ECU pause start time:', pauseStartStr);
     console.log('ECU pause end time:', pauseEndStr);
@@ -270,9 +269,7 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
          } else {
               messages.push(this.homey.__("Polling_interval_incorrect"));
          }
-      }
-  
-    
+      }  
   }
     // Combine all messages into a single return value
     await this.getAppSettings();
@@ -454,8 +451,8 @@ async pollLoop() {
     if (!isPaused( pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard, polling_on, this.homey)) {
       console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}.`);
       await Promise.all([
+        console.log('Polling active, getting data from ECU'),
         await this.getInverterdata(),
-        //await this.getPowerData()
       ]);
     }
   } catch (err) {

@@ -1,12 +1,6 @@
     
 async function setCapabilities() {    
     
-    // Maximum power that day
-    if (!this.hasCapability("peak_power")) {
-    await this.addCapability("peak_power");
-    await this.setCapabilityOptions("peak_power", {});
-    }
-
     //Lifetime energy
     if (!this.hasCapability("total_energy")) {
     await this.addCapability("total_energy");
@@ -29,14 +23,13 @@ async function setCapabilities() {
     if (!this.hasCapability("meter_todays_energy")) {
     await this.addCapability("meter_todays_energy");
     await this.setCapabilityOptions("meter_todays_energy", {});
-    console.log("Capabilities are set.");
     }
 
     //Polling counter
     if (!this.hasCapability("measure_polling")) {
     await this.addCapability("measure_polling");
     await this.setCapabilityOptions("measure_polling", {});
-    console.log("Capabilities are set.");
    }   
+    console.log("Capabilities are set.");
 }
 module.exports = { setCapabilities }

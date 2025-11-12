@@ -464,7 +464,8 @@
         "total_energy",
         "year_energy",
         "month_energy",
-        "meter_todays_energy"
+        "meter_todays_energy",
+        "measure_polling"
       ],
       "class": "solarpanel",
       "capabilitiesOptions": {
@@ -501,21 +502,11 @@
           }
         },
         "measure_polling": {
-          "type": "number",
           "title": {
             "en": "Polling counter",
             "nl": "Polling teller",
             "fr": "Compteur de sondage",
             "de": "Abfragezähler"
-          },
-          "uiComponent": "null",
-          "getable": false,
-          "setable": true,
-          "units": {
-            "en": "times",
-            "nl": "keer",
-            "fr": "fois",
-            "de": "mal"
           }
         }
       },
@@ -645,7 +636,7 @@
         "en": ""
       },
       "insights": false,
-      "icon": ""
+      "icon": "/assets/icons/counter.svg"
     },
     "measure_power": {
       "type": "number",

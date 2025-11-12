@@ -10,5 +10,5 @@
   "setable": false,
   "units": { "en": ""},
   "insights": false,
-  "icon" : ""
+   "icon" : "/assets/icons/counter.svg"
 }
