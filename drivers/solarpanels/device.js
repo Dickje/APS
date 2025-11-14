@@ -44,6 +44,9 @@ module.exports = class MyWebApi extends Homey.Device {
       const pi = Number.parseInt(p, 10);
       pollingInterval = Number.isInteger(pi) ? pi : 15;
     }
+    { 
+      pause_by_flowcard = this.getSetting('pause_by_flowcard');
+    }
 
     this.homey.flow.getActionCard('polling_pause_panel').registerRunListener(async (args, state) => {
     console.log('Flowcard polling_pause_panel triggered');

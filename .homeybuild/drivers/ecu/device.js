@@ -90,7 +90,10 @@ async getAppSettings(){
       const pi = Number.parseInt(p, 10);
       pollingInterval = Number.isInteger(pi) ? pi : 5;
     }
-
+    { 
+      pause_by_flowcard = this.getSetting('pause_by_flowcard');
+    }
+    
     console.log('ECU pause start time:', pauseStartStr);
     console.log('ECU pause end time:', pauseEndStr);
     console.log('ECU polling interval (minutes):', pollingInterval);
@@ -430,15 +433,16 @@ async pollLoop() {
     return;
   }
 
-  if (isPaused(pauseStartStr, pauseEndStr, pollingInterval, this.homey)) { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr} (${time})`); } 
+  if (isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey))
+     { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr} (${time})`); } 
 
   try {
-    if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, this.homey)) {
+        pause_by_flowcard = this.getSetting('pause_by_flowcard');
+    if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey)) {
       console.log(`⏸️ Polling on ECU is running.`);
       await Promise.all([
-        await this.getInverterdata(),
-        await this.getPowerData()
-      ]);
+        await this.getInverterdata() 
+           ]);
     }
   } catch (err) {
     console.warn("Polling error:", err);
