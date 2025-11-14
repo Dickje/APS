@@ -277,7 +277,7 @@ async getFirmwareAndInverters() {
     } catch(err){
         console.error(`❌ Error getting firmware and inverter count: ${err.message}`);
 
-        if (typeof error.message === "string") {               ECU_error.trigger({ error_message: err.message });
+        if (typeof error.message === "string") {ECU_error.trigger({ error_message: err.message });
 }        return null;
     }
         console.log('Number of inverters:', inverters);
@@ -352,26 +352,20 @@ try {
       console.log("Type return from ECU:", (typeof(buffer)));
       console.log("Buffer ", buffer);
       if (error ==='timeoutError'){return null};
-      if (error ==='connectionError'){
+      if (error ==='connectionError')     
 
-                if (typeof error.message === "string") {       
-             ECU_error.trigger({ error_message: this.homey.__("ECU_connection_failure ") }); 
-        messages.push(this.homey.__("ECU_connection_failure x",error));
-}     
-this.homey.notifications.create({
-    title: "Important Alert", // The main title for your notification
-    text: "This is the detailed message for the notification.", // The main body of your notification
-    subtitle: "ALERT AT TOP" // This text will appear at the very top of the notification [1, 2]
-}
-);
-
+      if (error.message ==='connectionError' || error.message ==='timeoutError') {
+        if (typeof error.message === "string") {   
+          console.log("Triggering ECU_error flow");
+          ECU_error.trigger({"error_message": this.homey.__("ECU_connection_failure ") });
+      }
         return null};
 
     if (error.code) console.error("🔹 Errorcode:", error.code);
 
     if (this && this.homey && this.homey.notifications) {
 
-      if (typeof error.message === "string") {        ECU_error.trigger({ error_message: this.homey.__("ECU_data ") })
+      if (typeof error_message === "string") { ECU_error.trigger({ error_message: this.homey.__("ECU_data ") })
 ;       } else {
         ECU_error.trigger({ "": this.homey.__("ECU_data_unknown ") });
       }     };    return null;
