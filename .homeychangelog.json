@@ -61,5 +61,8 @@
   },
   "1.3.3": {
     "en": "Corrected a piece that Copilot had messed up"
+  },
+  "1.3.4": {
+    "en": "Fixed some Codepilot generated code"
   }
 }
