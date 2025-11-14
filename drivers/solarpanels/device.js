@@ -30,10 +30,20 @@ module.exports = class MyWebApi extends Homey.Device {
 
     
     console.log('Solarpanel has been initialized');
-    // Get polling settings 
-    pauseStartStr = this.getSetting('pause_start') || "23:00";
-    pauseEndStr = this.getSetting('pause_end') || "05:00";
-    pollingInterval = parseInt(this.getSetting('poll_interval')) || "15"; 
+    // Get polling settings (normalize: trim, fallback when empty)
+    {
+      const s = this.getSetting('pause_start');
+      pauseStartStr = (typeof s === 'string' && s.trim() !== '') ? s.trim() : '23:00';
+    }
+    {
+      const e = this.getSetting('pause_end');
+      pauseEndStr = (typeof e === 'string' && e.trim() !== '') ? e.trim() : '05:00';
+    }
+    {
+      const p = this.getSetting('poll_interval');
+      const pi = Number.parseInt(p, 10);
+      pollingInterval = Number.isInteger(pi) ? pi : 15;
+    }
 
     this.homey.flow.getActionCard('polling_pause_panel').registerRunListener(async (args, state) => {
     console.log('Flowcard polling_pause_panel triggered');
@@ -148,20 +158,23 @@ epochToDate(epoch) {
     console.log('Setting', value);
 
     if (key === 'pause_start') {
-      if (isValidTimeFormat(pauseStartStr)) {
+      // Validate the new value (not the old variable)
+      if (isValidTimeFormat(value)) {
         this.homey.settings.set("pause_start", value);
-            messages.push(this.homey.__("Pause_start_changed"));
+        pauseStartStr = value.trim();
+        messages.push(this.homey.__("Pause_start_changed"));
       } else {
-            messages.push(this.homey.__("Pause_start_incorrect"));
+        messages.push(this.homey.__("Pause_start_incorrect"));
       }
     }
 
     if (key === 'pause_end') {
-      if (isValidTimeFormat(pauseEndStr)) {
+      if (isValidTimeFormat(value)) {
         this.homey.settings.set("pause_end", value);
-            messages.push(this.homey.__("Pause_end_changed"));
+        pauseEndStr = value.trim();
+        messages.push(this.homey.__("Pause_end_changed"));
       } else {
-            messages.push(this.homey.__("Pause_end_incorrect"));
+        messages.push(this.homey.__("Pause_end_incorrect"));
       }
     }
 

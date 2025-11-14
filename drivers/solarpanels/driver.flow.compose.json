@@ -1,0 +1,72 @@
+{
+"actions":[
+        {
+ "id": "polling_pause_panel",
+    "title": {
+        "en": "Pause solarpanel polling",
+        "nl": "Pauzeer zonnepaneel polling",
+        "de": "Solarpanel-Abfrage anhalten",
+        "fr": "Suspendre le sondage sur les panneaux solaires"
+  },
+  "hint": {
+        "en": "This overrides pause start time",
+        "nl": "Dit overschrijft de pauze starttijd",
+        "de": "Dies überschreibt die Pausenstartzeit",
+        "fr": "Ceci remplace l'heure de début de la pause"
+  }
+},
+{
+"id": "polling_start_panel",
+    "title": { 
+        "en": "Start solarpanel polling",
+        "nl": "Start zonnepaneel polling",
+        "de": "Solarpanel-Abfrage starten",
+        "fr": "Démarrer le sondage sur les panneaux solaires"
+    },              
+    "hint": {
+        "en": "This overrides pause end time",
+        "nl": "Dit overschrijft de pauze eindtijd",
+        "de": "Dies überschreibt die Pausenendzeit",
+        "fr": "Ceci remplace l'heure de fin de la pause"
+  }
+}   
+],
+"triggers": [
+    {
+ "id": "API_call_rejected",
+    "title": {
+        "en": "API call rejected ",
+        "nl": "API-aanroep afgewezen",
+        "de": "API-Aufruf abgelehnt",
+        "fr": "Appel API rejeté"
+  },
+    "hint": {
+        "en": "Check your API settings and amount of calls",
+        "nl": "Controleer uw API-instellingen en het aantal oproepen",
+        "de": "Überprüfen Sie Ihre API-Einstellungen und die Anzahl der Aufrufe",
+        "fr": "Vérifiez vos paramètres API et le nombre d'appels"
+  },
+     "tokens": [
+    {    
+      "name": "API_return_code",
+      "type": "number",
+      "title": {
+            "en": "API Return Code",
+            "nl": "API Retourcode",
+            "de": "API-Rückgabecode",
+            "fr": "Code de retour API"
+      }
+    },
+    {    
+      "name": "API_return_message",
+      "type": "string",
+      "title": {
+            "en": "API Return Message",
+            "nl": "API Retourbericht",
+            "de": "API-Rückgabemeldung",
+            "fr": "Message de retour API"
+      }
+    }]
+    }
+]
+}

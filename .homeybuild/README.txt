@@ -1,6 +1,6 @@
 Read power and energy from APsystems Solar Panels
 
-I'm grateful for the work of the Home Automation community, who published a lot of info.
+Thanks for the work of the Home Automation community, that published a lot of info.
 See https://github.com/HAEdwin/homeassistant-apsystems_ecu_reader for details.
 
 For using the ECU: configure your wireless ECU connection

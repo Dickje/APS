@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.dj.aps",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -79,6 +79,87 @@
   "flow": {
     "triggers": [
       {
+        "id": "ECU_error",
+        "title": {
+          "en": "Error in retreiving ECU-data",
+          "nl": "Fout bij het ophalen van ECU-gegevens",
+          "de": "Fehler beim Abrufen der ECU-Daten",
+          "fr": "Erreur lors de la récupération des données ECU"
+        },
+        "hint": {
+          "en": "Let's you know when the ECU is not communicating",
+          "nl": "Laat je weten dat de ECU niet communiceert",
+          "de": "Informiert Sie darüber, dass die ECU nicht kommuniziert",
+          "fr": "Vous permet de savoir que l'ECU ne communique pas"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "No connection to ECU",
+              "fr": "Aucune connexion à l'ECU",
+              "de": "Keine Verbindung zur ECU",
+              "nl": "Geen verbinding met ECU"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ecu"
+          }
+        ]
+      },
+      {
+        "id": "ECU_power_changed",
+        "title": {
+          "en": "Power has changed",
+          "nl": "Vermogen is veranderd",
+          "de": "Leistung hat sich geändert",
+          "fr": "La puissance a changé"
+        },
+        "hint": {
+          "en": "Triggers when the ECU power changes",
+          "nl": "Wordt geactiveerd als het vermogen van de ECU verandert",
+          "de": "Wird ausgelöst, wenn sich die ECU-Leistung ändert",
+          "fr": "Déclenché lorsque la puissance de l'ECU change"
+        },
+        "tokens": [
+          {
+            "type": "number",
+            "name": "new_power",
+            "title": {
+              "en": "New power",
+              "de": "Neue Leistung",
+              "fr": "Nouvelle puissance",
+              "nl": "Nieuw vermogen"
+            },
+            "example": {
+              "en": "3500",
+              "fr": "3500",
+              "de": "3500",
+              "nl": "3500"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ecu"
+          }
+        ]
+      },
+      {
+        "id": "API_call_rejected",
         "title": {
           "en": "API call rejected ",
           "nl": "API-aanroep afgewezen",
@@ -113,77 +194,40 @@
             }
           }
         ],
-        "id": "API_call_rejected"
-      },
-      {
-        "title": {
-          "en": "Error in retreiving ECU-data",
-          "nl": "Fout bij het ophalen van ECU-gegevens",
-          "de": "Fehler beim Abrufen der ECU-Daten",
-          "fr": "Erreur lors de la récupération des données ECU"
-        },
-        "hint": {
-          "en": "Let's you know when the ECU is not communicating",
-          "nl": "Laat je weten dat de ECU niet communiceert",
-          "de": "Informiert Sie darüber, dass die ECU nicht kommuniziert",
-          "fr": "Vous permet de savoir que l'ECU ne communique pas"
-        },
-        "tokens": [
+        "args": [
           {
-            "type": "string",
-            "name": "error_message",
-            "title": {
-              "en": "Error message",
-              "de": "Fehlermeldung",
-              "fr": "Message d'erreur",
-              "nl": "Foutmelding"
-            },
-            "example": {
-              "en": "No connection to ECU",
-              "fr": "Aucune connexion à l'ECU",
-              "de": "Keine Verbindung zur ECU",
-              "nl": "Geen verbinding met ECU"
-            }
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=solarpanels"
           }
-        ],
-        "id": "ECU_error"
-      },
-      {
-        "title": {
-          "en": "Power has changed",
-          "nl": "Vermogen is veranderd",
-          "de": "Leistung hat sich geändert",
-          "fr": "La puissance a changé"
-        },
-        "hint": {
-          "en": "Triggers when the ECU power changes",
-          "nl": "Wordt geactiveerd als het vermogen van de ECU verandert",
-          "de": "Wird ausgelöst, wenn sich die ECU-Leistung ändert",
-          "fr": "Déclenché lorsque la puissance de l'ECU change"
-        },
-        "tokens": [
-          {
-            "type": "number",
-            "name": "new_power",
-            "title": {
-              "en": "New power",
-              "de": "Neue Leistung",
-              "fr": "Nouvelle puissance",
-              "nl": "Nieuw vermogen"
-            },
-            "example": {
-              "en": "3500",
-              "fr": "3500",
-              "de": "3500",
-              "nl": "3500"
-            }
-          }
-        ],
-        "id": "ECU_power_changed"
+        ]
       }
     ],
     "actions": [
       {
+        "id": "polling_start_ECU",
+        "title": {
+          "en": "Start ECU polling",
+          "nl": "Start ECU polling",
+          "de": "Umfrage ECU starten",
+          "fr": "Démarrer le sondage ECU "
+        },
+        "hint": {
+          "en": "This overrides pause end time",
+          "nl": "Dit overschrijft de pauze eindtijd",
+          "de": "Dies überschreibt die Pausenendzeit",
+          "fr": "Ceci remplace l'heure de fin de la pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ecu"
+          }
+        ]
+      },
+      {
+        "id": "polling_pause_ECU",
         "title": {
           "en": "Pause ECU polling",
           "nl": "Pauzeer ECU polling",
@@ -196,9 +240,16 @@
           "de": "Dies überschreibt die Pausenstartzeit",
           "fr": "Ceci remplace l'heure de début de la pause"
         },
-        "id": "polling_pause_ECU"
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ecu"
+          }
+        ]
       },
       {
+        "id": "polling_pause_panel",
         "title": {
           "en": "Pause solarpanel polling",
           "nl": "Pauzeer zonnepaneel polling",
@@ -211,29 +262,21 @@
           "de": "Dies überschreibt die Pausenstartzeit",
           "fr": "Ceci remplace l'heure de début de la pause"
         },
-        "id": "polling_pause_panel"
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=solarpanels"
+          }
+        ]
       },
       {
-        "title": {
-          "en": "Start ECU polling",
-          "nl": "Start ECU polling",
-          "de": "Start ECU Umfrage",
-          "fr": "Commencer le sondage ECU"
-        },
-        "hint": {
-          "en": "This overrides pause end time",
-          "nl": "Dit overschrijft de pauze eindtijd",
-          "de": "Dies überschreibt die Pausenendzeit",
-          "fr": "Ceci remplace l'heure de fin de la pause"
-        },
-        "id": "polling_start_ECU"
-      },
-      {
+        "id": "polling_start_panel",
         "title": {
           "en": "Start solarpanel polling",
-          "nl": "Start solarpanel polling",
-          "de": "Start solarpanel Umfrage",
-          "fr": "Commencer le sondage solarpanel"
+          "nl": "Start zonnepaneel polling",
+          "de": "Solarpanel-Abfrage starten",
+          "fr": "Démarrer le sondage sur les panneaux solaires"
         },
         "hint": {
           "en": "This overrides pause end time",
@@ -241,7 +284,13 @@
           "de": "Dies überschreibt die Pausenendzeit",
           "fr": "Ceci remplace l'heure de fin de la pause"
         },
-        "id": "polling_start_panel"
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=solarpanels"
+          }
+        ]
       }
     ]
   },
@@ -508,6 +557,9 @@
             "fr": "Compteur de sondage",
             "de": "Abfragezähler"
           }
+        },
+        "energy": {
+          "exclude": false
         }
       },
       "platforms": [
