@@ -90,9 +90,9 @@ async getAppSettings(){
       const pi = Number.parseInt(p, 10);
       pollingInterval = Number.isInteger(pi) ? pi : 5;
     }
-    { 
-      pause_by_flowcard = this.getSetting('pause_by_flowcard');
-    }
+    { pause_by_flowcard = this.getSetting('pause_by_flowcard');
+
+      }
     
     console.log('ECU pause start time:', pauseStartStr);
     console.log('ECU pause end time:', pauseEndStr);
