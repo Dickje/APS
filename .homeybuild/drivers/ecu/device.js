@@ -335,7 +335,6 @@ async hexdumpall(buffer) {
 }
 
 async getECUdata(command, ECU_ID, ECU_address) {
-const ECU_error = this.homey.flow.getTriggerCard("ECU_error") 
 try {
     const ECU_command = command + ECU_ID + 'END\n';
     const ECU_connection = new ECU_connector();
@@ -350,27 +349,56 @@ try {
     } catch (error) {
       console.log("❗ Error in retreiving ECU-data:");
       console.log("Type return from ECU:", (typeof(buffer)));
-      console.log("Buffer ", buffer);
-      if (error ==='timeoutError'){return null};
-      if (error ==='connectionError')     
-
+      console.log("Buffer :", buffer);
+      console.log(`Error message: ${error.message} , ${this.homey.__("ECU_connection_failure ")}`);
+      const ECU_error = this.homey.flow.getTriggerCard("ECU_error") ;
       if (error.message ==='connectionError' || error.message ==='timeoutError') {
         if (typeof error.message === "string") {   
           console.log("Triggering ECU_error flow");
           ECU_error.trigger({"error_message": this.homey.__("ECU_connection_failure ") });
       }
-        return null};
-
-    if (error.code) console.error("🔹 Errorcode:", error.code);
-
-    if (this && this.homey && this.homey.notifications) {
-
-      if (typeof error_message === "string") { ECU_error.trigger({ error_message: this.homey.__("ECU_data ") })
-;       } else {
-        ECU_error.trigger({ "": this.homey.__("ECU_data_unknown ") });
-      }     };    return null;
+    }
+    return null;
   }
 }
+
+// async getECUdata(command, ECU_ID, ECU_address) {
+// const ECU_error = this.homey.flow.getTriggerCard("ECU_error") 
+// try {
+//     const ECU_command = command + ECU_ID + 'END\n';
+//     const ECU_connection = new ECU_connector();
+//     const ecudata = await ECU_connection.fetchData(ECU_address, ECU_command);
+//     console.log('getECUdata result:', ecudata);
+//     if (!ecudata || !ecudata.data) {
+//       console.log('❗ Geen geldige ECU data ontvangen.');
+//       return null;
+//     }
+//     const buffer = Buffer.from(ecudata.data);
+//     return buffer;
+//     } catch (error) {
+//       console.log("❗ Error in retreiving ECU-data:");
+//       console.log("Type return from ECU:", (typeof(buffer)));
+//       console.log("Buffer ", buffer);
+//       if (error ==='timeoutError'){return null};
+//       if (error ==='connectionError')     
+
+//       if (error.message ==='connectionError' || error.message ==='timeoutError') {
+//         if (typeof error.message === "string") {   
+//           console.log("Triggering ECU_error flow");
+//           ECU_error.trigger({"error_message": this.homey.__("ECU_connection_failure ") });
+//       }
+//         return null};
+
+//     if (error.code) console.error("🔹 Errorcode:", error.code);
+
+//     if (this && this.homey && this.homey.notifications) {
+
+//       if (typeof error_message === "string") { ECU_error.trigger({ error_message: this.homey.__("ECU_data ") })
+// ;       } else {
+//         ECU_error.trigger({ "": this.homey.__("ECU_data_unknown ") });
+//       }     };    return null;
+//   }
+// }
 
 async checkSum(buffer) {
   try {
