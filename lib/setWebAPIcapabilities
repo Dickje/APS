@@ -20,9 +20,9 @@ async function setCapabilities() {
     }
 
     //Todays energy
-    if (!this.hasCapability("meter_todays_energy")) {
-    await this.addCapability("meter_todays_energy");
-    await this.setCapabilityOptions("meter_todays_energy", {});
+    if (!this.hasCapability("meter_power")) {
+    await this.addCapability("meter_power");
+    await this.setCapabilityOptions("meter_power", {});
     }
 
     //Polling counter
@@ -30,6 +30,6 @@ async function setCapabilities() {
     await this.addCapability("measure_polling");
     await this.setCapabilityOptions("measure_polling", {});
    }   
-    console.log("Capabilities are set.");
+    console.log("WEB capabilities are set.");
 }
 module.exports = { setCapabilities }

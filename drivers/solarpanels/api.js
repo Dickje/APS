@@ -6,7 +6,7 @@ module.exports = class MyApi extends Homey.Api {
     async fetchData(request_path, request_param, http_method, api_Key, api_Secret) {
  
         console.log('API request called');
-
+        //throw new Error("API call rejected");
         const axios = require("axios"); 
         const timestamp = Date.now().toString();
         const myUUID = uuidFromTimestamp(Date.now());
@@ -43,29 +43,36 @@ module.exports = class MyApi extends Homey.Api {
         //console.log('Laatste segment:', lastSegment);
 
 
-        return new Promise((resolve, reject) => {
-            axios.get(url, { headers })
-                .then(response => {
-                    console.log("API Response:", response.data, response.status, response.statusText, response.data.code);
-                    if (response.data.code == 2005) {
-                    throw new Error(JSON.stringify({
-                        message: "API call rejected",
-                        code: response.data.code,
-                        details: response.data  
-                        }));
-                    }
-                    resolve(response.data);
-                })
-                .catch(error => {
-                    //console.error("Error in making API request:", error.message);
-                    reject(error);
-                });
-        });
-            // For Node.js 18 fetch example
-            // No imports needed, fetch is globally available
-            // const response = await fetch(url);
-            // const data = await response.json();
+        try {
+            const response = await axios.get(url, { headers });
+            console.log("API Response:", response.data, response.status, response.statusText, response.data && response.data.code);
 
+            if (response && response.data && response.data.code === 2005) {
+                throw new Error(JSON.stringify({
+                    message: "API call rejected",
+                    code: response.data.code,
+                    details: response.data
+                }));
+            }
+
+            return response.data;
+        } catch (error) {
+            // Log the error with as much detail as possible
+            console.error("API Error:", error && error.message ? error.message : error);
+
+            // If axios returned a response with useful error info, normalize and rethrow
+            if (error && error.response && error.response.data) {
+                const errPayload = {
+                    message: error.response.data.message || 'API error',
+                    code: error.response.data.code || error.response.status,
+                    details: error.response.data
+                };
+                throw new Error(JSON.stringify(errPayload));
+            }
+
+            // Otherwise rethrow the original error
+            throw error;
+        }
     }
 
 }

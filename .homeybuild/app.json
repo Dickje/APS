@@ -304,40 +304,13 @@
       },
       "class": "solarpanel",
       "capabilities": [
+        "measure_power",
+        "peak_power",
+        "meter_power.exported",
         "measure_voltage",
         "measure_temperature",
-        "meter_power.exported",
-        "peak_power",
-        "measure_power",
         "inverters_online"
       ],
-      "capabilitiesOptions": {
-        "measure_power": {
-          "title": {
-            "en": "Power",
-            "nl": "Vermogen",
-            "fr": "Pouvoir",
-            "de": "Leistung"
-          },
-          "icon": "assets/icons/measure_power.svg"
-        },
-        "measure_voltage": {
-          "title": {
-            "en": "Voltage",
-            "nl": "Spanning",
-            "de": "Spannung",
-            "fr": "Tension"
-          }
-        },
-        "meter_power.exported": {
-          "title": {
-            "en": "Generated energy",
-            "nl": "Opgewekte energie",
-            "fr": "Énergie générée",
-            "de": "Erzeugte Energie"
-          }
-        }
-      },
       "platforms": [
         "local"
       ],
@@ -348,15 +321,6 @@
         "small": "/drivers/ecu/assets/images/small.png",
         "large": "/drivers/ecu/assets/images/large.png",
         "xlarge": "/drivers/ecu/assets/images/xlarge.png"
-      },
-      "measure_temperature": {
-        "name": {
-          "en": "My Driver"
-        },
-        "images": {
-          "small": "/drivers/my_driver/assets/images/small.png",
-          "large": "/drivers/my_driver/assets/images/large.png"
-        }
       },
       "pair": [
         {
@@ -513,55 +477,10 @@
         "total_energy",
         "year_energy",
         "month_energy",
-        "meter_todays_energy",
+        "meter_power",
         "measure_polling"
       ],
       "class": "solarpanel",
-      "capabilitiesOptions": {
-        "total_energy": {
-          "title": {
-            "en": "Total energy",
-            "nl": "Totale energie",
-            "fr": "L'énergie totale",
-            "de": "Gesamtenergie"
-          }
-        },
-        "year_energy": {
-          "title": {
-            "en": "This years energy",
-            "nl": "Energie dit jaar",
-            "fr": "L'énergie de cette année",
-            "de": "Energie diesen Jahr"
-          }
-        },
-        "month_energy": {
-          "title": {
-            "en": "Energy this month",
-            "nl": "Energie deze maand",
-            "fr": "L'énergie ce mois-ci",
-            "de": "Energie diesen Monat"
-          }
-        },
-        "meter_todays_energy": {
-          "title": {
-            "en": "Todays energy",
-            "nl": "Energie vandaag",
-            "fr": "L'énergie aujourd'hui",
-            "de": "Energie heute"
-          }
-        },
-        "measure_polling": {
-          "title": {
-            "en": "Polling counter",
-            "nl": "Polling teller",
-            "fr": "Compteur de sondage",
-            "de": "Abfragezähler"
-          }
-        },
-        "energy": {
-          "exclude": false
-        }
-      },
       "platforms": [
         "local"
       ],
@@ -573,6 +492,7 @@
         "large": "/drivers/solarpanels/assets/images/large.jpg",
         "xlarge": "/drivers/solarpanels/assets/images/xlarge.jpg"
       },
+      "energy_exclude": true,
       "pair": [
         {
           "id": "enterkeys"
@@ -707,7 +627,7 @@
       "insights": true,
       "icon": "/assets/icons/measure_power.svg"
     },
-    "meter_todays_energy": {
+    "meter_power": {
       "type": "number",
       "title": {
         "en": "Todays energy",

@@ -6,56 +6,11 @@
     "total_energy",
     "year_energy",
     "month_energy",
-    "meter_todays_energy",
+    "meter_power",
     "measure_polling"
   ],
   "class": "solarpanel",
-    "capabilitiesOptions": {
-    "total_energy": {
-      "title": {
-        "en": "Total energy",
-        "nl": "Totale energie",
-        "fr": "L'énergie totale",
-        "de": "Gesamtenergie"
-      }
-    },
-    "year_energy": {
-      "title": {
-        "en": "This years energy",
-        "nl": "Energie dit jaar",
-        "fr": "L'énergie de cette année",
-        "de": "Energie diesen Jahr"
-      }
-    },
-    "month_energy": {
-      "title": {
-        "en": "Energy this month",
-        "nl": "Energie deze maand",
-        "fr": "L'énergie ce mois-ci",
-        "de": "Energie diesen Monat"
-      }
-    },
-    "meter_todays_energy": {
-      "title": {
-        "en": "Todays energy",
-        "nl": "Energie vandaag",
-        "fr": "L'énergie aujourd'hui",
-        "de": "Energie heute"
-      }
-    },
-    "measure_polling": {
-      "title": {
-        "en": "Polling counter",
-        "nl": "Polling teller",
-        "fr": "Compteur de sondage",
-        "de": "Abfragezähler"
-      }
-      },
-      "energy": {
-        "exclude": false
-      }
-  },
-  "platforms": [
+     "platforms": [
     "local"
   ],
   "connectivity": [
@@ -66,6 +21,7 @@
     "large": "{{driverAssetsPath}}/images/large.jpg",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.jpg"
   },
+  "energy_exclude": true,
   "pair": [
     {
       "id": "enterkeys"

@@ -14,6 +14,32 @@
     "measure_temperature",
     "inverters_online"
   ],
+  "capabilitiesOptions": {
+    "measure_power": {
+      "title": {
+        "en": "Power",
+        "nl": "Vermogen",
+        "fr": "Pouvoir",
+        "de": "Leistung"
+      }
+    },
+    "measure_voltage": {
+      "title": {
+        "en": "Voltage",
+        "nl": "Spanning",
+        "de": "Spannung",
+        "fr": "Tension"
+      }
+    },
+    "meter_power.exported": {
+      "title": {
+        "en": "Generated energy",
+        "nl": "Opgewekte energie",
+        "fr": "Énergie générée",
+        "de": "Erzeugte Energie"
+      }
+    }
+  },
   "platforms": [
     "local"
   ],
@@ -24,6 +50,15 @@
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "measure_temperature": {
+    "name": {
+      "en": "My Driver"
+    },
+    "images": {
+      "small": "/drivers/my_driver/assets/images/small.png",
+      "large": "/drivers/my_driver/assets/images/large.png"
+    }
   },
   "pair": [
     {

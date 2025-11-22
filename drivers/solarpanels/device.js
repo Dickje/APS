@@ -10,11 +10,9 @@ let pauseEndStr;
 let pollingInterval=15;
 let pause_by_flowcard = false;
 let polling_on = true;
-let measure_polling = 1;
-
+let measure_polling;
+ 
 module.exports = class MyWebApi extends Homey.Device {
-
-
 
   /**
    * onInit is called when the device is initialized.
@@ -24,11 +22,7 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log('Initializing solarpanel');
 
     await setCapabilities.call(this)
-
-    const settings = this.getSettings();
-    console.log('Alle settings voor WEB:', settings);
-
-    
+  
     console.log('Solarpanel has been initialized');
     // Get polling settings (normalize: trim, fallback when empty)
     {
@@ -60,6 +54,9 @@ module.exports = class MyWebApi extends Homey.Device {
     if (measure_polling === undefined){
       measure_polling = 1;
     }
+
+    const settings = this.getSettings();
+    console.log('Alle settings voor WEB:', settings);
 
     //Checks the time every 5 minutes and calls pollingCounterReset
     setInterval(() => {this.pollingCounterReset(); }, 5 * 60 * 1000);
@@ -106,16 +103,13 @@ module.exports = class MyWebApi extends Homey.Device {
     this.setCapabilityValue("total_energy",Math.round(total_energy));
     this.setCapabilityValue("year_energy",Math.round(year_energy));
     this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
-    this.setCapabilityValue("meter_todays_energy",Math.round(100*meter_todays_energy)/100);
+   // this.setCapabilityValue("meter_todays_energy",Math.round(100*meter_todays_energy)/100);
+    this.setCapabilityValue("meter_power",Math.round(100*meter_todays_energy)/100);
     this.setCapabilityValue("measure_polling", measure_polling);
     console.log('Solarpanel data updated');
         
   }catch(error) {
     console.log('Error fetching todays energy:', error.message);
-    const errorData = JSON.parse(error.message);
-    console.log(errorData.message); // "API call rejected"
-    console.log(errorData.code);    // 2005
-    console.log(errorData.details); // response data
 
     if (errorData.message === 'API call rejected' ){
      const errorMessage = this.homey.__('API call rejected');
@@ -291,7 +285,7 @@ async pollingCounterReset() {
   }
 
 async isFirstDay() {
- 
+ try { 
     const tz = this.homey.clock.getTimezone();
     console.log(`The timezone is ${tz}`);
 
@@ -310,9 +304,10 @@ async isFirstDay() {
 
 if (day === '01' && hour === '15' && minute < '15') {
   return true;
-} else {
-  return false;
-}
-  }
-
+} else { return false;}
+  } catch (error) {
+    console.error("Error in isFirstDay:", error);
+    return false;
+  } 
+ }
 }

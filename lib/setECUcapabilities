@@ -27,6 +27,6 @@ async function setCapabilities() {
     await this.addCapability("inverters_online");
     await this.setCapabilityOptions("inverters_online", {});
     }
-    console.log("Capabilities are set.");
+    console.log("ECU capabilities are set.");
 }
 module.exports = { setCapabilities }
