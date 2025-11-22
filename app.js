@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const { Log } = require('homey-log');
 
 class MyApp extends Homey.App {
   /**
