@@ -67,5 +67,8 @@
   },
   "1.3.5": {
     "en": "Changed a bit of code hoping crashes will stop. Did not receive mails or crash report, I had to guess."
+  },
+  "1.3.6": {
+    "en": "Added logging via Sentry"
   }
 }
