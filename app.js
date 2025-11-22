@@ -8,6 +8,7 @@ class MyApp extends Homey.App {
    */
   async onInit() {
     console.log("The app has been initialized");
+    this.homeyLog = new Log({ homey: this.homey });
 
   }
 };
