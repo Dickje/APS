@@ -74,5 +74,16 @@
         "username": "@DickJuffermans"
       }
     }
-  }
+  },
+  "capabilities": [
+    "measure_power",
+    "meter_power",
+    "measure_energy",
+    "meter_energy",
+    "measure_temperature"
+  ],
+  "flows": [
+    "ECU_error",
+    "ECU_power_changed"
+  ]
 }

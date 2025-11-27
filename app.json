@@ -76,6 +76,10 @@
       }
     }
   },
+  "flows": [
+    "ECU_error",
+    "ECU_power_changed"
+  ],
   "flow": {
     "triggers": [
       {

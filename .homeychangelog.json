@@ -76,5 +76,8 @@
   },
   "1.3.8": {
     "en": "Deleted the log code because it caused crashes at users"
+  },
+  "1.3.9": {
+    "en": "Improved the polling mechanism to prevent overlapping calls"
   }
 }

@@ -21,8 +21,6 @@ let ECU_query = 'APS1100160001';
 let Inverter_query = 'APS1100280002';
 let polling_on = true;
 let pause_by_flowcard = false;
-let ECUbuffer = null;
-let InverterBuffer = null;  
 
 
 module.exports = class MyECU extends Homey.Device {
@@ -61,7 +59,7 @@ module.exports = class MyECU extends Homey.Device {
       pollingInterval = Number.isInteger(pi) ? pi : 5;
     }
 
-    await this.getFirmwareAndInverters(await this.getECUbuffer());
+    await this.getFirmwareAndInverters(firmware, inverters);
 
     this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
     console.log('Flowcard polling_pause_ECU triggered');
@@ -71,15 +69,9 @@ module.exports = class MyECU extends Homey.Device {
     console.log('Flowcard polling_start triggered');
     polling_on = true;});
 
-    //Listener for triggers is not needed when there are no arguments
-    // this.homey.flow.getTriggerCard('ECU_power_changed').registerRunListener(async (args, state) => {
-    // console.log('Flowcard ECU_power_changed triggered');
-    // return true;
-    //});
-
-
-    // this.homey.flow.getTriggerCard('ECU_error').registerRunListener(async (args, state) => {
-    // console.log('Flowcard ECU_error triggered');});
+    this.homey.flow.getTriggerCard('ECU_power_changed').registerRunListener(async (args, state) => {
+    console.log('Flowcard ECU_power_changed triggered');
+    polling_on = true;});
 
     await this.setSettings({
       ECU_ID: ECU_ID,
@@ -101,51 +93,20 @@ module.exports = class MyECU extends Homey.Device {
   }
 };
 
-getInverterBuffer = async()=>{ 
-  console.log('');
-  console.log('Getting inverter buffer data');
-  try {
-    buffer = await this.getECUdata(Inverter_query, ECU_ID, ECU_address);
-    console.log('Type of buffer:', typeof(buffer));
-    if (buffer != null ){
-        this.hexdumpall(buffer);
-        return buffer;
-    } else {
-      console.log('No valid buffer received from ECU.');
-      return null;
-    }
-  } catch (err) {
-    console.log(`❌ Error in getInverterBufferData: ${err.message}`);       
-    return null;
-  }
-};
 
-getECUbuffer = async()=>{ 
-  console.log('');
-  console.log('Getting ECU buffer data');
-  try {
-    buffer = await this.getECUdata(ECU_query,'', ECU_address);
-    console.log('Type of buffer:', typeof(buffer));
-    if (buffer != null ){
-        this.hexdumpall(buffer);
-        return buffer;
-    } else {
-      console.log('No valid buffer received from ECU.');
-      return null;
-    }
-  } catch (err) {
-    console.log(`❌ Error in getECUbufferData: ${err.message}`);       
-    return null;
-  }
-};  
-
-getInverterdata = async(buffer) => { 
+getInverterdata = async()=>{ 
   console.log('');
   console.log('Getting inverter data');
   try {
   let totalVoltage = 0;
   let totalTemperature = 0;
   let totalRecords = 0;
+
+    buffer = await this.getECUdata(Inverter_query, ECU_ID, ECU_address);
+    console.log('Type of buffer:', typeof(buffer));
+    //if (buffer != null && this.checkSum(buffer)){
+      if (buffer != null ){
+        this.hexdumpall(buffer);
         const payload = buffer.subarray(16, 194); // The relevant data
         const blockSize = 21; //Number of bytes per inverter
 
@@ -154,9 +115,9 @@ getInverterdata = async(buffer) => {
 
               const baseOffset = 5; // Start of first record 
               const recordStart = baseOffset + (i + blockSize);
-              const volt = parseInt(InverterBuffer[recordStart + 16], 10); // Voltage byte in record
-              const temp = (InverterBuffer[recordStart + 11] << 8 | InverterBuffer[recordStart + 12]) - 100;
-              const online = parseInt(InverterBuffer[recordStart + 6], 10);
+              const volt = parseInt(buffer[recordStart + 16], 10); // Voltage byte in record
+              const temp = (buffer[recordStart + 11] << 8 | buffer[recordStart + 12]) - 100;
+              const online = parseInt(buffer[recordStart + 6], 10);
         
           if(online == 1){ 
               totalVoltage += volt;
@@ -176,18 +137,26 @@ getInverterdata = async(buffer) => {
   this.setCapabilityValue("measure_voltage",numVoltage);
   this.setCapabilityValue("measure_temperature",averageTemp);
 
- 
+  //And get power data
+  await this.getPowerData();
+  //And the firmware and # of inverters
+  await this.getFirmwareAndInverters();
+ }
   } catch (err) {
   console.log(`❌ Error in getInverterdata: ${err.message}`);       
 }
 };
 
 
-async getPowerData(buffer) {
+async getPowerData() {
   console.log('Getting powerdata');
-  const ECU_power_changed = this.homey.flow.getDeviceTriggerCard("ECU_power_changed");
+  const ECU_power_changed = this.homey.flow.getTriggerCard("ECU_power_changed");
   try {
-  
+  buffer = await this.getECUdata(ECU_query,'', ECU_address);
+
+  if (buffer != null && this.checkSum(buffer)) {
+    this.hexdumpall(buffer);
+
     const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
     const todaysEnergy = (((buffer[35] << 24) | (buffer[36] << 16) | (buffer[37] << 8) | buffer[38]) >>> 0)/ 100;
     const invertersOnline = parseInt(buffer[49],10);
@@ -221,9 +190,11 @@ async getPowerData(buffer) {
 
       if (lastPower !== currentPower) {
       console.log('Power changed from', lastPower, 'to', currentPower);
-      await ECU_power_changed.trigger(this,{"new_power": currentPower });
+      ECU_power_changed.trigger({"new_power": currentPower });
       lastPower = currentPower
       }
+    
+  };
   } catch (err) {
     console.log(`❌ Error in getPowerData: ${err.message}`);       
   }
@@ -282,29 +253,58 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
   } 
 };  
 
-async getFirmwareAndInverters(buffer) {
+async getFirmwareAndInverters() {
+
+  //const ECU_error = this.homey.flow.getTriggerCard("ECU_error") 23-11 verplaatst naar try
   try {
-      const sliced = buffer.subarray(61, 67); // Byte 61-67 for firmware version  
+  buffer =  await this.extractECUdata();
+      const sliced = buffer.subarray(61, 67); // Byte 61-67 for firmware version
+      
       firmware = sliced.toString('utf8'); 
       if (firmware == null) {
       throw new Error("❗ Failed to get firmware from buffer.");
       }
         inverters = (buffer[46] << 8) | buffer[47];
       if (isNaN(inverters)) {
-        throw new Error("❗ Failed to parse inverter count from ECU buffer.");
+        throw new Error("❗ Failed to parse inverter count from buffer.");
       }
 
     } catch(err){
-        const ECU_error = this.homey.flow.getDeviceTriggerCard("ECU_error") 
+        const ECU_error = this.homey.flow.getTriggerCard("ECU_error") 
         console.error(`❌ Error getting firmware and inverter count: ${err.message}`);
 
-        if (typeof err.message === "string") {await ECU_error.trigger(this,{ error_message: err.message });
+        if (typeof error.message === "string") {ECU_error.trigger({ error_message: err.message });
 }        return null;
     }
         console.log('Number of inverters:', inverters);
         console.log('Firmware version:', firmware);
         return { firmware, inverters };
 };
+
+
+async extractECUdata() {
+  try {
+    let checkOk = false;
+
+    buffer = await this.getECUdata(ECU_query, '', ECU_address);
+    if (!buffer) {
+      throw new Error("❗ Failed to retreive ECU data.");
+    }
+
+    this.hexdumpall(buffer);
+    checkOk = this.checkSum(buffer); 
+
+    if (checkOk) {
+      if (!buffer || buffer.length < 48) { throw new Error("❗ Buffer too short to extract data.");
+       }
+    } 
+    return buffer;
+
+  } catch (err) {
+    console.log(`❌ Error in getECUdata: ${err.message}`);
+    return null;
+  }
+}
 
 async hexdumpall(buffer) {
   let lineOutput=''
@@ -347,11 +347,11 @@ try {
       console.log("Type return from ECU:", (typeof(buffer)));
       console.log("Buffer :", buffer);
       console.log(`Error message: ${error.message} , ${this.homey.__("ECU_connection_failure ")}`);
-      const ECU_error = this.homey.flow.getDeviceTriggerCard("ECU_error") ;
+      const ECU_error = this.homey.flow.getTriggerCard("ECU_error") ;
       if (error.message ==='connectionError' || error.message ==='timeoutError') {
         if (typeof error.message === "string") {   
           console.log("Triggering ECU_error flow");
-          await ECU_error.trigger(this,{"error_message": this.homey.__("ECU_connection_failure ") });
+          ECU_error.trigger({"error_message": this.homey.__("ECU_connection_failure ") });
       }
     }
     return null;
@@ -415,18 +415,8 @@ async pollLoop() {
       { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`); } 
       await Promise.all([
         console.log('Polling active, getting data from ECU'),
-        ECUbuffer = await this.getECUbuffer(),
-        InverterBuffer = await this.getInverterBuffer(),
-      ]);
-    if (ECUbuffer != null ){
-          this.getPowerData(ECUbuffer),
-          this.getFirmwareAndInverters(ECUbuffer)
-        }
-    if (InverterBuffer != null ){
-          this.getInverterdata(InverterBuffer)
-        }
-
-
+        await this.getInverterdata() 
+           ]);
     }
   } catch (err) {
     console.log(`❌ Error in pollLoop: ${err.message}`);

@@ -6,7 +6,10 @@ const ECU_connector = require('./ecu_connector');
 module.exports = class ECUdriver extends Homey.Driver {
 
   async onInit() {
+
+   
     this.log('ECUdriver has been initialized');
+
   }
  
   async onPair(session) {

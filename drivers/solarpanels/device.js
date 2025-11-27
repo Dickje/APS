@@ -47,8 +47,8 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log('Flowcard polling_start_panel triggered');
     polling_on = true;});
 
-    this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
-    console.log('Flowcard API_call_rejected triggered');});
+    // this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
+    // console.log('Flowcard API_call_rejected triggered');});
     
     measure_polling = await this.getStoreValue('measure_polling');
     if (measure_polling === undefined){
@@ -70,7 +70,7 @@ module.exports = class MyWebApi extends Homey.Device {
 
   async getTodaysEnergy() {
     console.log('Get todays energy called');
-    const API_error = this.homey.flow.getTriggerCard('API_call_rejected')
+    const API_error = this.homey.flow.getDeviceTriggerCard('API_call_rejected')
 
     try{
     var sid=''; // System ID
@@ -113,7 +113,7 @@ module.exports = class MyWebApi extends Homey.Device {
 
     if (errorData.message === 'API call rejected' ){
      const errorMessage = this.homey.__('API call rejected');
-    API_error.trigger({'API_return_code': errorData.code, 'API_return_message': errorMessage});
+    await API_error.trigger(this,{'API_return_code': errorData.code, 'API_return_message': errorMessage});
     }
   };
 }
@@ -216,11 +216,7 @@ epochToDate(epoch) {
     console.log(`❌ Error in onSettings: ${err.message}`);
   } 
 
-
-
-
-
-    
+   
   }
 
   async onRenamed(name) {
