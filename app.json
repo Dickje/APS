@@ -295,6 +295,28 @@
             "filter": "driver_id=solarpanels"
           }
         ]
+      },
+      {
+        "id": "polling_reset",
+        "title": {
+          "en": "Reset polling counter",
+          "nl": "Reset polling teller",
+          "fr": "Réinitialiser le compteur de sondage",
+          "de": "Polling-Zähler zurücksetzen"
+        },
+        "hint": {
+          "en": "Reset the counter to zero",
+          "nl": "Zet de teller weer op nul",
+          "de": "Den Zähler auf Null zurücksetzen",
+          "fr": "Réinitialiser le compteur à zéro"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=solarpanels"
+          }
+        ]
       }
     ]
   },

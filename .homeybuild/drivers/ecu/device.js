@@ -413,19 +413,19 @@ async pollLoop() {
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
     if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey)) {
       { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`); } 
-      await Promise.all([
+   
         console.log('Polling active, getting data from ECU'),
-        ECUbuffer = await this.getECUbuffer(),
-        InverterBuffer = await this.getInverterBuffer(),
-      ]);
-    if (ECUbuffer != null ){
-          this.getPowerData(ECUbuffer),
-          this.getFirmwareAndInverters(ECUbuffer)
-        }
+        InverterBuffer = await this.getInverterBuffer()
+     
     if (InverterBuffer != null ){
-          this.getInverterdata(InverterBuffer)
+          await this.getInverterdata(InverterBuffer)
+          ECUbuffer = await this.getECUbuffer()
         }
 
+    if (ECUbuffer != null ){
+          await this.getPowerData(ECUbuffer),
+          await this.getFirmwareAndInverters(ECUbuffer)
+        }
 
     }
   } catch (err) {

@@ -40,12 +40,17 @@ module.exports = class MyWebApi extends Homey.Device {
     }
 
     this.homey.flow.getActionCard('polling_pause_panel').registerRunListener(async (args, state) => {
-    console.log('Flowcard polling_pause_panel triggered');
-    polling_on = false;});
+      console.log('Flowcard polling_pause_panel triggered');
+      polling_on = false;});
 
     this.homey.flow.getActionCard('polling_start_panel').registerRunListener(async (args, state) => {
-    console.log('Flowcard polling_start_panel triggered');
-    polling_on = true;});
+      console.log('Flowcard polling_start_panel triggered');
+      polling_on = true;});
+
+    this.homey.flow.getActionCard('polling_reset').registerRunListener(async (args, state) => {
+      console.log('Flowcard pollingcounter_reset');
+      measure_polling = 0;
+      await this.setStoreValue('measure_polling', measure_polling);});
 
     // this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
     // console.log('Flowcard API_call_rejected triggered');});
@@ -57,9 +62,6 @@ module.exports = class MyWebApi extends Homey.Device {
 
     const settings = this.getSettings();
     console.log('Alle settings voor WEB:', settings);
-
-    //Checks the time every 5 minutes and calls pollingCounterReset
-    setInterval(() => {this.pollingCounterReset(); }, 5 * 60 * 1000);
 
     this.pollLoop(); // Get data and repeat
   }catch(error){
@@ -266,44 +268,4 @@ async pollLoop() {
   }
 };
 
-async pollingCounterReset() {
-    try {
-      const firstDay = await this.isFirstDay();
-      if (firstDay) {
-        console.log("It's the first day of the month, resetting polling counter.");
-        measure_polling = 0;
-        await this.setStoreValue('measure_polling', measure_polling);
-        await this.pollLoop();
-      }
-    } catch (error) {
-      console.error("Error in pollingCounterReset:", error);
-    }
-  }
-
-async isFirstDay() {
- try { 
-    const tz = this.homey.clock.getTimezone();
-    console.log(`The timezone is ${tz}`);
-
-    // Define a function to get the time in a specific timezone
-    const formatter = new Intl.DateTimeFormat([], {
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false, // Use 24-hour format
-      timeZone: tz,
-    });
-    const timeParts = formatter.formatToParts(new Date());
-    const day = timeParts.find(part => part.type === 'day').value;
-    const hour = timeParts.find(part => part.type === 'hour').value;
-    const minute = timeParts.find(part => part.type === 'minute').value;
-
-if (day === '01' && hour === '15' && minute < '15') {
-  return true;
-} else { return false;}
-  } catch (error) {
-    console.error("Error in isFirstDay:", error);
-    return false;
-  } 
- }
 }
