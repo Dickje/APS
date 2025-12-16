@@ -1,11 +1,12 @@
     
 async function setCapabilities() {    
-    
+    try {
     // Current power
     if (!this.hasCapability("measure_power")) {
     await this.addCapability("measure_power");
     await this.setCapabilityOptions("measure_power", {});
     }
+
     // Temperature
     if (!this.hasCapability("measure_temperature")) {
     await this.addCapability("measure_temperature");
@@ -28,5 +29,6 @@ async function setCapabilities() {
     await this.setCapabilityOptions("inverters_online", {});
     }
     console.log("ECU capabilities are set.");
+    } catch (error) { console.log("Error setting ECU capabilities:", error); }      
 }
 module.exports = { setCapabilities }

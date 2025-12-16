@@ -7,7 +7,7 @@ const { setCapabilities } = require('../../lib/setWebAPIcapabilities');
 const { isValidTimeFormat, getTime, isPaused } = require('../../lib/apslib');
 let pauseStartStr;
 let pauseEndStr;
-let pollingInterval=15;
+let pollingInterval=30;
 let pause_by_flowcard = false;
 let polling_on = true;
 let measure_polling;
@@ -22,7 +22,7 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log('Initializing solarpanel');
 
     await setCapabilities.call(this)
-  
+    await this.unsetWarning();
     console.log('Solarpanel has been initialized');
     // Get polling settings (normalize: trim, fallback when empty)
     {
@@ -36,7 +36,8 @@ module.exports = class MyWebApi extends Homey.Device {
     {
       const p = this.getSetting('poll_interval');
       const pi = Number.parseInt(p, 10);
-      pollingInterval = Number.isInteger(pi) ? pi : 15;
+      pollingInterval = Number.isInteger(pi) ? pi : 30;
+      if (isNaN(pollingInterval) || pollingInterval < 1) { pollingInterval = 30; }
     }
 
     this.homey.flow.getActionCard('polling_pause_panel').registerRunListener(async (args, state) => {
@@ -51,14 +52,18 @@ module.exports = class MyWebApi extends Homey.Device {
       console.log('Flowcard pollingcounter_reset');
       measure_polling = 0;
       await this.setStoreValue('measure_polling', measure_polling);});
-
-    // this.homey.flow.getTriggerCard('API_call_rejected').registerRunListener(async (args, state) => {
-    // console.log('Flowcard API_call_rejected triggered');});
     
     measure_polling = await this.getStoreValue('measure_polling');
     if (measure_polling === undefined){
       measure_polling = 1;
     }
+
+    await this.setSettings({
+      pause_start: pauseStartStr,
+      pause_end: pauseEndStr,
+      poll_interval: pollingInterval,
+      pause_by_flowcard: pause_by_flowcard
+    })
 
     const settings = this.getSettings();
     console.log('Alle settings voor WEB:', settings);
@@ -101,14 +106,15 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log('Month energy', month_energy);
     console.log('Todays energy', meter_todays_energy);
     console.log('Measure polling', measure_polling);
+    console.log('Polling interval', pollingInterval,'\n');
 
     this.setCapabilityValue("total_energy",Math.round(total_energy));
     this.setCapabilityValue("year_energy",Math.round(year_energy));
     this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
-   // this.setCapabilityValue("meter_todays_energy",Math.round(100*meter_todays_energy)/100);
     this.setCapabilityValue("meter_power",Math.round(100*meter_todays_energy)/100);
     this.setCapabilityValue("measure_polling", measure_polling);
-    console.log('Solarpanel data updated');
+  
+    console.log('Solarpanel data updated','\n');
         
   }catch(error) {
     console.log('Error fetching todays energy:', error.message);
@@ -177,8 +183,10 @@ epochToDate(epoch) {
     if (key === 'poll_interval') {
        const pollingIntervalnum = Number(pollingInterval);
        if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 1 && pollingIntervalnum < 61) {
-         this.homey.settings.set("polling_interval", value);
-         pollingInterval=value;
+        //await this.setSettings({ poll_interval: value});
+        pollingInterval=value;
+        //  this.homey.settings.set("polling_interval", value);
+        //  pollingInterval=value;
          messages.push(this.homey.__("Polling_interval_changed"));
          await this.pollLoop(); // Restart polling with new interval
        } else {
@@ -200,18 +208,23 @@ epochToDate(epoch) {
   console.log('pollingperday: ', pollingperday);
   if (pollingperday*30 > 1000) {
     messages.push(this.homey.__("polling_too_much"));
+    console.log('⚠️ Polling too much warning set, polling per day: ', pollingperday);
+      //https://github.com/athombv/eu.huum/blob/d36061bd219cecd88019c4e9f507f1efc7061a67/lib/HuumDevice.js#L148
+      //https://apps-sdk-v3.developer.homey.app/Device.html#setWarning
 
-      //this.setWarning(this.homey.__('steamerError')).catch(this.error);
-      // zie: https://github.com/athombv/eu.huum/blob/d36061bd219cecd88019c4e9f507f1efc7061a67/lib/HuumDevice.js#L148
-      //zie ook: https://apps-sdk-v3.developer.homey.app/Device.html#setWarning
-
-      this.setWarning(this.homey.__('polling_too_much')); //Must be unset also
-
+      await this.setWarning(this.homey.__('polling_too_much',)); 
+      //} else {await this.setWarning(null);
   }
 
+      await this.setSettings({
+      pause_start: pauseStartStr,
+      pause_end: pauseEndStr,
+      poll_interval: pollingInterval,
+      pause_by_flowcard: pause_by_flowcard
+    })
 
   // Combine all messages into a single return value
-  Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit
+  //Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit
   return messages.join('\n');
 
   } catch (err) {
@@ -227,6 +240,7 @@ epochToDate(epoch) {
 
   async onDeleted() {
     this.log('Solarpanel has been deleted');
+    this.destroy();
   }
 
 async pollLoop() {
@@ -247,7 +261,7 @@ async pollLoop() {
 
   try {
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
-    if (!isPaused( pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard, polling_on, this.homey)) {
+    if (!isPaused( pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard, polling_on, this.homey, "solarpanel")) {
       console.log(`⏸️ Web polling paused between ${pauseStartStr} and ${pauseEndStr}.`);
       await Promise.all([
         console.log('Polling active, getting data from web API'),

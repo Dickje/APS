@@ -4,7 +4,7 @@ const net = require('net');
 
   async fetchData(ECU_address, ECU_command) {
     ECU_address = ECU_address.split('.').map(Number).join('.'); // Normalize the IP
-    console.log(`Command ${ECU_command} to IP address ${ECU_address}`);
+    console.log(`Command ${ECU_command.replace(/[\n]/g,"")} to IP address ${ECU_address}`, '\n');
 
     //throw new Error('connectionError');
     return new Promise((resolve, reject) => {

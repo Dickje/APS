@@ -35,32 +35,28 @@ module.exports = class MyECU extends Homey.Device {
     
     try {
     await setCapabilities.call(this);
-
-    const settings = this.getSettings();
-    console.log('Alle settings voor ECU:', settings);
     
     ECU_address = this.homey.settings.get('ECU_address') ?? '';
     ECU_ID = this.homey.settings.get("ECU_ID") ?? '';
     this.setStoreValue("peak_power", null);
-    
-    console.log('On init ECU address', ECU_address);
-    console.log('On init ECU ID', ECU_ID);
 
     // Normalize settings: trim strings and provide safe defaults when empty
     {
-      const s = this.getSetting('pause_start');
+      const s = await this.homey.settings.get('pause_start');
       pauseStartStr = (typeof s === 'string' && s.trim() !== '') ? s.trim() : '23:00';
     }
     {
-      const e = this.getSetting('pause_end');
+      const e = await this.homey.settings.get('pause_end');
       pauseEndStr = (typeof e === 'string' && e.trim() !== '') ? e.trim() : '05:00';
     }
     {
-      const p = this.getSetting('poll_interval');
+      const p = await this.homey.settings.get('poll_interval');
       const pi = Number.parseInt(p, 10);
       pollingInterval = Number.isInteger(pi) ? pi : 5;
+      if (isNaN(pollingInterval) || pollingInterval < 1) { pollingInterval = 5; }
     }
-
+    
+    
     await this.getFirmwareAndInverters(await this.getECUbuffer());
 
     this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
@@ -71,20 +67,14 @@ module.exports = class MyECU extends Homey.Device {
     console.log('Flowcard polling_start triggered');
     polling_on = true;});
 
-    //Listener for triggers is not needed when there are no arguments
-    // this.homey.flow.getTriggerCard('ECU_power_changed').registerRunListener(async (args, state) => {
-    // console.log('Flowcard ECU_power_changed triggered');
-    // return true;
-    //});
-
-
-    // this.homey.flow.getTriggerCard('ECU_error').registerRunListener(async (args, state) => {
-    // console.log('Flowcard ECU_error triggered');});
-
     await this.setSettings({
       ECU_ID: ECU_ID,
       ECU_address: ECU_address,
-      ECU_firmware: firmware
+      ECU_firmware: firmware,
+      pause_start: pauseStartStr,
+      pause_end: pauseEndStr,
+      poll_interval: pollingInterval,
+      pause_by_flowcard: pause_by_flowcard
     })
 
 
@@ -92,6 +82,9 @@ module.exports = class MyECU extends Homey.Device {
     setInterval(() => {this.datareset(); }, 3 * 60 * 1000);
     // Get data and repeat
     this.pollLoop(); // Get data and repeat
+
+    const settings = this.getSettings();
+    console.log('Alle settings voor ECU:', settings);
 
     console.log('ECU has been initialized');
     console.log('');
@@ -193,7 +186,7 @@ async getPowerData(buffer) {
     const invertersOnline = parseInt(buffer[49],10);
     console.log('currentPower', currentPower);
     console.log('todaysEnergy', todaysEnergy);
-    console.log('Inverters online', invertersOnline);
+    console.log('Inverters online', invertersOnline,'\n');
 
     if (!peakJustReset && currentPower > peak_power && currentPower <= maxPossiblePower){
       peak_power = currentPower;
@@ -208,9 +201,9 @@ async getPowerData(buffer) {
     if (currentPower > maxPossiblePower){
               this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU.`);}
     else { await this.setCapabilityValue("measure_power", currentPower);
+  
     };
 
-    //await this.setCapabilityValue("measure_power", currentPower);
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
     await this.setCapabilityValue("peak_power", peak_power);
     if (invertersOnline == 0) {
@@ -251,10 +244,8 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
       const isValidECU_ID = /^\d{12}$/.test(value);
       if (isValidECU_ID) {
         this.homey.settings.set("ECU_ID", value);
-        //messages.push('✅ ECU_ID was successfully saved.');
         messages.push(this.homey.__("ECU_ID_saved"));
       } else {
-        //messages.push('❌ ECU_ID must be exactly 12 digits.');
         messages.push(this.homey.__("ECU_ID_invalid"));
       }
     }
@@ -270,6 +261,39 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
         //messages.push('❌ Invalid IP address.');
         messages.push('❌ ' +  this.homey.__("IP_address_invalid"));        
       }
+    }
+
+    if (key === 'pause_start') {
+      // Validate the new value (not the old variable)
+      if (isValidTimeFormat(value)) {
+        this.homey.settings.set("pause_start", value);
+        pauseStartStr = value.trim();
+        messages.push(this.homey.__("Pause_start_changed"));
+      } else {
+        messages.push(this.homey.__("Pause_start_incorrect"));
+      }
+    }
+    
+    if (key === 'pause_end') {
+      if (isValidTimeFormat(value)) {
+        this.homey.settings.set("pause_end", value);
+        pauseEndStr = value.trim();
+        messages.push(this.homey.__("Pause_end_changed"));
+      } else {
+        messages.push(this.homey.__("Pause_end_incorrect"));
+      }
+    }
+    
+    if (key === 'poll_interval') {
+        const pollingIntervalnum = Number(pollingInterval);
+        if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 1 && pollingIntervalnum < 61) {
+          this.homey.settings.set("polling_interval", value);
+          pollingInterval=value;
+          messages.push(this.homey.__("Polling_interval_changed"));
+          await this.pollLoop(); // Restart polling with new interval
+        } else {
+            messages.push(this.homey.__("Polling_interval_incorrect"));
+        }
     }
   }
 
@@ -302,7 +326,7 @@ async getFirmwareAndInverters(buffer) {
 }        return null;
     }
         console.log('Number of inverters:', inverters);
-        console.log('Firmware version:', firmware);
+        console.log('Firmware version:', firmware,'\n');
         return { firmware, inverters };
 };
 
@@ -328,7 +352,7 @@ async hexdumpall(buffer) {
   } catch (err) {
     console.error(`❌ Error in hexdumpall: ${err.message}`);
   }
-}
+};
 
 async getECUdata(command, ECU_ID, ECU_address) {
 try {
@@ -356,43 +380,7 @@ try {
     }
     return null;
   }
-}
-
-async checkSum(buffer) {
-  try {
-    if (!Buffer.isBuffer(buffer)) {
-      throw new TypeError("❗ Invalid buffer object: expected a Buffer.");
-    }
-
-    if (buffer.length < 9) {
-      throw new RangeError("❗ Buffer is too short to contain length information.");
-    }
-
-    const lengthAscii = buffer.subarray(5, 9).toString('ascii');    // Length of bytes (5 - 8) as ASCII
-    const expectedLength = parseInt(lengthAscii, 10);  // Convert ASCII length to integer
-
-    if (isNaN(expectedLength)) {
-      throw new Error(`❗ Invalid length value in buffer: "${lengthAscii}" is not a number.`);
-    }
-
-    // Length of dump without last byte (linefeed, 0x0A)
-    const lastByte = buffer[buffer.length - 1];
-    const actualLength = lastByte === 0x0A ? buffer.length - 1 : buffer.length;
-
-    if (expectedLength !== actualLength) {
-      console.warn(`⛔ Length mismatch (expected: ${expectedLength}, actual: ${actualLength})`);
-      return false;
-    }
-    // All OK
-    return true;
-
-  } catch (err) {
-    console.error(`❌ Error in checkSum: ${err.message}`);
-
-    return false;
-  }
-}
-
+};
 
 async pollLoop() {
   try {
@@ -411,7 +399,7 @@ async pollLoop() {
   }
 
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
-    if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey)) {
+    if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey, "ECU")) {
       { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`); } 
    
         console.log('Polling active, getting data from ECU'),
@@ -419,6 +407,7 @@ async pollLoop() {
      
     if (InverterBuffer != null ){
           await this.getInverterdata(InverterBuffer)
+          await this.sleep(2000);
           ECUbuffer = await this.getECUbuffer()
         }
 
@@ -433,10 +422,11 @@ async pollLoop() {
   }
   finally {
     pollingInterval = parseInt(this.getSetting('poll_interval'));
+    if (isNaN(pollingInterval) || pollingInterval < 1) { pollingInterval = 5; }
     console.log(`⏸️ Polling on ECU is running at an interval of ${pollingInterval} minutes`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
   }
-}
+};
 
 async datareset() {
   try {
@@ -454,6 +444,10 @@ async datareset() {
   }
 };
 
+async sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};
+
 addToTimeline(message) {
   try {
     this.homey.notifications.createNotification({ 
@@ -464,9 +458,10 @@ addToTimeline(message) {
 
 async onRenamed(name) {
     this.log('ECU was renamed');
-  }
+  };
 
 async onDeleted() {
     this.log('ECU has been deleted');
-  }
+    this.destroy();
+  };
 }

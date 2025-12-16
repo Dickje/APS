@@ -1,6 +1,6 @@
     
 async function setCapabilities() {    
-    
+    try {
     //Lifetime energy
     if (!this.hasCapability("total_energy")) {
     await this.addCapability("total_energy");
@@ -31,5 +31,7 @@ async function setCapabilities() {
     await this.setCapabilityOptions("measure_polling", {});
    }   
     console.log("WEB capabilities are set.");
-}
+} catch (error) { console.log("Error setting WEB capabilities:", error); }      
+}       
+
 module.exports = { setCapabilities }

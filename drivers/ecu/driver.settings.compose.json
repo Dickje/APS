@@ -83,12 +83,12 @@
    "id": "poll_interval",
    "type": "number",
    "label": {
-     "en": "Polling interval (minutes)",
-     "nl": "Polling interval (minuten)",
-     "de": "Abfrageintervall (Minuten)",
-     "fr": "Intervalle d'interrogation (minutes)"
+     "en": "Polling interval",
+     "nl": "Polling interval",
+     "de": "Abfrageintervall",
+     "fr": "Intervalle d'interrogation"
    },
-   "default": 1,
+   "default": 5,
    "units": {
      "en": "minutes",
      "nl": "minuten",

@@ -45,7 +45,7 @@ module.exports = class MyApi extends Homey.Api {
 
         try {
             const response = await axios.get(url, { headers });
-            console.log("API Response:", response.data, response.status, response.statusText, response.data && response.data.code);
+            console.log("API Response:", response.data, response.status, response.statusText, response.data && response.data.code,'\n');
 
             if (response && response.data && response.data.code === 2005) {
                 throw new Error(JSON.stringify({

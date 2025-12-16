@@ -9,6 +9,6 @@
   "getable": true,
   "setable": false,
   "units": { "en": "W"},
-  "insights": true,
+  "insights": false,
   "icon" : "/assets/icons/measure_power.svg"
 }
