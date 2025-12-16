@@ -4,7 +4,7 @@ const Homey = require('homey');
 const MyApi = require('./api');
 //const { isValidTimeFormat } = require('../../lib/apslib');
 const { setCapabilities } = require('../../lib/setWebAPIcapabilities');
-const { isValidTimeFormat, getTime, isPaused } = require('../../lib/apslib');
+const { isValidTimeFormat, isPaused } = require('../../lib/apslib');
 let pauseStartStr;
 let pauseEndStr;
 let pollingInterval=30;

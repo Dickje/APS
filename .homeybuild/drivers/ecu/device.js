@@ -1,7 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
-const { isValidTimeFormat, getTime, isPaused } = require('../../lib/apslib');
+const { isValidTimeFormat, isPaused, getTime } = require('../../lib/apslib');
 const { setCapabilities } = require('../../lib/setECUcapabilities');
 const ECU_connector = require('./ecu_connector');
 
