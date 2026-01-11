@@ -88,5 +88,8 @@
   },
   "1.3.12": {
     "en": "Accidently deleted a character in the code in v1.3.11, which caused it to crash"
+  },
+  "1.3.13": {
+    "en": "Several minor updates and fixes"
   }
 }
