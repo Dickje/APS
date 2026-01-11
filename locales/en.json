@@ -8,6 +8,7 @@
     "ECU_token": "ECU response data",
     "ECU_data_failure ": "Error retrieving data from ECU: ",
     "ECU_connection_failure ": "Error connecting to ECU", 
+     "polling_too_fast": "An interval of less than 5 minutes is not recommended",
     "Pause_start_changed" : "Pause start has changed",
     "Pause_start_incorrect" : "The pause start time is incorrect",
     "Pause_end_changed" : "The pause end time has changed",

@@ -8,6 +8,7 @@
     "ECU_token": "Gegevens van de ECU respons",
     "ECU_data_failure ": "Fout bij het ophalen van gegevens van de ECU: ",
     "ECU_connection_failure ": "Fout bij het verbinden met de ECU" ,
+    "polling_too_fast": "Een interval kleiner dan 5 minuten wordt niet aanbevolen",
     "Pause_start_changed" : "De pauze starttijd is gewijzigd",
     "Pause_start_incorrect" : "De pauze starttijd is onjuist",
     "Pause_end_changed" : "De pauze eindtijd is gewijzigd",

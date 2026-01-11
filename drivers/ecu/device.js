@@ -78,8 +78,8 @@ module.exports = class MyECU extends Homey.Device {
     })
 
 
-    //Checks the time every 3 minutes and calls datareset
-    setInterval(() => {this.datareset(); }, 3 * 60 * 1000);
+    //Checks the time every 15 minutes and calls datareset
+    setInterval(() => {this.datareset(); }, 15 * 60 * 1000);
     // Get data and repeat
     this.pollLoop(); // Get data and repeat
 
@@ -199,8 +199,8 @@ async getPowerData(buffer) {
 
     await this.setCapabilityValue("meter_power.exported", todaysEnergy);
     if (currentPower > maxPossiblePower){
-              this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU.`);}
-    else { await this.setCapabilityValue("measure_power", currentPower);
+              this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU. ECU response: ${buffer}`);
+    } else { await this.setCapabilityValue("measure_power", currentPower);
   
     };
 
@@ -290,6 +290,10 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
           this.homey.settings.set("polling_interval", value);
           pollingInterval=value;
           messages.push(this.homey.__("Polling_interval_changed"));
+         if (pollingIntervalnum < 5) {messages.push(this.homey.__("polling_too_fast"));}
+
+
+
           await this.pollLoop(); // Restart polling with new interval
         } else {
             messages.push(this.homey.__("Polling_interval_incorrect"));
@@ -400,7 +404,7 @@ async pollLoop() {
 
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
     if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey, "ECU")) {
-      { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`); } 
+      { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`);     } 
    
         console.log('Polling active, getting data from ECU'),
         InverterBuffer = await this.getInverterBuffer()
@@ -416,22 +420,32 @@ async pollLoop() {
           await this.getFirmwareAndInverters(ECUbuffer)
         }
 
+    } else {
+      console.log('⏸️ Polling is paused currently.');
+      await this.setCapabilityValue("measure_power", 0); 
+      //Because sometime the ECU doesn't report anymore and the power stays at the last value until polling is resumed
     }
   } catch (err) {
     console.log(`❌ Error in pollLoop: ${err.message}`);
   }
   finally {
+    try {
     pollingInterval = parseInt(this.getSetting('poll_interval'));
     if (isNaN(pollingInterval) || pollingInterval < 1) { pollingInterval = 5; }
     console.log(`⏸️ Polling on ECU is running at an interval of ${pollingInterval} minutes`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
+    } catch (err) {
+      console.log(`❌ Error in pollLoop finally: ${err.message}`);
+    }
   }
 };
 
 async datareset() {
   try {
     const time = getTime(this.homey);
-    if (time == "00:00") { // Reset data at midnight
+    const hour = parseInt(time.split(':')[0]); 
+    if (
+      hour === 0) { // Reset data aftermidnight
       console.log("Data reset");
       peak_power = null;
       peakJustReset = true;

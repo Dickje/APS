@@ -77,12 +77,12 @@ module.exports = class MyWebApi extends Homey.Device {
 
   async getTodaysEnergy() {
     console.log('Get todays energy called');
-    const API_error = this.homey.flow.getDeviceTriggerCard('API_call_rejected')
 
     try{
     var sid=''; // System ID
     var apiKey='';
     var apiSecret='';
+    //const API_error = this.homey.flow.getDeviceTriggerCard('API_call_rejected')
 
     sid = this.homey.settings.get("sid");
     apiKey =  this.homey.settings.get("apiKey");
@@ -119,9 +119,17 @@ module.exports = class MyWebApi extends Homey.Device {
   }catch(error) {
     console.log('Error fetching todays energy:', error.message);
 
-    if (errorData.message === 'API call rejected' ){
-     const errorMessage = this.homey.__('API call rejected');
-    await API_error.trigger(this,{'API_return_code': errorData.code, 'API_return_message': errorMessage});
+    let errorDetails;
+    try {
+        errorDetails = JSON.parse(error.message);
+    } catch (parseError) {
+        errorDetails = { message: error.message, code: null };
+    }
+    const API_error = this.homey.flow.getDeviceTriggerCard('API_call_rejected')
+    if (errorDetails.message === 'API call rejected') {
+        console.log('Triggering API call rejected flow card');
+        const errorMessage = this.homey.__('API call rejected');
+        await API_error.trigger(this, { 'API_return_code': errorDetails.code, 'API_return_message': errorMessage });
     }
   };
 }
@@ -153,6 +161,7 @@ epochToDate(epoch) {
 
   try {
   const messages = [];
+  await this.unsetWarning();
 
   for (const key of changedKeys) {
     let value = newSettings[key];

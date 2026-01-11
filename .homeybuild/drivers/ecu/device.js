@@ -78,8 +78,8 @@ module.exports = class MyECU extends Homey.Device {
     })
 
 
-    //Checks the time every 3 minutes and calls datareset
-    setInterval(() => {this.datareset(); }, 3 * 60 * 1000);
+    //Checks the time every 15 minutes and calls datareset
+    setInterval(() => {this.datareset(); }, 15 * 60 * 1000);
     // Get data and repeat
     this.pollLoop(); // Get data and repeat
 
@@ -199,8 +199,8 @@ async getPowerData(buffer) {
 
     await this.setCapabilityValue("meter_power.exported", todaysEnergy);
     if (currentPower > maxPossiblePower){
-              this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU.`);}
-    else { await this.setCapabilityValue("measure_power", currentPower);
+              this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU. ECU response: ${buffer}`);
+    } else { await this.setCapabilityValue("measure_power", currentPower);
   
     };
 
@@ -290,6 +290,10 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
           this.homey.settings.set("polling_interval", value);
           pollingInterval=value;
           messages.push(this.homey.__("Polling_interval_changed"));
+         if (pollingIntervalnum < 5) {messages.push(this.homey.__("polling_too_fast"));}
+
+
+
           await this.pollLoop(); // Restart polling with new interval
         } else {
             messages.push(this.homey.__("Polling_interval_incorrect"));
@@ -428,10 +432,28 @@ async pollLoop() {
   }
 };
 
+// async datareset() {
+//   try {
+//     const time = getTime(this.homey);
+//     if (time == "00:01") { // Reset data at one minute aftermidnight
+//       console.log("Data reset");
+//       peak_power = null;
+//       peakJustReset = true;
+//     await this.setStoreValue("peak_power", peak_power);
+//     await this.setCapabilityValue("peak_power", peak_power);
+//     await this.setCapabilityValue("meter_power.exported", null);
+//   }
+// } catch (err) {   
+//     console.log(`❌ Error in datareset: ${err.message}`);
+//   }
+// };
+
 async datareset() {
   try {
     const time = getTime(this.homey);
-    if (time == "00:00") { // Reset data at midnight
+    const hour = parseInt(time.split(':')[0]); 
+    if (
+      hour === 0) { // Reset data aftermidnight
       console.log("Data reset");
       peak_power = null;
       peakJustReset = true;
@@ -443,6 +465,9 @@ async datareset() {
     console.log(`❌ Error in datareset: ${err.message}`);
   }
 };
+
+
+
 
 async sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
