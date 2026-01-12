@@ -1,19 +1,17 @@
-Read power and energy from APsystems Solar Panels
-
 Thanks for the work of the Home Automation community, that published a lot of info.
 See https://github.com/HAEdwin/homeassistant-apsystems_ecu_reader for details.
 
-For using the ECU: configure your wireless ECU connection
-Install EMA Manager: Download and install the EMA Manager app on your mobile device from the appropriate app store.
-Put ECU-R in Access Point Mode: Locate the physical button on your ECU-R. 
-Press and hold the button for a few seconds until the ECU Wi-Fi starts. 
-You should see it in your accessible WIFI networks of your device (phone). This indicates that the ECU is in Access Point mode.
-Connect to ECU-R Wi-Fi: Use your mobile device to connect to the newly created Wi-Fi network from your ECU-R. 
-The default Wi-Fi password is 88888888.
-Launch EMA Manager: Open the EMA Manager app on your device. Choose the "Local" connection option. 
-The app should automatically detect and connect to your ECU-R.
-Configure ECU-R Network Settings: Once connected, use the EMA Manager app to configure the ECU-R's network settings. 
-Connect the ECU-R to the same (Wi-Fi) network as your Homey.
+For using the ECU: 
+- Download and install the EMA Manager app on your mobile device from the appropriate app store.
+- Put ECU-R in Access Point Mode: Locate the physical button on your ECU-R. 
+  Press and hold the button for a few seconds until the ECU Wi-Fi starts. 
+  You should see it in your accessible WIFI networks of your device. This indicates that the ECU is in Access Point mode.
+- Connect to ECU-R Wi-Fi: Use your mobile device to connect to the newly created Wi-Fi network from your ECU-R. 
+  The default Wi-Fi password is 88888888.
+- Launch EMA Manager: Open the EMA Manager app on your device. Choose the "Local" connection option. 
+  The app should automatically detect and connect to your ECU-R.
+- Once connected, use the EMA Manager app to configure the ECU-R's network settings. 
+  Connect the ECU-R to the same (Wi-Fi) network as your Homey.
 
 Testing the connection can be done by using ping, or from the terminal using the Netcat command, follow the example below but use the correct (fixed) IP address of your ECU. 
 If connected you'll see line 2, then type in the command APS1100160001END if you get a response (line 4) you are ready to install the integration. 
@@ -26,6 +24,5 @@ APS11009400012160000xxxxxxxz%10012ECU_R_1.2.22009Etc/GMT-8
 
 The ECU only reports every 5 minutes. A shorter polling interval won't yield more information, but seems to cause the ECU to hang up.
 
-
 For the WEB device, request an API key with AP systems. You are allowed to make 1000 API calls per month for free, so be carefull with the polling settings.
-In the app, you must enter the API key, the API secret and the system ID. The latter can be found on the web page were you can see see your system's performance.
+In the app, you must enter the API key, the API secret and the system ID. The latter can be found on the web page where you can see see your system's performance.

@@ -20,12 +20,15 @@
   "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
-    "large": "/assets/images/large.png"
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
   },
   "author": {
     "name": "Dick Juffermans",
     "email": "dick.juffermans@gmail.com"
   },
+  "source":"https://github.com/Dickje/APS",
+  "bugs": {"url":"https://github.com/Dickje/APS/issues"},
   "tags": {
     "en": [
       "Solar",
@@ -62,9 +65,8 @@
       "Solarmodule",
       "Solarmodul",
       "AP-Systeme",
-      "AP-Systeme",
-      "AP-Systeme",
-      "AP-Systeme",
+      "AP Systeme",
+      "APSysteme",
       "ECU"
     ]
   },
@@ -74,16 +76,5 @@
         "username": "@DickJuffermans"
       }
     }
-  },
-  "capabilities": [
-    "measure_power",
-    "meter_power",
-    "measure_energy",
-    "meter_energy",
-    "measure_temperature"
-  ],
-  "flows": [
-    "ECU_error",
-    "ECU_power_changed"
-  ]
+  }
 }

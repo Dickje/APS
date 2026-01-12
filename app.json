@@ -27,6 +27,11 @@
     "name": "Dick Juffermans",
     "email": "dick.juffermans@gmail.com"
   },
+  "source": "https://github.com/Dickje/APS",
+  "bugs": {
+    "url": "https://github.com/Dickje/APS/issues"
+  },
+  "support": "mailto: dick.juffermans@gmail.com",
   "tags": {
     "en": [
       "Solar",

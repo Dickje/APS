@@ -404,7 +404,7 @@ async pollLoop() {
 
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
     if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey, "ECU")) {
-      { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`); } 
+      { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`);     } 
    
         console.log('Polling active, getting data from ECU'),
         InverterBuffer = await this.getInverterBuffer()
@@ -420,33 +420,25 @@ async pollLoop() {
           await this.getFirmwareAndInverters(ECUbuffer)
         }
 
+    } else {
+      console.log('⏸️ Polling is paused currently.');
+      await this.setCapabilityValue("measure_power", 0); 
+      //Because sometime the ECU doesn't report anymore and the power stays at the last value until polling is resumed
     }
   } catch (err) {
     console.log(`❌ Error in pollLoop: ${err.message}`);
   }
   finally {
+    try {
     pollingInterval = parseInt(this.getSetting('poll_interval'));
     if (isNaN(pollingInterval) || pollingInterval < 1) { pollingInterval = 5; }
     console.log(`⏸️ Polling on ECU is running at an interval of ${pollingInterval} minutes`);
     setTimeout(() => this.pollLoop(), pollingInterval * 60 * 1000);
+    } catch (err) {
+      console.log(`❌ Error in pollLoop finally: ${err.message}`);
+    }
   }
 };
-
-// async datareset() {
-//   try {
-//     const time = getTime(this.homey);
-//     if (time == "00:01") { // Reset data at one minute aftermidnight
-//       console.log("Data reset");
-//       peak_power = null;
-//       peakJustReset = true;
-//     await this.setStoreValue("peak_power", peak_power);
-//     await this.setCapabilityValue("peak_power", peak_power);
-//     await this.setCapabilityValue("meter_power.exported", null);
-//   }
-// } catch (err) {   
-//     console.log(`❌ Error in datareset: ${err.message}`);
-//   }
-// };
 
 async datareset() {
   try {
@@ -465,9 +457,6 @@ async datareset() {
     console.log(`❌ Error in datareset: ${err.message}`);
   }
 };
-
-
-
 
 async sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
