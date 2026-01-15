@@ -1,5 +1,4 @@
-Thanks for the work of the Home Automation community, that published a lot of info.
-See https://github.com/HAEdwin/homeassistant-apsystems_ecu_reader for details.
+This app allows you to read the generated power and energy from either the ECU and/ or via the web API.
 
 For using the ECU: 
 - Download and install the EMA Manager app on your mobile device from the appropriate app store.
