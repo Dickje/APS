@@ -16,6 +16,7 @@
     "Polling_interval_changed": "Polling interval changed",
     "pause_by_flowcard_changed" : "Polling choice changed",
     "pause_by_flowcard_incorrect" : "Error in polling choice change",
-    "API call rejected": "API call rejected"
+    "API call rejected": "API call rejected",
+    "all_online": "All inverters online"
 
 }  

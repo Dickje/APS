@@ -23,11 +23,12 @@ async function setCapabilities() {
     await this.setCapabilityOptions("meter_power.exported", {});
     }
 
-    // Number of inverters online
+    // Number of inverters online for insights
     if (!this.hasCapability("inverters_online")) {
     await this.addCapability("inverters_online");
     await this.setCapabilityOptions("inverters_online", {});
     }
+
     console.log("ECU capabilities are set.");
     } catch (error) { console.log("Error setting ECU capabilities:", error); }      
 }

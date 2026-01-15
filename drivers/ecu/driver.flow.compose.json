@@ -99,5 +99,91 @@
       }
     }
   ]
-}]
+},
+{    
+"id": "Not_All_Inverters_Online",
+    "title": {
+        "en": "Not all inverters online",
+        "nl": "Niet alle omvormers online",
+        "de": "Nicht alle Wechselrichter online",
+        "fr": "Tous les onduleurs ne sont pas en ligne"
+  },  
+    "hint": {
+        "nl": "Triggert wanneer niet alle inverters online zijn.",
+        "en": "Triggers when not all inverters are online.",
+        "de": "Wird ausgelöst, wenn nicht alle Wechselrichter online sind.",
+        "fr": "Se déclenche lorsque tous les onduleurs ne sont pas en ligne."
+  },
+  "tokens": [
+    {
+      "type": "number",
+      "name": "online_inverters",
+      "title": {
+        "en": "Online inverters",
+        "de": "Online Wechselrichter",
+        "fr": "Onduleurs en ligne",
+        "nl": "Online omvormers"
+      },
+      "example": {
+        "en": "5",
+        "fr": "5",
+        "de": "5",
+        "nl": "5"
+      }
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+],
+"conditions":[
+{ 
+  "id": "Number_Inverters_Online",
+    "title": {
+        "en": "Number of inverters online",
+        "nl": "Aantal omvormers online",
+        "de": "Anzahl der Online-Wechselrichter",
+        "fr": "Nombre d'onduleurs en ligne"
+  },
+  "titleFormatted": {
+        "en": "Number of inverters online is [[inverter_count]]",
+        "nl": "Aantal omvormers online is [[inverter_count]]",
+        "de": "Anzahl der Online-Wechselrichter ist [[inverter_count]]",
+        "fr": "Le nombre d'onduleurs en ligne est de [[inverter_count]]"
+    },
+    "hint": {
+        "en": "See the number of inverters that are online",
+        "nl": "Zie het aantal omvormers dat online is",
+        "de": "Sehen Sie die Anzahl der Wechselrichter, die online sind",
+        "fr": "Voir le nombre d'onduleurs en ligne"
+  },
+    "args": [
+    {
+      "type": "number",
+      "name": "inverter_count",
+      "title": {
+        "en": "Inverter count",
+        "de": "Wechselrichteranzahl",
+        "fr": "Nombre d'onduleurs",
+        "nl": "Aantal omvormers"
+      },
+      "example": {
+        "en": "3",
+        "fr": "3",
+        "de": "3",
+        "nl": "3"
+      }
+    }
+  ]
+}
+]
 }

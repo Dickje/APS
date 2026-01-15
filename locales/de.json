@@ -16,6 +16,7 @@
     "Polling_interval_changed": "Abfrageintervall geändert",
     "pause_by_flowcard_changed" : "Umfrageergebnis geändert",
     "pause_by_flowcard_incorrect" : "Fehler bei der Änderung der Umfrageauswahl",
-    "API call rejected": "API-Aufruf abgelehnt"
+    "API call rejected": "API-Aufruf abgelehnt",
+    "all_online": "Alle Wechselrichter online"
     
 }  

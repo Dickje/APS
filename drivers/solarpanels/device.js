@@ -108,11 +108,11 @@ module.exports = class MyWebApi extends Homey.Device {
     console.log('Measure polling', measure_polling);
     console.log('Polling interval', pollingInterval,'\n');
 
-    this.setCapabilityValue("total_energy",Math.round(total_energy));
-    this.setCapabilityValue("year_energy",Math.round(year_energy));
-    this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
-    this.setCapabilityValue("meter_power",Math.round(100*meter_todays_energy)/100);
-    this.setCapabilityValue("measure_polling", measure_polling);
+    await this.setCapabilityValue("total_energy",Math.round(total_energy));
+    await this.setCapabilityValue("year_energy",Math.round(year_energy));
+    await this.setCapabilityValue("month_energy",Math.round(100*month_energy)/100);
+    await this.setCapabilityValue("meter_power",Math.round(100*meter_todays_energy)/100);
+    await this.setCapabilityValue("measure_polling", measure_polling);
   
     console.log('Solarpanel data updated','\n');
         

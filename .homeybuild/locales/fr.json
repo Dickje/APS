@@ -16,7 +16,8 @@
     "Polling_interval_changed": "L'intervalle d'interrogation a été modifié",
     "pause_by_flowcard_changed" : "Changement de choix de sondage",
     "pause_by_flowcard_incorrect" : "Erreur dans le changement de choix du sondage",
-    "API call rejected": "Appel API rejeté"
+    "API call rejected": "Appel API rejeté",
+    "all_online": "Tous les onduleurs en ligne"
 
 
     

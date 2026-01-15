@@ -38,7 +38,7 @@ module.exports = class MyECU extends Homey.Device {
     
     ECU_address = this.homey.settings.get('ECU_address') ?? '';
     ECU_ID = this.homey.settings.get("ECU_ID") ?? '';
-    this.setStoreValue("peak_power", null);
+    await this.setStoreValue("peak_power", null);
 
     // Normalize settings: trim strings and provide safe defaults when empty
     {
@@ -135,6 +135,8 @@ getECUbuffer = async()=>{
 getInverterdata = async(buffer) => { 
   console.log('');
   console.log('Getting inverter data');
+
+  
   try {
   let totalVoltage = 0;
   let totalTemperature = 0;
@@ -166,8 +168,8 @@ getInverterdata = async(buffer) => {
   console.log(`Average of temperature: ${averageTemp.toFixed(1)}°C`);
 
   //Push data to app
-  this.setCapabilityValue("measure_voltage",numVoltage);
-  this.setCapabilityValue("measure_temperature",averageTemp);
+  await this.setCapabilityValue("measure_voltage",numVoltage);
+  await this.setCapabilityValue("measure_temperature",averageTemp);
 
  
   } catch (err) {
@@ -179,6 +181,8 @@ getInverterdata = async(buffer) => {
 async getPowerData(buffer) {
   console.log('Getting powerdata');
   const ECU_power_changed = this.homey.flow.getDeviceTriggerCard("ECU_power_changed");
+  const Not_All_Inverters_Online = this.homey.flow.getDeviceTriggerCard("Not_All_Inverters_Online");
+  const Number_Inverters_Online = this.homey.flow.getConditionCard("Number_Inverters_Online");
   try {
   
     const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
@@ -190,7 +194,7 @@ async getPowerData(buffer) {
 
     if (!peakJustReset && currentPower > peak_power && currentPower <= maxPossiblePower){
       peak_power = currentPower;
-      this.setStoreValue("peak_power", peak_power);
+      await this.setStoreValue("peak_power", peak_power);
     }
     if (peakJustReset) {
       peakJustReset = false; 
@@ -199,17 +203,24 @@ async getPowerData(buffer) {
 
     await this.setCapabilityValue("meter_power.exported", todaysEnergy);
     if (currentPower > maxPossiblePower){
-              this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU. ECU response: ${buffer}`);
+              await this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU. ECU response: ${buffer}`);
     } else { await this.setCapabilityValue("measure_power", currentPower);
   
     };
 
+    await Number_Inverters_Online.trigger(this,{"inverters_online": invertersOnline });
+
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
+    if (inverters !== invertersOnline ){
+      console.log('Not all inverters are online');
+      await Not_All_Inverters_Online.trigger(this);
+      
+    }
     await this.setCapabilityValue("peak_power", peak_power);
     if (invertersOnline == 0) {
-      this.setCapabilityValue("measure_power",null);
-      this.setCapabilityValue("measure_voltage",null);
-      this.setCapabilityValue("measure_temperature", null);
+      await this.setCapabilityValue("measure_power",null);
+      await this.setCapabilityValue("measure_voltage",null);
+      await this.setCapabilityValue("measure_temperature", null);
     };  
 
       if (lastPower !== currentPower) {
@@ -462,9 +473,9 @@ async sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 };
 
-addToTimeline(message) {
+async addToTimeline(message) {
   try {
-    this.homey.notifications.createNotification({ 
+    await this.homey.notifications.createNotification({ 
         excerpt: `${message}`})} catch (err) {
     console.log(`❌ Error in addToTimeline: ${err.message}`);
   }
