@@ -164,46 +164,6 @@
         ]
       },
       {
-        "id": "Not_All_Inverters_Online",
-        "title": {
-          "en": "Not all inverters online",
-          "nl": "Niet alle omvormers online",
-          "de": "Nicht alle Wechselrichter online",
-          "fr": "Tous les onduleurs ne sont pas en ligne"
-        },
-        "hint": {
-          "nl": "Triggert wanneer niet alle inverters online zijn.",
-          "en": "Triggers when not all inverters are online.",
-          "de": "Wird ausgelöst, wenn nicht alle Wechselrichter online sind.",
-          "fr": "Se déclenche lorsque tous les onduleurs ne sont pas en ligne."
-        },
-        "tokens": [
-          {
-            "type": "number",
-            "name": "online_inverters",
-            "title": {
-              "en": "Online inverters",
-              "de": "Online Wechselrichter",
-              "fr": "Onduleurs en ligne",
-              "nl": "Online omvormers"
-            },
-            "example": {
-              "en": "5",
-              "fr": "5",
-              "de": "5",
-              "nl": "5"
-            }
-          }
-        ],
-        "args": [
-          {
-            "type": "device",
-            "name": "device",
-            "filter": "driver_id=ecu"
-          }
-        ]
-      },
-      {
         "id": "API_call_rejected",
         "title": {
           "en": "API call rejected ",
@@ -250,24 +210,24 @@
     ],
     "conditions": [
       {
-        "id": "Number_Inverters_Online",
+        "id": "All_Inverters_Online",
         "title": {
-          "en": "Number of inverters online",
-          "nl": "Aantal omvormers online",
-          "de": "Anzahl der Online-Wechselrichter",
-          "fr": "Nombre d'onduleurs en ligne"
-        },
-        "titleFormatted": {
-          "en": "Number of inverters online is [[inverter_count]]",
-          "nl": "Aantal omvormers online is [[inverter_count]]",
-          "de": "Anzahl der Online-Wechselrichter ist [[inverter_count]]",
-          "fr": "Le nombre d'onduleurs en ligne est de [[inverter_count]]"
+          "en": "!{{Not all|All}} inverters are online",
+          "nl": "!{{Niet alle|Alle}} omvormers zijn online",
+          "de": "!{{Nicht alle|Alle}} Wechselrichter sind online",
+          "fr": "Tous les onduleurs !{{sont|ne sont pas}} en ligne"
         },
         "hint": {
-          "en": "See the number of inverters that are online",
-          "nl": "Zie het aantal omvormers dat online is",
-          "de": "Sehen Sie die Anzahl der Wechselrichter, die online sind",
-          "fr": "Voir le nombre d'onduleurs en ligne"
+          "en": "Check if all inverters are online",
+          "nl": "Controleer of alle omvormers online zijn",
+          "de": "Überprüfen Sie, ob alle Wechselrichter online sind",
+          "fr": "Vérifiez si tous les onduleurs sont en ligne"
+        },
+        "titleFormatted": {
+          "en": "[[amountoffline]] of inverters are offline.",
+          "nl": "[[amountoffline]] omvormers zijn offline.",
+          "de": "[[amountoffline]] Wechselrichter sind offline.",
+          "fr": "[[amountoffline]] onduleurs sont hors ligne."
         },
         "args": [
           {
@@ -277,19 +237,51 @@
           },
           {
             "type": "number",
-            "name": "inverter_count",
-            "title": {
-              "en": "Inverter count",
-              "de": "Wechselrichteranzahl",
-              "fr": "Nombre d'onduleurs",
-              "nl": "Aantal omvormers"
-            },
-            "example": {
-              "en": "3",
-              "fr": "3",
-              "de": "3",
-              "nl": "3"
-            }
+            "name": "amountoffline"
+          }
+        ]
+      },
+      {
+        "id": "ECU_polling_active",
+        "title": {
+          "en": "ECU polling is !{{active|not active}}",
+          "nl": "ECU polling is !{{actief|niet actief}}",
+          "de": "ECU-Abfrage ist !{{aktiv|nicht aktiv}}",
+          "fr": "Le sondage ECU est !{{actif|inactif}}"
+        },
+        "hint": {
+          "en": "Check if ECU polling is active or paused",
+          "nl": "Controleer of ECU polling actief of gepauzeerd is",
+          "de": "Überprüfen Sie, ob die ECU-Abfrage aktiv oder pausiert ist",
+          "fr": "Vérifiez si le sondage ECU est actif ou en pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ecu"
+          }
+        ]
+      },
+      {
+        "id": "WEB_polling_active",
+        "title": {
+          "en": "WEB polling is !{{active|not active}}",
+          "nl": "WEB polling is !{{actief|niet actief}}",
+          "de": "WEB-Abfrage ist !{{aktiv|nicht aktiv}}",
+          "fr": "Le sondage WEB est !{{actif|inactif}}"
+        },
+        "hint": {
+          "en": "Check if WEB polling is active or paused",
+          "nl": "Controleer of WEB polling actief of gepauzeerd is",
+          "de": "Überprüfen Sie, ob die WEB-Abfrage aktiv oder pausiert ist",
+          "fr": "Vérifiez si le sondage WEB est actif ou en pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=solarpanels"
           }
         ]
       }

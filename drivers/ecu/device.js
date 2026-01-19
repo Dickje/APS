@@ -49,6 +49,7 @@ module.exports = class MyECU extends Homey.Device {
       const e = await this.homey.settings.get('pause_end');
       pauseEndStr = (typeof e === 'string' && e.trim() !== '') ? e.trim() : '05:00';
     }
+
     {
       const p = await this.homey.settings.get('poll_interval');
       const pi = Number.parseInt(p, 10);
@@ -181,8 +182,7 @@ getInverterdata = async(buffer) => {
 async getPowerData(buffer) {
   console.log('Getting powerdata');
   const ECU_power_changed = this.homey.flow.getDeviceTriggerCard("ECU_power_changed");
-  const Not_All_Inverters_Online = this.homey.flow.getDeviceTriggerCard("Not_All_Inverters_Online");
-  const Number_Inverters_Online = this.homey.flow.getConditionCard("Number_Inverters_Online");
+  const All_Inverters_Online = this.homey.flow.getConditionCard("All_Inverters_Online",);
   try {
   
     const currentPower = ((buffer[31] << 24) | (buffer[32] << 16) | (buffer[33] << 8) | buffer[34]) >>> 0;
@@ -208,14 +208,12 @@ async getPowerData(buffer) {
   
     };
 
-    await Number_Inverters_Online.trigger(this,{"inverters_online": invertersOnline });
-
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
-    if (inverters !== invertersOnline ){
-      console.log('Not all inverters are online');
-      await Not_All_Inverters_Online.trigger(this);
-      
-    }
+    
+    All_Inverters_Online.registerRunListener(async(args) => {
+      return invertersOnline >= args.amount; 
+    })
+    
     await this.setCapabilityValue("peak_power", peak_power);
     if (invertersOnline == 0) {
       await this.setCapabilityValue("measure_power",null);
@@ -413,10 +411,16 @@ async pollLoop() {
     return;
   }
 
+  this.homey.flow.getConditionCard('ECU_polling_active').registerRunListener(async() => {
+      return polling_on;
+  })
+
+
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
+    
     if (!isPaused(pauseStartStr, pauseEndStr, pollingInterval, pause_by_flowcard,polling_on, this.homey, "ECU")) {
       { console.log(`⏸️ ECU polling paused between ${pauseStartStr} and ${pauseEndStr}`);     } 
-   
+  
         console.log('Polling active, getting data from ECU'),
         InverterBuffer = await this.getInverterBuffer()
      

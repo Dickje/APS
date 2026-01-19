@@ -83,5 +83,21 @@
       }
     }]
     }
+],
+"conditions":[
+{"id": "WEB_polling_active",
+    "title": {
+        "en": "WEB polling is !{{active|not active}}",
+        "nl": "WEB polling is !{{actief|niet actief}}",
+        "de": "WEB-Abfrage ist !{{aktiv|nicht aktiv}}",
+        "fr": "Le sondage WEB est !{{actif|inactif}}"
+  },
+    "hint": {
+        "en": "Check if WEB polling is active or paused",
+        "nl": "Controleer of WEB polling actief of gepauzeerd is",
+        "de": "Überprüfen Sie, ob die WEB-Abfrage aktiv oder pausiert ist",
+        "fr": "Vérifiez si le sondage WEB est actif ou en pause"
+  }
+}
 ]
 }

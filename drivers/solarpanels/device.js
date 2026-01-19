@@ -62,7 +62,8 @@ module.exports = class MyWebApi extends Homey.Device {
       pause_start: pauseStartStr,
       pause_end: pauseEndStr,
       poll_interval: pollingInterval,
-      pause_by_flowcard: pause_by_flowcard
+      pause_by_flowcard: pause_by_flowcard,
+      polling_on: polling_on
     })
 
     const settings = this.getSettings();
@@ -267,6 +268,10 @@ async pollLoop() {
     console.log("poll_interval must be greater or equal to 1.");
     return;
   }
+
+  this.homey.flow.getConditionCard('WEB_polling_active').registerRunListener(async() => {
+      return polling_on;
+  })
 
   try {
     pause_by_flowcard = this.getSetting('pause_by_flowcard');
