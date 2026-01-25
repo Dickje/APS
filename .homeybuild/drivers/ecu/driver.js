@@ -35,7 +35,7 @@ module.exports = class ECUdriver extends Homey.Driver {
       const buffer = Buffer.from(data.data)
       var Segment = buffer.subarray(55,60); // The ECU type bytes
       var decodedString = Segment.toString('utf8'); // Of 'ascii', afhankelijk van de codering
-      this.homey.settings.set("ECU_ID", decodedString);
+      //this.homey.settings.set("ECU_ID", decodedString);
 
       if (decodedString.substring(0,3) === "ECU"){
         console.log("✅ " + decodedString + "detected");

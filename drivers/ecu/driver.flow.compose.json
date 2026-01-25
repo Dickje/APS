@@ -118,15 +118,15 @@
         "fr": "Vérifiez si tous les onduleurs sont en ligne"
   },
   "titleFormatted": {
-        "en": "[[amountoffline]] of inverters are offline.",
-        "nl": "[[amountoffline]] omvormers zijn offline.",
-        "de": "[[amountoffline]] Wechselrichter sind offline.",
-        "fr": "[[amountoffline]] onduleurs sont hors ligne."
+        "en": "[[amountonline]] of inverter(s) online.",
+        "nl": "[[amountonline]] omvormer(s) online.",
+        "de": "[[amountonline]] Wechselrichter online.",
+        "fr": "[[amountonline]] onduleur(s) en ligne."
   },
   "args": [
     {
       "type": "number",
-      "name": "amountoffline"
+      "name": "amountonline"
     }
   ]
 },

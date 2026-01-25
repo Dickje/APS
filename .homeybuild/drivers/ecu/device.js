@@ -20,7 +20,7 @@ let peakJustReset = false;
 let ECU_query = 'APS1100160001';
 let Inverter_query = 'APS1100280002';
 let polling_on = true;
-let pause_by_flowcard = false;
+let pause_by_flowcard ;
 let ECUbuffer = null;
 let InverterBuffer = null;  
 
@@ -36,9 +36,11 @@ module.exports = class MyECU extends Homey.Device {
     try {
     await setCapabilities.call(this);
     
-    ECU_address = this.homey.settings.get('ECU_address') ?? '';
-    ECU_ID = this.homey.settings.get("ECU_ID") ?? '';
+    ECU_address = await this.homey.settings.get('ECU_address') ?? '';
+    ECU_ID = await this.homey.settings.get("ECU_ID") ?? '';
+    pause_by_flowcard = await this.getSetting('pause_by_flowcard');
     await this.setStoreValue("peak_power", null);
+
 
     // Normalize settings: trim strings and provide safe defaults when empty
     {
@@ -211,7 +213,7 @@ async getPowerData(buffer) {
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
     
     All_Inverters_Online.registerRunListener(async(args) => {
-      return invertersOnline >= args.amount; 
+      return invertersOnline >= args.amountonline; 
     })
     
     await this.setCapabilityValue("peak_power", peak_power);
@@ -270,6 +272,13 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
         //messages.push('❌ Invalid IP address.');
         messages.push('❌ ' +  this.homey.__("IP_address_invalid"));        
       }
+    }
+
+    if (key === 'pause_by_flowcard') {
+      // Validate the new value (not the old variable)
+      this.homey.settings.set("pause_by_flowcard", value);
+      pause_by_flowcard = value;
+      messages.push(this.homey.__("Pause_by_flowcard_changed"));
     }
 
     if (key === 'pause_start') {
