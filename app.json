@@ -576,6 +576,28 @@
     },
     {
       "name": {
+        "en": "EZ1"
+      },
+      "class": "solarpanel",
+      "capabilities": [
+        "meter_power",
+        "measure_power"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/ez1/assets/images/small.png",
+        "large": "/drivers/ez1/assets/images/large.png",
+        "xlarge": "/drivers/ez1/assets/images/xlarge.png"
+      },
+      "id": "ez1"
+    },
+    {
+      "name": {
         "en": "Solarpanels"
       },
       "capabilities": [
