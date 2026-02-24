@@ -1,0 +1,25 @@
+    
+async function setCapabilities() {    
+    try {
+    //Lifetime energy
+    if (!this.hasCapability("total_energy")) {
+    await this.addCapability("total_energy");
+    await this.setCapabilityOptions("total_energy", {});
+    }
+    // Current power
+    if (!this.hasCapability("measure_power")) {
+    await this.addCapability("measure_power");
+    await this.setCapabilityOptions("measure_power", {});
+    }
+
+    // Energy in kWh
+    if (!this.hasCapability("meter_power.exported")) {
+    await this.addCapability("meter_power.exported");
+    await this.setCapabilityOptions("meter_power.exported", {});
+    }
+
+
+    console.log("EZ1 capabilities are set.");
+    } catch (error) { console.log("Error setting EZ1 capabilities:", error); }      
+}
+module.exports = { setCapabilities }
