@@ -106,5 +106,8 @@
   },
   "1.4.0": {
     "en": "Adding support for EZ1"
+  },
+  "1.4.1": {
+    "en": "Fixed a bug that prevented the EZ1 detection"
   }
 }
