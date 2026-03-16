@@ -109,5 +109,8 @@
   },
   "1.4.1": {
     "en": "Fixed a bug that prevented the EZ1 detection"
+  },
+  "1.4.2": {
+    "en": "Changed the EZ1 data handling. For solar panel, control by flow setting should now be remembered on updates"
   }
 }
