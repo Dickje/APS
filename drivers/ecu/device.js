@@ -17,8 +17,8 @@ let pauseEndStr;
 let pollingInterval=5;
 let lastPower=0;
 let peakJustReset = false; 
-let ECU_query = 'APS1100160001';
-let Inverter_query = 'APS1100280002';
+let ECU_query = 'APS1100160001'; // ECU command to get ECU data like inverter count and firmware version
+let Inverter_query = 'APS1100280002'; // ECU command to get power and other data
 let polling_on = true;
 let pause_by_flowcard ;
 let ECUbuffer = null;

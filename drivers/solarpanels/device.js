@@ -8,7 +8,7 @@ const { isValidTimeFormat, isPaused } = require('../../lib/apslib');
 let pauseStartStr;
 let pauseEndStr;
 let pollingInterval=30;
-let pause_by_flowcard = false;
+let pause_by_flowcard;
 let polling_on = true;
 let measure_polling;
  
@@ -23,6 +23,7 @@ module.exports = class MyWebApi extends Homey.Device {
 
     await setCapabilities.call(this)
     await this.unsetWarning();
+    pause_by_flowcard = await this.getSetting('pause_by_flowcard');
     console.log('Solarpanel has been initialized');
     // Get polling settings (normalize: trim, fallback when empty)
     {
@@ -189,7 +190,13 @@ epochToDate(epoch) {
         messages.push(this.homey.__("Pause_end_incorrect"));
       }
     }
-
+    if (key === 'pause_by_flowcard') {
+      // Validate the new value (not the old variable)
+      this.homey.settings.set("pause_by_flowcard", value);
+      pause_by_flowcard = value;
+      messages.push(this.homey.__("Pause_by_flowcard_changed"));
+    }
+    
     if (key === 'poll_interval') {
        const pollingIntervalnum = Number(pollingInterval);
        if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 1 && pollingIntervalnum < 61) {

@@ -31,32 +31,36 @@ module.exports = class EZ1driver extends Homey.Driver {
     const EZ1_command = 'getDeviceInfo';
 
     try {
-      const data = await EZ1_connection.fetchData(EZ1_address, EZ1_command);
-      const response = await data.json();
+      const { json: response } = await EZ1_connection.fetchData(EZ1_address, EZ1_command);
+      const payload = response.data || response;
+      const EZ1_ID = response.deviceId || payload.deviceId || payload.DeviceID;
 
-      console.log("DeviceID:", response.DeviceID);
-      console.log("DeviceVersion:", response.devVer);
-      console.log("SSID:", response.ssid);
-      console.log("ipAddress:", response.ipAddr);
-      console.log("minPower:", response.minPower);
-      console.log("maxPower:", response.maxPower);
+      console.log("DeviceID:", EZ1_ID);
+      console.log("DeviceVersion:", payload.devVer);
+      console.log("SSID:", payload.ssid);
+      console.log("ipAddress:", payload.ipAddr);
+      console.log("minPower:", payload.minPower);
+      console.log("maxPower:", payload.maxPower);
       
     
-      if (response.message === "SUCCESS"){
-        console.log("✅ " + response.DeviceID + "detected");
-      } else {  
-        console.log("❌ Error:EZ1 not detected");
+      const success = (response.message || payload.message) === "SUCCESS";
+      if (success) {
+        console.log("✅ " + EZ1_ID + " detected");
+      } else {
+        console.log("❌ Error: EZ1 not detected");
       }
 
       const devices = {
         name: 'APsystems EZ1',
         data: { EZ1_ID },
-        store: {deviceID: respinse.deviceID,
-                devVer: response.devVer,
-                ssid: response.ssid,
-                ipAddr: response.ipAddr,
-                minPower: response.minPower,
-                maxPower: response.maxPower} 
+        store: {
+          deviceID: EZ1_ID,
+          devVer: payload.devVer,
+          ssid: payload.ssid,
+          ipAddr: payload.ipAddr,
+          minPower: payload.minPower,
+          maxPower: payload.maxPower,
+        },
       };
              
     

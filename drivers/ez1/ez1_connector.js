@@ -32,7 +32,16 @@ const net = require('net');
 
       client.on('data', (data) => {
         client.destroy();
-        resolve({ data });
+
+        const raw = data.toString('utf8');
+        let json;
+        try {
+          json = JSON.parse(raw);
+        } catch (error) {
+          return reject(new Error(`invalid JSON response: ${error.message}`));
+        }
+
+        resolve({ raw, json });
       });
     });
   }

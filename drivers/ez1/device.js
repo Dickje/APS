@@ -1,6 +1,7 @@
 'use strict';
 
 const Homey = require('homey');
+const EZ1_connector = require('./ez1_connector');
 
 module.exports = class MyDevice extends Homey.Device {
 
@@ -14,8 +15,9 @@ module.exports = class MyDevice extends Homey.Device {
   async getCurrentOutput() {
 
     this.log('Getting current output');
+    const EZ1_connection = new EZ1_connector();
   
-    const data = await this.getECUdata("getOutputData", this.getStoreValue("ipAddr"));
+    const data = await EZ1_connection.fetchData(this.getStoreValue("ipAddr"), "getOutputData");
     if (data.message === "SUCCESS") {
       this.log('Current output data:', data);
       const p1 = data.p1;
