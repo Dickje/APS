@@ -38,6 +38,7 @@ const net = require('net');
         try {
           json = JSON.parse(raw);
         } catch (error) {
+          console.log("Invalid JSON data received:", raw);
           return reject(new Error(`invalid JSON response: ${error.message}`));
         }
 
