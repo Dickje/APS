@@ -1,50 +1,52 @@
-const net = require('net');
+const http = require('http');
 
-  class EZ1_connector {
+class EZ1_connector {
 
-  async fetchData(EZ1_address, EZ1_command) {
+  async fetchData(EZ1_address, EZ1_endpoint) {
     EZ1_address = EZ1_address.split('.').map(Number).join('.'); // Normalize the IP
-    console.log(`Command ${EZ1_command.replace(/[\n]/g,"")} to IP address ${EZ1_address}`, '\n');
+    console.log(`Request to http://${EZ1_address}:8050/${EZ1_endpoint}`);
 
-    //throw new Error('connectionError');
     return new Promise((resolve, reject) => {
-      const client = new net.Socket();
-      client.setTimeout(5000); // 5 seconds timeout
-      let hasError = false;
+      const options = {
+        hostname: EZ1_address,
+        port: 8050,
+        path: `/${EZ1_endpoint}`,
+        method: 'GET',
+        timeout: 5000,
+      };
 
-      client.connect(8050, EZ1_address, () => { client.write(EZ1_command, 'utf-8'); });
+      const req = http.request(options, (res) => {
+        let rawData = '';
+        res.setEncoding('utf8');
 
-      client.on('error', () => {
-        console.error('❗ Connection error');
-        client.destroy();
-        if (hasError) return;
-        hasError = true;
-         reject (new Error('connectionError'));
+        res.on('data', (chunk) => { rawData += chunk; });
+
+        res.on('end', () => {
+          let json;
+          try {
+            json = JSON.parse(rawData);
+          } catch (error) {
+            console.log('Invalid JSON data received:', rawData);
+            return reject(new Error(`invalid JSON response: ${error.message}`));
+          }
+          resolve({ raw: rawData, json });
+        });
       });
 
-      client.on('timeout', () => {
+      req.on('timeout', () => {
         console.error('⏱️ Timeout error');
-        client.destroy();
-        if (hasError) return;
-        hasError = true;
-        reject (new Error('timeoutError'));
+        req.destroy();
+        reject(new Error('timeoutError'));
       });
 
-      client.on('data', (data) => {
-        client.destroy();
-
-        const raw = data.toString('utf8');
-        let json;
-        try {
-          json = JSON.parse(raw);
-        } catch (error) {
-          console.log("Invalid JSON data received:", raw);
-          return reject(new Error(`invalid JSON response: ${error.message}`));
-        }
-
-        resolve({ raw, json });
+      req.on('error', (err) => {
+        console.error('❗ Connection error:', err.message);
+        reject(new Error('connectionError'));
       });
+
+      req.end();
     });
   }
-  }
+}
+
 module.exports = EZ1_connector;

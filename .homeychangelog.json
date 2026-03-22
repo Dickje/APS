@@ -112,5 +112,8 @@
   },
   "1.4.2": {
     "en": "Changed the EZ1 data handling. For solar panel, control by flow setting should now be remembered on updates"
+  },
+  "1.0.2": {
+    "en": "Logging "
   }
 }
