@@ -34,7 +34,8 @@ module.exports = class EZ1driver extends Homey.Driver {
       const { json: response } = await EZ1_connection.fetchData(EZ1_address, EZ1_command);
       const payload = response.data || response;
       const EZ1_ID = response.deviceId || payload.deviceId || payload.DeviceID;
-
+      const success = (response.message || payload.message) === "SUCCESS";
+      
       console.log("DeviceID:", EZ1_ID);
       console.log("DeviceVersion:", payload.devVer);
       console.log("SSID:", payload.ssid);
@@ -43,7 +44,7 @@ module.exports = class EZ1driver extends Homey.Driver {
       console.log("maxPower:", payload.maxPower);
       
     
-      const success = (response.message || payload.message) === "SUCCESS";
+
       if (success) {
         console.log("✅ " + EZ1_ID + " detected");
       } else {

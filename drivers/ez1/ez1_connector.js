@@ -6,6 +6,42 @@ class EZ1_connector {
     EZ1_address = EZ1_address.split('.').map(Number).join('.'); // Normalize the IP
     console.log(`Request to http://${EZ1_address}:8050/${EZ1_endpoint}`);
 
+    // For testing purposes, return mock data instead of making an actual HTTP request
+
+    const returnDeviceData = {
+    "data":{
+    "deviceId":"E07000000001",
+    "devVer":"EZ11.0.0",
+    "ssid":"ssidName",
+    "ipAddr":"192.168.1.2",
+    "minPower":"30",
+    "maxPower":"800"
+    },
+    "message":"SUCCESS",
+    "deviceId":"E07000000001"
+    };
+
+    const returnDataOutput = {
+    "data":{
+    "p1":10,
+    "e1":20,
+    "te1":300,
+    "p2":15,
+    "e2":25,
+    "te2":500,
+    },
+    "message":"SUCCESS",
+    "deviceId":"E07000000001"
+    };
+   
+    //   if (EZ1_endpoint === "getDeviceInfo") {
+    //    console.log('Returning mock device info data');
+    //    return { raw: JSON.stringify(returnDeviceData), json: returnDeviceData };
+    // } else if (EZ1_endpoint === "getOutputData") {
+    //   console.log('Returning mock output data');
+    //    return { raw: JSON.stringify(returnDataOutput), json: returnDataOutput };
+    // }
+
     return new Promise((resolve, reject) => {
       const options = {
         hostname: EZ1_address,

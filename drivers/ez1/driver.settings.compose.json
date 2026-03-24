@@ -1,0 +1,18 @@
+   
+   [{"id": "poll_interval",
+   "type": "number",
+   "label": {
+     "en": "Polling interval",
+     "nl": "Polling interval",
+     "de": "Abfrageintervall",
+     "fr": "Intervalle d'interrogation"
+   },
+   "value": 5,
+   "min": 1,
+   "units": {
+     "en": "minutes",
+     "nl": "minuten",
+     "de": "Minuten",
+     "fr": "minutes"
+   }
+}]

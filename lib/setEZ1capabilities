@@ -12,12 +12,17 @@ async function setCapabilities() {
     await this.setCapabilityOptions("measure_power", {});
     }
 
-    // Energy in kWh
-    if (!this.hasCapability("meter_power.exported")) {
-    await this.addCapability("meter_power.exported");
-    await this.setCapabilityOptions("meter_power.exported", {});
-    }
+    // // Energy in kWh
+    // if (!this.hasCapability("meter_power.exported")) {
+    // await this.addCapability("meter_power.exported");
+    // await this.setCapabilityOptions("meter_power.exported", {});
+    // }
 
+        // Energy in kWh
+    if (!this.hasCapability("meter_power")) {
+    await this.addCapability("meter_power");
+    await this.setCapabilityOptions("meter_power", {});
+    }
 
     console.log("EZ1 capabilities are set.");
     } catch (error) { console.log("Error setting EZ1 capabilities:", error); }      
