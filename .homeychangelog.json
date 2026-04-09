@@ -13,5 +13,8 @@
   },
   "1.0.6": {
     "en": "added actioncards"
+  },
+  "1.0.7": {
+    "en": "Resolved an issue that crashed the app with real data, but not with dummy data"
   }
 }
