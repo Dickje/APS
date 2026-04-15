@@ -25,5 +25,8 @@
   },
   "1.0.10": {
     "en": "Fixed a typo"
+  },
+  "1.0.11": {
+    "en": "Removed a line that added random power,for testing"
   }
 }
