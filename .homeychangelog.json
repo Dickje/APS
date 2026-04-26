@@ -28,5 +28,8 @@
   },
   "1.0.11": {
     "en": "Removed a line that added random power,for testing"
+  },
+  "1.0.12": {
+    "en": "A lot"
   }
 }

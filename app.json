@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.dj.ez1",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -212,6 +212,50 @@
     ],
     "actions": [
       {
+        "id": "max_DevicePower_EZ1",
+        "title": {
+          "en": "Set EZ1 maximum device power",
+          "nl": "Stel de maximale apparaatstroom van EZ1 in",
+          "de": "Maximale Gerätestromstärke des EZ1 festlegen",
+          "fr": "Définir la puissance maximale de l'appareil EZ1 "
+        },
+        "titleFormatted": {
+          "en": "Set EZ1 maximum device power to [[set_maxPower]] watts",
+          "nl": "Stel de maximale apparaatstroom van EZ1 in op [[set_maxPower]] watt",
+          "de": "Maximale Gerätestromstärke des EZ1 auf [[set_maxPower]] Watt festlegen",
+          "fr": "Définir la puissance maximale de l'appareil EZ1 à [[set_maxPower]] watts"
+        },
+        "hint": {
+          "en": "Control the maximum power output of the EZ1 device",
+          "nl": "Controleer de maximale stroomuitvoer van het EZ1 apparaat",
+          "de": "Steuerung der maximalen Stromausgabe des EZ1-Geräts",
+          "fr": "Contrôle la puissance maximale de sortie du dispositif EZ1"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          },
+          {
+            "type": "number",
+            "name": "set_maxPower",
+            "title": {
+              "en": "Maximum power in watts",
+              "nl": "Maximaal vermogen in watt",
+              "de": "Maximale Leistung in Watt",
+              "fr": "Puissance maximale en watts"
+            },
+            "example": {
+              "en": "500",
+              "fr": "500",
+              "de": "500",
+              "nl": "500"
+            }
+          }
+        ]
+      },
+      {
         "id": "polling_start_EZ1",
         "title": {
           "en": "Start EZ1 polling",
@@ -327,7 +371,7 @@
       "capabilities": [
         "meter_power",
         "measure_power",
-        "peak_power",
+        "set_DevicePower",
         "alarm_offgrid",
         "alarm_isce1",
         "alarm_isce2",
@@ -335,6 +379,78 @@
         "total_energy",
         "EZ1_status"
       ],
+      "capabilitiesOptions": {
+        "EZ1_status": {
+          "titleTrue": {
+            "en": "Off",
+            "nl": "Uit",
+            "fr": "Désactivé",
+            "de": "Aus"
+          },
+          "titleFalse": {
+            "en": "On",
+            "nl": "Aan",
+            "fr": "Activé",
+            "de": "Ein"
+          }
+        },
+        "alarm_offgrid": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_isce1": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_isce2": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_oe": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -367,6 +483,16 @@
       ],
       "id": "ez1",
       "settings": [
+        {
+          "id": "set_DevicePower",
+          "type": "number",
+          "label": {
+            "en": "Set maximum power",
+            "nl": "Stel maximaal vermogen in",
+            "de": "Maximale Leistung einstellen",
+            "fr": "Définir la puissance maximale"
+          }
+        },
         {
           "type": "group",
           "label": {
@@ -417,25 +543,6 @@
               }
             },
             {
-              "id": "setPeakPower",
-              "type": "number",
-              "label": {
-                "en": "Maximum power",
-                "nl": "Maximaal vermogen",
-                "de": "Maximale Leistung",
-                "fr": "Puissance maximale"
-              },
-              "value": 600,
-              "min": 0,
-              "max": 1000,
-              "units": {
-                "en": "watts",
-                "nl": "watt",
-                "de": "Watt",
-                "fr": "watts"
-              }
-            },
-            {
               "id": "pause_by_flowcard",
               "type": "checkbox",
               "value": false,
@@ -452,6 +559,23 @@
     }
   ],
   "capabilities": {
+    "_max_DevicePower": {
+      "type": "number",
+      "title": {
+        "en": "Peak power",
+        "nl": "Piekvermogen",
+        "fr": "Puissance de crête",
+        "de": "Spitzenleistung"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": "W"
+      },
+      "insights": false,
+      "icon": "/assets/icons/peak_power.svg"
+    },
     "alarm_isce1": {
       "type": "boolean",
       "capabilitiesOptions": {
@@ -469,10 +593,10 @@
         }
       },
       "title": {
-        "en": "Alarm DC-1",
-        "nl": "Alarm DC-1",
-        "fr": "Alarme DC-1",
-        "de": "Alarm DC-1"
+        "en": "Status DC-1",
+        "nl": "Status DC-1",
+        "fr": "Statut DC-1",
+        "de": "Status DC-1"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -500,10 +624,10 @@
         }
       },
       "title": {
-        "en": "Alarm DC-2",
-        "nl": "Alarm DC-2",
-        "fr": "Alarme DC-2",
-        "de": "Alarm DC-2"
+        "en": "Status DC-2",
+        "nl": "Status DC-2",
+        "fr": "Statut DC-2",
+        "de": "Status DC-2"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -531,10 +655,10 @@
         }
       },
       "title": {
-        "en": "Alarm Output Error",
-        "nl": "Alarm Outputfout",
-        "fr": "Alarme d'erreur de sortie",
-        "de": "Alarm Ausgabefehler"
+        "en": "Output",
+        "nl": "Uitgang",
+        "fr": "Sortie",
+        "de": "Ausgabe"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -549,23 +673,23 @@
       "type": "boolean",
       "capabilitiesOptions": {
         "titleTrue": {
-          "en": "Off grid alarm on",
-          "nl": "Off grid alarm aan",
-          "fr": "Alarme hors réseau activée",
-          "de": "Off Grid Alarm aktiviert"
+          "en": "AC connection alarm on",
+          "nl": "AC verbinding alarm aan",
+          "fr": "Connexion CA activée",
+          "de": "AC-Anschluss Alarm aktiviert"
         },
         "titleFalse": {
-          "en": "Off grid alarm off",
-          "nl": "Off grid alarm uit",
-          "fr": "Alarme hors réseau désactivée",
-          "de": "Off Grid Alarm deaktiviert"
+          "en": "AC connection alarm off",
+          "nl": "AC verbinding alarm uit",
+          "fr": "Connexion CA désactivée",
+          "de": "AC-Anschluss Alarm deaktiviert"
         }
       },
       "title": {
-        "en": "Off grid alarm",
-        "nl": "Off grid alarm",
-        "fr": "Alarme hors réseau",
-        "de": "Off Grid Alarm"
+        "en": "AC connection",
+        "nl": "AC verbinding",
+        "fr": "Connexion CA",
+        "de": "AC-Anschluss"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -574,24 +698,7 @@
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/counter.svg"
-    },
-    "EZ1_set_on_off": {
-      "type": "boolean",
-      "title": {
-        "en": "EZ1 On/Off",
-        "nl": "EZ1 Aan/uit",
-        "fr": "EZ1 On/Off",
-        "de": "EZ1 Ein/Aus"
-      },
-      "uiComponent": "button",
-      "getable": false,
-      "setable": true,
-      "units": {
-        "en": ""
-      },
-      "insights": false,
-      "icon": "/assets/icons/peak_power.svg"
+      "icon": "/assets/icons/grid-off.svg"
     },
     "EZ1_status": {
       "type": "boolean",
@@ -603,46 +710,12 @@
       },
       "uiComponent": "sensor",
       "getable": true,
-      "setable": true,
-      "units": {
-        "en": ""
-      },
-      "insights": false,
-      "icon": "/assets/icons/peak_power.svg"
-    },
-    "inverters_online": {
-      "type": "string",
-      "title": {
-        "en": "Inverters online",
-        "nl": "Inverters online",
-        "fr": "Onduleurs en ligne",
-        "de": "Wechselrichter online"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
       "setable": false,
       "units": {
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/inverters_online.svg"
-    },
-    "measure_polling": {
-      "type": "number",
-      "title": {
-        "en": "Polling this month",
-        "nl": "Polling deze maand",
-        "fr": "Sondage ce mois-ci",
-        "de": "Umfrage in diesem Monat "
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": ""
-      },
-      "insights": false,
-      "icon": "/assets/icons/counter.svg"
+      "icon": "/assets/icons/onoff.svg"
     },
     "measure_power": {
       "type": "number",
@@ -678,51 +751,17 @@
       "insights": true,
       "icon": "/assets/icons/measure_power.svg"
     },
-    "month_energy": {
+    "set_DevicePower": {
       "type": "number",
       "title": {
-        "en": "Energy this month",
-        "nl": "Energie deze maand",
-        "fr": "Puissance ce mois-ci",
-        "de": "Leistung diesen Monat"
+        "en": "Set maximum",
+        "nl": "Ingesteld maximum",
+        "fr": "Valeur maximale",
+        "de": "Maximale Leistung"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "insights": true,
-      "icon": "/assets/icons/measure_power.svg"
-    },
-    "peak_power": {
-      "type": "number",
-      "title": {
-        "en": "Peak power",
-        "nl": "Piekvermogen",
-        "fr": "Puissance de crête",
-        "de": "Spitzenleistung"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "W"
-      },
-      "insights": false,
-      "icon": "/assets/icons/peak_power.svg"
-    },
-    "set_peak_power": {
-      "type": "number",
-      "title": {
-        "en": "Peak power",
-        "nl": "Piekvermogen",
-        "fr": "Puissance de crête",
-        "de": "Spitzenleistung"
-      },
-      "uiComponent": "sensor",
-      "getable": false,
-      "setable": true,
       "units": {
         "en": "W"
       },
@@ -736,23 +775,6 @@
         "nl": "Totaal vermogen",
         "fr": "Puissance totale",
         "de": "Gesamtleistung"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "insights": true,
-      "icon": "/assets/icons/measure_power.svg"
-    },
-    "year_energy": {
-      "type": "number",
-      "title": {
-        "en": "This years energy",
-        "nl": "Vermogen dit jaar",
-        "fr": "Puissance de cette année",
-        "de": "Leistung diesen Jahr"
       },
       "uiComponent": "sensor",
       "getable": true,
