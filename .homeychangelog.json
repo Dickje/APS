@@ -31,5 +31,8 @@
   },
   "1.0.12": {
     "en": "A lot"
+  },
+  "1.0.13": {
+    "en": "in init , read again the minimum and maximum power of the ez1"
   }
 }
