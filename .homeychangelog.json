@@ -43,5 +43,8 @@
   },
   "1.0.16": {
     "en": "removed 'getdeviceinfo' from device.js"
+  },
+  "1.0.17": {
+    "en": "Variable name typo corrected"
   }
 }
