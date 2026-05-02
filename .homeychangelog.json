@@ -64,5 +64,8 @@
   },
   "1.0.23": {
     "en": "Changed the on/ off display as this was inverted"
+  },
+  "1.0.24": {
+    "en": "Something with the power settings"
   }
 }
