@@ -58,5 +58,8 @@
   },
   "1.0.21": {
     "en": "Fixed another typo"
+  },
+  "1.0.22": {
+    "en": "Changed the onsettings procedure"
   }
 }
