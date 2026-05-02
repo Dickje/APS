@@ -55,5 +55,8 @@
   },
   "1.0.20": {
     "en": "changed the order of some commands"
+  },
+  "1.0.21": {
+    "en": "Fixed another typo"
   }
 }
