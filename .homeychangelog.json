@@ -46,5 +46,8 @@
   },
   "1.0.17": {
     "en": "Variable name typo corrected"
+  },
+  "1.0.18": {
+    "en": "Changed the powersetting"
   }
 }
