@@ -49,5 +49,8 @@
   },
   "1.0.18": {
     "en": "Changed the powersetting"
+  },
+  "1.0.19": {
+    "en": "maxpowerset defined"
   }
 }
