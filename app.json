@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.dj.ez1",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -381,13 +381,13 @@
       ],
       "capabilitiesOptions": {
         "EZ1_status": {
-          "titleTrue": {
+          "titleFalse": {
             "en": "Off",
             "nl": "Uit",
             "fr": "Désactivé",
             "de": "Aus"
           },
-          "titleFalse": {
+          "titleTrue": {
             "en": "On",
             "nl": "Aan",
             "fr": "Activé",
