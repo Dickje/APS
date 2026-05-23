@@ -70,5 +70,8 @@
   },
   "1.0.25": {
     "en": "Changed something to not let the power be set to 0 on start"
+  },
+  "1.0.26": {
+    "en": "Fixed a variable name error"
   }
 }

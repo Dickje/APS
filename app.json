@@ -1,8 +1,8 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.dj.ez1",
-  "version": "1.0.25",
-  "compatibility": ">=5.0.0",
+  "version": "1.0.26",
+  "compatibility": ">=12.13.0",
   "sdk": 3,
   "platforms": [
     "local"
@@ -84,6 +84,86 @@
   "flow": {
     "triggers": [
       {
+        "id": "EZ1_connection_error",
+        "title": {
+          "en": "EZ1 connection error",
+          "nl": "EZ1 verbinding fout",
+          "de": "EZ1 Verbindungsfehler",
+          "fr": "Erreur de connexion EZ1"
+        },
+        "hint": {
+          "en": "Lets you know that the EZ1 has a connection error",
+          "nl": "Laat je weten dat de EZ1 een verbindingsfout heeft",
+          "de": "Informiert Sie darüber, dass die EZ1 einen Verbindungsfehler hat",
+          "fr": "Vous permet de savoir que l'EZ1 a une erreur de connexion"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "No connection to EZ1",
+              "fr": "Pas de connexion à l'EZ1",
+              "de": "Keine Verbindung zu EZ1",
+              "nl": "Geen verbinding met EZ1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_timeout",
+        "title": {
+          "en": "EZ1 timeout",
+          "nl": "EZ1 timeout",
+          "de": "EZ1 Timeout",
+          "fr": "Timeout EZ1"
+        },
+        "hint": {
+          "en": "Lets you know that the EZ1 has a timeout",
+          "nl": " Laat je weten dat de EZ1 een timeout heeft",
+          "de": "Informiert Sie darüber, dass die EZ1 einen Timeout hat",
+          "fr": "Vous permet de savoir que l'EZ1 a un timeout"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "EZ1 timeout",
+              "fr": "Timeout EZ1",
+              "de": "EZ1 Timeout",
+              "nl": "EZ1 timeout"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
         "id": "EZ1_alarm",
         "title": {
           "en": "EZ1 alarm",
@@ -108,10 +188,10 @@
               "nl": "Foutmelding"
             },
             "example": {
-              "en": "Short circuit in DC-1",
-              "fr": "Court-circuit dans DC-1",
-              "de": "Kurzschluss in DC-1",
-              "nl": "Kortsluiting in DC-1"
+              "en": "DC1 short circuit",
+              "fr": "Court-circuit DC1",
+              "de": "Kurzschluss DC1",
+              "nl": "Kortsluiting DC1"
             }
           }
         ],
@@ -485,6 +565,7 @@
       "settings": [
         {
           "id": "set_DevicePower",
+          "deprecated": true,
           "type": "text",
           "label": {
             "en": "Set maximum power",
