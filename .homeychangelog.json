@@ -76,5 +76,8 @@
   },
   "1.0.27": {
     "en": "Revisited the code that makes connection to the EZ"
+  },
+  "1.0.28": {
+    "en": "Nothing, but v27 had a processing error"
   }
 }
