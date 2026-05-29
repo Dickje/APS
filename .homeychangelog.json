@@ -79,5 +79,8 @@
   },
   "1.0.28": {
     "en": "Nothing, but v27 had a processing error"
+  },
+  "1.0.29": {
+    "en": "Swapped a < and > in the maximum power settings to be able to set the power"
   }
 }
