@@ -82,5 +82,8 @@
   },
   "1.0.29": {
     "en": "Swapped a < and > in the maximum power settings to be able to set the power"
+  },
+  "1.0.30": {
+    "en": "Changed a lot to support multiple devices"
   }
 }
