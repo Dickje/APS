@@ -11,19 +11,21 @@ const net = require('net');
       const client = new net.Socket();
       client.setTimeout(5000); // 5 seconds timeout
       let hasError = false;
+      let err;
 
       client.connect(8899, ECU_address, () => { client.write(ECU_command, 'utf-8'); });
 
-      client.on('error', () => {
-        console.error('❗ Connection error');
+      client.on('error', (err) => {
+
+        console.error('❗ Connection error: ',err, '\n');
         client.destroy();
         if (hasError) return;
         hasError = true;
          reject (new Error('connectionError'));
       });
 
-      client.on('timeout', () => {
-        console.error('⏱️ Timeout error');
+      client.on('timeout', (err) => {
+        console.error('⏱️ Timeout error: ', err, '\n');
         client.destroy();
         if (hasError) return;
         hasError = true;
