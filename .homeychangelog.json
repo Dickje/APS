@@ -85,5 +85,8 @@
   },
   "1.0.30": {
     "en": "Changed a lot to support multiple devices"
+  },
+  "1.0.31": {
+    "en": "Moved settings to 'per device'. Final test version before integrating into APsystems app."
   }
 }
