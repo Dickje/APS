@@ -1,10 +1,10 @@
 const net = require('net');
 
-  class ECU_connector {
+  class EZ1_connector {
 
-  async fetchData(ECU_address, ECU_command) {
-    ECU_address = ECU_address.split('.').map(Number).join('.'); // Normalize the IP
-    console.log(`Command ${ECU_command.replace(/[\n]/g,"")} to IP address ${ECU_address}`, '\n');
+  async fetchData(EZ1_address, EZ1_command) {
+    EZ1_address = EZ1_address.split('.').map(Number).join('.'); // Normalize the IP
+    console.log(`Command ${EZ1_command.replace(/[\n]/g,"")} to IP address ${EZ1_address}`, '\n');
 
     //throw new Error('connectionError');
     return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ const net = require('net');
       let hasError = false;
       let err;
 
-      client.connect(8899, ECU_address, () => { client.write(ECU_command, 'utf-8'); });
+      client.connect(8050, EZ1_address, () => { client.write(EZ1_command, 'utf-8'); });
 
       client.on('error', (err) => {
 
@@ -34,9 +34,19 @@ const net = require('net');
 
       client.on('data', (data) => {
         client.destroy();
-        resolve({ data });
+
+        const raw = data.toString('utf8');
+        let json;
+        try {
+          json = JSON.parse(raw);
+        } catch (error) {
+          console.log("Invalid JSON data received:", raw);
+          return reject(new Error(`invalid JSON response: ${error.message}`));
+        }
+
+        resolve({ raw, json });
       });
     });
   }
   }
-module.exports = ECU_connector;
+module.exports = EZ1_connector;

@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
-  "id": "nl.dj.aps",
-  "version": "1.4.2",
+  "id": "nl.dj.ez1",
+  "version": "1.0.4",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -81,6 +81,7 @@
       }
     }
   },
+<<<<<<< HEAD
   "flow": {
     "triggers": [
       {
@@ -752,181 +753,9 @@
       }
     ]
   },
+=======
+>>>>>>> 88f8906542b19ab1b5c358f8d372a1bf3b2fb925
   "drivers": [
-    {
-      "name": {
-        "en": "ECU"
-      },
-      "energy": {
-        "meterPowerExportedCapability": "meter_power.exported"
-      },
-      "class": "solarpanel",
-      "capabilities": [
-        "measure_power",
-        "peak_power",
-        "meter_power.exported",
-        "measure_voltage",
-        "measure_temperature",
-        "inverters_online"
-      ],
-      "platforms": [
-        "local"
-      ],
-      "connectivity": [
-        "lan"
-      ],
-      "images": {
-        "small": "/drivers/ecu/assets/images/small.png",
-        "large": "/drivers/ecu/assets/images/large.png",
-        "xlarge": "/drivers/ecu/assets/images/xlarge.png"
-      },
-      "pair": [
-        {
-          "id": "enterkeys",
-          "options": {
-            "logo": "APSlogo.png"
-          }
-        },
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_devices"
-          }
-        },
-        {
-          "id": "add_devices",
-          "template": "add_devices"
-        }
-      ],
-      "id": "ecu",
-      "settings": [
-        {
-          "type": "group",
-          "label": {
-            "en": "ECU data",
-            "nl": "ECU gegevens",
-            "de": "Steuergerätedaten",
-            "fr": "Données de l'ECU"
-          },
-          "children": [
-            {
-              "id": "ECU_ID",
-              "type": "text",
-              "label": {
-                "en": "The serial number of the ECU",
-                "nl": "Het serienummer van de ECU",
-                "fr": "Le numéro de série de l'ECU",
-                "de": "Die Seriennummer der ECU"
-              },
-              "value": "123456789012",
-              "hint": {
-                "en": "The number is on the device.",
-                "nl": "Het nummer op het apparaat ",
-                "fr": "Le numéro sur l'appareil",
-                "de": "Die Nummer auf dem Gerät"
-              }
-            },
-            {
-              "id": "ECU_address",
-              "type": "text",
-              "label": {
-                "en": "The IP adress of ECU",
-                "nl": "Het IP adres van de ECU",
-                "fr": "L'adresse IP de l'ECU",
-                "de": "Die IP-Adresse der ECU"
-              },
-              "value": "192.192.192.192",
-              "hint": {
-                "en": "The wifi IP address.",
-                "nl": "Het wifi IP adres",
-                "fr": "L'adresse IP du Wi-Fi",
-                "de": "Die WLAN-IP-Adresse"
-              }
-            },
-            {
-              "id": "ECU_firmware",
-              "type": "label",
-              "label": {
-                "en": "The current firmware of ECU",
-                "nl": "De firmware van de ECU",
-                "fr": "Le firmware actuel de l'ECU",
-                "de": "Die aktuelle Firmware des Steuergerätes"
-              },
-              "value": "",
-              "setable": false,
-              "hint": {
-                "en": "This cannot be changed by the user",
-                "nl": "Deze kan niet gewijzigd worden door de gebruiker",
-                "fr": "Cela ne peut pas être modifié par l'utilisateur",
-                "de": "Dies kann vom Benutzer nicht geändert werden"
-              }
-            }
-          ]
-        },
-        {
-          "type": "group",
-          "label": {
-            "en": "Polling data",
-            "nl": "Polling gegevens",
-            "de": "Umfragedaten",
-            "fr": "Données de sondage"
-          },
-          "children": [
-            {
-              "id": "pause_start",
-              "type": "text",
-              "label": {
-                "en": "Pause start time (HH:MM)",
-                "nl": "Pauze start tijd (HH:MM)",
-                "de": "Pausenbeginn (HH:MM)",
-                "fr": "Heure de début de la pause (HH:MM)"
-              },
-              "default": "23:00"
-            },
-            {
-              "id": "pause_end",
-              "type": "text",
-              "label": {
-                "en": "Pause end time (HH:MM)",
-                "nl": "Pauze eind tijd (HH:MM)",
-                "de": "Endzeit der Pause (HH:MM)",
-                "fr": "Heure de fin de pause (HH:MM)"
-              },
-              "default": "06:00"
-            },
-            {
-              "id": "poll_interval",
-              "type": "number",
-              "label": {
-                "en": "Polling interval",
-                "nl": "Polling interval",
-                "de": "Abfrageintervall",
-                "fr": "Intervalle d'interrogation"
-              },
-              "default": 5,
-              "units": {
-                "en": "minutes",
-                "nl": "minuten",
-                "de": "Minuten",
-                "fr": "minutes"
-              }
-            },
-            {
-              "id": "pause_by_flowcard",
-              "type": "checkbox",
-              "value": false,
-              "label": {
-                "en": "Perform pauses through flowcards",
-                "nl": "Pauze uitvoeren door flowcards",
-                "de": "Pausen durch Flowcards durchführen",
-                "fr": "Effectuer des pauses à travers des flowcards"
-              }
-            }
-          ]
-        }
-      ]
-    },
     {
       "name": {
         "en": "EZ1"
@@ -1046,6 +875,7 @@
         }
       ],
       "id": "ez1",
+<<<<<<< HEAD
       "settings": [
         {
           "id": "set_DevicePower",
@@ -1163,67 +993,26 @@
         }
       ],
       "id": "solarpanels",
+=======
+>>>>>>> 88f8906542b19ab1b5c358f8d372a1bf3b2fb925
       "settings": [
         {
-          "type": "group",
+          "id": "poll_interval",
+          "type": "number",
           "label": {
-            "en": "Polling data",
-            "nl": "Polling gegevens",
-            "de": "Umfragedaten",
-            "fr": "Données de sondage"
+            "en": "Polling interval",
+            "nl": "Polling interval",
+            "de": "Abfrageintervall",
+            "fr": "Intervalle d'interrogation"
           },
-          "children": [
-            {
-              "id": "pause_start",
-              "type": "text",
-              "label": {
-                "en": "Pause start time (HH:MM)",
-                "nl": "Pauze start tijd (HH:MM)",
-                "de": "Pausenbeginn (HH:MM)",
-                "fr": "Heure de début de la pause (HH:MM)"
-              },
-              "default": "23:00"
-            },
-            {
-              "id": "pause_end",
-              "type": "text",
-              "label": {
-                "en": "Pause end time (HH:MM)",
-                "nl": "Pauze eind tijd (HH:MM)",
-                "de": "Endzeit der Pause (HH:MM)",
-                "fr": "Heure de fin de pause (HH:MM)"
-              },
-              "default": "06:00"
-            },
-            {
-              "id": "poll_interval",
-              "type": "number",
-              "label": {
-                "en": "Polling interval",
-                "nl": "Polling interval",
-                "de": "Abfrageintervall",
-                "fr": "Intervalle d'interrogation"
-              },
-              "default": 15,
-              "units": {
-                "en": "minutes",
-                "nl": "minuten",
-                "de": "Minuten",
-                "fr": "minutes"
-              }
-            },
-            {
-              "id": "pause_by_flowcard",
-              "type": "checkbox",
-              "value": false,
-              "label": {
-                "en": "Perform pauses through flowcards",
-                "nl": "Pauze uitvoeren door flowcards",
-                "de": "Pausen durch Flowcards durchführen",
-                "fr": "Effectuer des pauses à travers des flowcards"
-              }
-            }
-          ]
+          "value": 5,
+          "min": 1,
+          "units": {
+            "en": "minutes",
+            "nl": "minuten",
+            "de": "Minuten",
+            "fr": "minutes"
+          }
         }
       ]
     }
