@@ -1,0 +1,26 @@
+{
+  "type": "boolean",
+   "capabilitiesOptions":{
+  "titleTrue": { 
+     "en": "Output error alarm",
+     "nl": "Outputfoutalarm",
+     "fr": "Erreur de sortie",
+     "de": "Ausgabefehleralarm"},
+  "titleFalse": {
+     "en": "No output error",
+     "nl": "Geen outputfout",
+     "fr": "Pas d'erreur de sortie",
+     "de": "Kein Ausgabefehler"}
+     },
+   "title":{
+         "en": "Output",
+         "nl": "Uitgang",
+         "fr": "Sortie",
+         "de": "Ausgabe"},
+  "uiComponent": "sensor",
+  "getable": true,  
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+   "icon" : "/assets/icons/alarm_generic.svg"
+}

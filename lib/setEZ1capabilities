@@ -12,16 +12,49 @@ async function setCapabilities() {
     await this.setCapabilityOptions("measure_power", {});
     }
 
-    // // Energy in kWh
-    // if (!this.hasCapability("meter_power.exported")) {
-    // await this.addCapability("meter_power.exported");
-    // await this.setCapabilityOptions("meter_power.exported", {});
-    // }
+    // Alarms
+    if (!this.hasCapability("alarm_offgrid")) {
+    await this.addCapability("alarm_offgrid");
+    await this.setCapabilityOptions("alarm_offgrid", {});
+    }
 
-        // Energy in kWh
+    if (!this.hasCapability("alarm_isce1")) {
+    await this.addCapability("alarm_isce1");
+    await this.setCapabilityOptions("alarm_isce1", {});
+    }       
+
+    if (!this.hasCapability("alarm_isce2")) {
+    await this.addCapability("alarm_isce2");
+    await this.setCapabilityOptions("alarm_isce2", {});
+    }   
+
+    if (!this.hasCapability("alarm_oe")) {
+    await this.addCapability("alarm_oe");
+    await this.setCapabilityOptions("alarm_oe", {});
+    }
+
+    // Energy in kWh
     if (!this.hasCapability("meter_power")) {
     await this.addCapability("meter_power");
     await this.setCapabilityOptions("meter_power", {});
+    }
+
+    // Status
+    if (!this.hasCapability("EZ1_status")) {
+    await this.addCapability("EZ1_status");
+    await this.setCapabilityOptions("EZ1_status", {});
+    }
+
+    // Peak power
+    // if (!this.hasCapability("max_DevicePower")) {
+    // await this.addCapability("max_DevicePower");
+    // await this.setCapabilityOptions("max_DevicePower", {});
+    // }
+
+    // Set maximum power
+    if (!this.hasCapability("set_DevicePower")) {
+    await this.addCapability("set_DevicePower");
+    await this.setCapabilityOptions("set_DevicePower", {});
     }
 
     console.log("EZ1 capabilities are set.");

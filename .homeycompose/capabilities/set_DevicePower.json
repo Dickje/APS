@@ -1,0 +1,13 @@
+{
+  "type": "string",
+  "title": { "en": "Set maximum",
+             "nl": "Ingesteld maximum",
+             "fr": "Valeur maximale",
+             "de": "Maximale Leistung" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "W"},
+  "insights": false,
+  "icon" : "/assets/icons/peak_power.svg"
+}

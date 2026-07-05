@@ -1,0 +1,26 @@
+{
+  "type": "boolean",
+   "capabilitiesOptions":{
+  "titleTrue": { 
+     "en": "Short circuit in DC-2",
+     "nl": "Kortsluiting in DC-2",
+     "fr": "Court-circuit dans DC-2",
+     "de": "Kurzschluss in DC-2"},
+  "titleFalse": {
+     "en": "No short circuit in DC-2",
+     "nl": "Geen kortsluiting in DC-2",
+     "fr": "Pas de court-circuit dans DC-2",
+     "de": "Kein Kurzschluss in DC-2"}
+  },
+  "title": {
+     "en": "Status DC-2",
+     "nl": "Status DC-2",
+     "fr": "Statut DC-2",
+     "de": "Status DC-2"},
+  "uiComponent": "sensor",
+  "getable": true,  
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+   "icon" : "/assets/icons/alarm_power.svg"
+}

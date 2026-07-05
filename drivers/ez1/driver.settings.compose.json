@@ -1,5 +1,48 @@
    
-   [{"id": "poll_interval",
+   [
+  {"id": "set_DevicePower",
+  "deprecated": true,
+  "type": "text",
+  "label": {
+    "en": "Set maximum power",
+    "nl": "Stel maximaal vermogen in",
+    "de": "Maximale Leistung einstellen",
+    "fr": "Définir la puissance maximale"
+  }
+},
+
+      {
+  "type": "group",
+  "label": { "en": "Polling data",
+             "nl": "Polling gegevens",
+             "de": "Umfragedaten",
+             "fr": "Données de sondage"},
+  "children": 
+  [
+    {
+    "id": "pause_start",
+    "type": "text",
+    "label": {
+      "en": "Pause start time (HH:MM)",
+      "nl": "Pauze start tijd (HH:MM)",
+      "de": "Pausenbeginn (HH:MM)",
+      "fr": "Heure de début de la pause (HH:MM)"
+    },
+    "default": "23:00"
+  },
+  {
+    "id": "pause_end",
+    "type": "text",
+    "label": {
+      "en": "Pause end time (HH:MM)",
+      "nl": "Pauze eind tijd (HH:MM)",
+      "de": "Endzeit der Pause (HH:MM)",
+      "fr": "Heure de fin de pause (HH:MM)"
+    },
+    "default": "06:00"
+  },
+    
+    {"id": "poll_interval",
    "type": "number",
    "label": {
      "en": "Polling interval",
@@ -8,11 +51,24 @@
      "fr": "Intervalle d'interrogation"
    },
    "value": 5,
-   "min": 1,
+   "min": 1,  
    "units": {
      "en": "minutes",
      "nl": "minuten",
      "de": "Minuten",
      "fr": "minutes"
    }
-}]
+},
+  {
+   "id": "pause_by_flowcard",
+   "type": "checkbox",
+   "value": false,
+   "label" :{
+     "en": "Perform pauses through flowcards",
+     "nl": "Pauze uitvoeren door flowcards",
+     "de": "Pausen durch Flowcards durchführen",
+     "fr": "Effectuer des pauses à travers des flowcards"
+    }
+  }
+]}
+   ]

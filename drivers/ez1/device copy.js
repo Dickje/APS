@@ -7,9 +7,40 @@ const { setCapabilities } = require('../../lib/setEZ1capabilities');
 const { mockup_data } = require('../../lib/mockup_data.js');
 const { randomInt } = require('crypto');
 const { settings } = require('cluster');
-const debug = false; //Enable error reporting if true
+
+
+// let pause_start;
+// let pause_end;
+// let minDevicePower;
+// let maxDevicePower;
+// let maxPower = "0";
+// let newPower = 0;
+// let status = "0"; // "0" for on, "1" for off, this is used to set the status in the setOnOffStatus function
+//let maxPowerSet; //The maximum power set by the user in the settings, which is applied when the device turns on again
+
+// -------------------------------------------------------------
+// APP‑wide variables
+// -------------------------------------------------------------
+// let pauseStartStr = this.homey.app.pauseStartStr;
+// let pauseEndStr = this.homey.app.pauseEndStr;
+// let pause_start = this.homey.app.pause_start;
+// let pause_end = this.homey.app.pause_end;
+// let pause_by_flowcard = this.homey.app.pause_by_flowcard;
+// let polling_on = this.homey.app.polling_on;
+// let pollingInterval = this.homey.app.pollingInterval;
+let debug = true;
 
 module.exports = class MyDevice extends Homey.Device {
+
+  // -----------------------------------------------------------
+  // DEVICE‑SPECIFIEKE VARIABELEN (per device)
+  // -----------------------------------------------------------
+//   minDevicePower;
+//   maxDevicePower;
+//   maxPower;
+//   newPower;
+//   status;
+
 
   /**
    * onInit is called when the device is initialized.
@@ -20,10 +51,9 @@ module.exports = class MyDevice extends Homey.Device {
     this.maxPower = "0";
     this.newPower = "0";
     this.status = "0";
-    this.pollingInterval=5;
     
     try {
-    console.log(this.getName(), ' has been initialized');
+    console.log('MyDevice has been initialized');
   
     await setCapabilities.call(this);
     await this.getAppsettings();
@@ -52,12 +82,10 @@ module.exports = class MyDevice extends Homey.Device {
       return await this.setCapabilityValue("EZ1_status") })
 
     this.homey.flow.getActionCard('EZ1_set_on_off').registerRunListener(async (args) => {
-      this.status = args.state === "on" ? "0" : "1";
-      console.log(`Flowcard `, this.getName(), ` set_on_off triggered, setting status to ${this.status === "0" ? "on" : "off"}`);
-
-      await this.setOnOffStatus(this.status);
-      //await this.getAppsettings();
-      
+      status = args.state === "on" ? "0" : "1";
+      console.log(`Flowcard EZ1_set_on_off triggered, setting status to ${status === "0" ? "on" : "off"}`);
+      await this.setOnOffStatus(status);
+      await this.getAppsettings();
     });
 
     await this.setSettings({
@@ -69,10 +97,9 @@ module.exports = class MyDevice extends Homey.Device {
     })
 
     // Run once immediately on init
-    console.log("Start polloop", this.getName());
     await this.pollLoop();
   } catch (err) {
-    console.log(`❌ Error in onInit: ${err.message}` , this.getName());
+    console.log(`❌ Error in onInit: ${err.message}`);
     if (debug) throw err;
   }
   } 
@@ -81,30 +108,30 @@ module.exports = class MyDevice extends Homey.Device {
     try {
       this.maxDevicePower= await this.getStoreValue("maxDevicePower");
       this.minDevicePower= await this.getStoreValue("minDevicePower");
-      console.log(this.getName(), ` power range: ${this.minDevicePower}W - ${this.maxDevicePower}W`,'\n');
+      console.log(`Device power range: ${this.minDevicePower}W - ${this.maxDevicePower}W`,'\n');
 
-     this.maxPower = String(await this.getSetting('set_DevicePower') || this.maxDevicePower);
-     console.log(this.getName(), `maxPower from settings: ${this.maxPower}`);
+     this.maxPower = String(await this.getSetting('set_DevicePower') || "0");
+     console.log(`maxPower from settings: ${this.maxPower}`);
      if (isNaN(this.maxPower) || this.maxPower < 0 || this.maxPower > 5000 || this.maxPower === undefined || this.maxPower === null) {
-       this.maxPower = String(await this.getSetting("maxPower") || this.maxDevicePower);
+       this.maxPower = String(await this.getStoreValue("maxPower") || "0");
      }
      if (this.maxPower === undefined || this.maxPower === null || isNaN(this.maxPower) || this.minDevicePower < 0 || this.maxDevicePower > 5000) {
       this.maxPower = String(this.maxDevicePower);
 
-      console.log(this.getName(), `maxPower: ${this.maxPower}`);
+      console.log(`maxPower: ${this.maxPower}`);
       await this.setDevicePower(this.maxPower)
      }
 
-    // {
-    //   const s = await this.homey.settings.get('pause_start');
-    //   this.pauseStartStr = (typeof s === 'string' && s.trim() !== '') ? s.trim() : '23:00';
-    //   console.log(`Normalized pause_start: ${this.pauseStartStr}`);
-    // }
-    // {
-    //   const e = await this.homey.settings.get('pause_end');
-    //   this.pauseEndStr = (typeof e === 'string' && e.trim() !== '') ? e.trim() : '05:00';
-    //   console.log(`Normalized pause_end: ${this.pauseEndStr}`);
-    // }
+    {
+      const s = await this.homey.settings.get('pause_start');
+      this.pauseStartStr = (typeof s === 'string' && s.trim() !== '') ? s.trim() : '23:00';
+      console.log(`Normalized pause_start: ${this.pauseStartStr}`);
+    }
+    {
+      const e = await this.homey.settings.get('pause_end');
+      this.pauseEndStr = (typeof e === 'string' && e.trim() !== '') ? e.trim() : '05:00';
+      console.log(`Normalized pause_end: ${this.pauseEndStr}`);
+    }
 
     await this.getOnOffStatus();
 
@@ -126,7 +153,7 @@ module.exports = class MyDevice extends Homey.Device {
       maxPower: this.maxPower
     };
    } catch (err) {
-    console.log(`❌ Error in getAppsettings: ${err.message}`, this.getName());
+    console.log(`❌ Error in getAppsettings: ${err.message}`);
     if (debug) throw err;
     return {};
    }
@@ -139,14 +166,12 @@ module.exports = class MyDevice extends Homey.Device {
     const EZ1_power_changed = this.homey.flow.getDeviceTriggerCard("EZ1_power_changed");
     const EZ1result = await this.fetchDataFromEZ1("getOutputData");
     if (EZ1result?.success) {  
-        const data = EZ1result?.data;
-
-        p1 = data.p1;
-        e1 = data.e1;
-        te1 = data.te1;
-        p2 = data.p2;
-        e2 = data.e2;
-        te2 = data.te2;
+      p1 = EZ1result?.response?.p1;
+      e1 = EZ1result?.response?.e1;
+      te1 = EZ1result?.response?.te1;
+      p2 = EZ1result?.response?.p2;
+      e2 = EZ1result?.response?.e2;
+      te2 = EZ1result?.response?.te2;
 
     this.newPower=p1+p2;
     if (await this.getCapabilityValue("measure_power") !== this.newPower) {
@@ -164,11 +189,10 @@ module.exports = class MyDevice extends Homey.Device {
 
   async getSettedMaxPower() {
     try {
-    console.log('Getting ', this.getName() , ' set maximum power');
+    console.log('Getting device set maximum power');
     const EZ1result = await this.fetchDataFromEZ1("getMaxPower");
     if (EZ1result?.success) {
-       const data = EZ1result?.data;
-       const maxSetDevicePower = data.maxPower;
+       const maxSetDevicePower = EZ1result?.response?.maxPower;
        await this.setCapabilityValue("set_DevicePower", maxSetDevicePower);
     } else {  
       console.log('Error getting maximum output power:','\n');
@@ -184,7 +208,6 @@ module.exports = class MyDevice extends Homey.Device {
     console.log('Setting on/off status to', status);
     const EZ1result = await this.fetchDataFromEZ1(`setOnOff?status=${status}`);
     if (EZ1result?.success) {
-      const data = EZ1result?.data;
       console.log(`Successfully set on/off status to ${status}`);
     } else {  
       console.log('Error setting on/off status:','\n');
@@ -202,10 +225,9 @@ module.exports = class MyDevice extends Homey.Device {
     const maxPowerNum = Number(maxPower);
     console.log("try catch loop setDevicePower to ", maxPowerNum);
     if (isNaN(maxPowerNum) || maxPowerNum > this.minDevicePower || maxPowerNum < this.maxDevicePower) {      
-    console.log('Setting ', this.getName(), ' maximum power to ', maxPower, 'maximum is ', this.maxDevicePower, 'minimum is ', this.minDevicePower);
+    console.log('Setting device maximum power to ', maxPower, 'maximum is ', this.maxDevicePower, 'minimum is ', this.minDevicePower);
     const EZ1result = await this.fetchDataFromEZ1("setMaxPower?p=" + maxPower);
     if (EZ1result?.success) {
-      const data = EZ1result?.data;
       await this.setSettings({"set_DevicePower": maxPower }); // Store the new max power in settings 
       await this.setCapabilityValue("set_DevicePower", maxPower);
       //await this.getSettedMaxPower(); // Refresh the max_DevicePower capability to reflect the new value from the device
@@ -225,8 +247,7 @@ module.exports = class MyDevice extends Homey.Device {
     console.log('Getting on/off status');
     const EZ1result = await this.fetchDataFromEZ1("getOnOff");
     if (EZ1result?.success) {
-        const data = EZ1result?.data;
-        const onOff = data.status === "0" ? true : false; //Becomes true when response is "0"
+        const onOff = EZ1result?.response?.status === "0" ? true : false; //Becomes true when response is "0"
         await this.setCapabilityValue("EZ1_status", onOff);
     } else {  
       console.log('Error getting on/off status:','\n');
@@ -242,11 +263,10 @@ module.exports = class MyDevice extends Homey.Device {
     console.log('Getting alarm data');
     const EZ1result = await this.fetchDataFromEZ1("getAlarm");
     if (EZ1result?.success) {
-      const data = EZ1result?.data;
-      const og = data.og === "1";
-      const isce1 = data.isce1 === "1";
-      const isce2 = data.isce2 === "1";
-      const oe = data.oe === "1";
+      const og = EZ1result?.response?.og === "1";
+      const isce1 = EZ1result?.response?.isce1 === "1";
+      const isce2 = EZ1result?.response?.isce2 === "1";
+      const oe = EZ1result?.response?.oe === "1";
 
       await this.setCapabilityValue("alarm_offgrid", og);
       await this.setCapabilityValue("alarm_isce1", isce1);
@@ -275,6 +295,8 @@ module.exports = class MyDevice extends Homey.Device {
     console.log('🆕 New settings:', newSettings);
     console.log('🔑 Changed keys:', changedKeys,'\n');
     
+    let needsRestart = false;
+
     for (const key of changedKeys) {
       let value = newSettings[key];
 
@@ -288,7 +310,7 @@ module.exports = class MyDevice extends Homey.Device {
         if (!Number.isInteger(maxPowerNum) || maxPowerNum <= this.minDevicePower || maxPowerNum >= this.maxDevicePower) {
           throw new Error(this.homey.__("maxDevicePower_incorrect", { min: this.minDevicePower, max: this.maxDevicePower }));
         }
-        console.log(`Setting `, this.getName(), ` power to ${this.maxPower}W`);
+        console.log(`Setting device power to ${this.maxPower}W`);
       }
 
       if (key === 'poll_interval') {
@@ -297,7 +319,8 @@ module.exports = class MyDevice extends Homey.Device {
           throw new Error(this.homey.__("Polling_interval_incorrect"));
         }
         this.pollingInterval = pollingIntervalnum;
-        console.log("Polling interval changed to:", this.pollingInterval);
+        needsRestart = true;
+        console.log("Polling interval changed to:", pollingInterval);
       }
 
       if (key === 'pause_start') {
@@ -319,14 +342,15 @@ module.exports = class MyDevice extends Homey.Device {
       }
     }
 
-    //Restart polling to reflect changes
-    {
+    // Restart polling if interval changed
+    if (needsRestart) {
       setImmediate(async () => await this.pollLoop());
     }
 
     return;
   } catch (err) {
     console.log(`❌ Error in onSettings: ${err.message}`);
+    if (debug) throw err;
     throw err; // Rethrow to ensure Homey shows the error message to the user
   }
   } 
@@ -374,13 +398,13 @@ module.exports = class MyDevice extends Homey.Device {
       const EZ1_connection = new EZ1_connector();
       const { json: EZ1result } = await EZ1_connection.fetchData(await this.getStoreValue("ipAddr"), EZ1command);
       const success = EZ1result?.message === "SUCCESS";
-      const data = EZ1result?.data;
+      const response = (EZ1result && EZ1result.data) || EZ1result || {};
     if (success) {
-      console.log(`Result from command ${EZ1command}:`, data, "Success: ", success,'\n');
-      return { data, success };
+      console.log(`Result from command ${EZ1command}:`, response, "Success: ", success,'\n');
+      return { response, success };
     } else {
       console.log(`Error executing command ${EZ1command}:`, EZ1result?.message, '\n');
-      return { data: null, success: false };
+      return { response: null, success: false };
     } 
   }
     catch (err) { 
@@ -390,13 +414,13 @@ module.exports = class MyDevice extends Homey.Device {
         console.error('⏱️ Timeout: Device did not respond within 5 seconds');
         this.homey.flow.getDeviceTriggerCard("EZ1_timeout").trigger(this, {"error_message": this.homey.__("timeout_error")});
       } else if (err.message.includes('connectionerror')) {
-        console.error('🔌 Socket hang up: Connection lost with ' , this.getName());
+        console.error('🔌 Socket hang up: Connection lost with device');
         this.homey.flow.getDeviceTriggerCard("EZ1_connection_error").trigger(this, {"error_message": this.homey.__("connection_error")});
       } else {
         console.error(`❌ Unexpected error: ${err.message}`);
         this.homey.flow.getDeviceTriggerCard("EZ1_connection_error").trigger(this, {"error_message": err.message});
       }
-      return { data: null, success: false };
+      return { response: null, success: false };
     } 
   }
 

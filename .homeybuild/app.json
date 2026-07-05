@@ -81,6 +81,367 @@
       }
     }
   },
+  "flow": {
+    "triggers": [
+      {
+        "id": "EZ1_connection_error",
+        "title": {
+          "en": "EZ1 connection error",
+          "nl": "EZ1 verbinding fout",
+          "de": "EZ1 Verbindungsfehler",
+          "fr": "Erreur de connexion EZ1"
+        },
+        "hint": {
+          "en": "Lets you know that the EZ1 has a connection error",
+          "nl": "Laat je weten dat de EZ1 een verbindingsfout heeft",
+          "de": "Informiert Sie darüber, dass die EZ1 einen Verbindungsfehler hat",
+          "fr": "Vous permet de savoir que l'EZ1 a une erreur de connexion"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "No connection to EZ1",
+              "fr": "Pas de connexion à l'EZ1",
+              "de": "Keine Verbindung zu EZ1",
+              "nl": "Geen verbinding met EZ1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_timeout",
+        "title": {
+          "en": "EZ1 timeout",
+          "nl": "EZ1 timeout",
+          "de": "EZ1 Timeout",
+          "fr": "Timeout EZ1"
+        },
+        "hint": {
+          "en": "Lets you know that the EZ1 has a timeout",
+          "nl": " Laat je weten dat de EZ1 een timeout heeft",
+          "de": "Informiert Sie darüber, dass die EZ1 einen Timeout hat",
+          "fr": "Vous permet de savoir que l'EZ1 a un timeout"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "EZ1 timeout",
+              "fr": "Timeout EZ1",
+              "de": "EZ1 Timeout",
+              "nl": "EZ1 timeout"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_alarm",
+        "title": {
+          "en": "EZ1 alarm",
+          "nl": "EZ1 alarm",
+          "de": "EZ1 Alarm",
+          "fr": "Alarme EZ1"
+        },
+        "hint": {
+          "en": "Lets you know that the EZ1 has an alarm",
+          "nl": "Laat je weten dat de EZ1 een alarm heeft",
+          "de": "Informiert Sie darüber, dass die EZ1 einen Alarm hat",
+          "fr": "Vous permet de savoir que l'EZ1 a une alarme"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "error_message",
+            "title": {
+              "en": "Error message",
+              "de": "Fehlermeldung",
+              "fr": "Message d'erreur",
+              "nl": "Foutmelding"
+            },
+            "example": {
+              "en": "DC1 short circuit",
+              "fr": "Court-circuit DC1",
+              "de": "Kurzschluss DC1",
+              "nl": "Kortsluiting DC1"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_power_changed",
+        "title": {
+          "en": "Power has changed",
+          "nl": "Vermogen is veranderd",
+          "de": "Leistung hat sich geändert",
+          "fr": "La puissance a changé"
+        },
+        "hint": {
+          "en": "Triggers when the EZ1 power changes",
+          "nl": "Wordt geactiveerd als het vermogen van de EZ1 verandert",
+          "de": "Wird ausgelöst, wenn sich die EZ1-Leistung ändert",
+          "fr": "Déclenché lorsque la puissance de l'EZ1 change"
+        },
+        "tokens": [
+          {
+            "type": "number",
+            "name": "new_power",
+            "title": {
+              "en": "New power",
+              "de": "Neue Leistung",
+              "fr": "Nouvelle puissance",
+              "nl": "Nieuw vermogen"
+            },
+            "example": {
+              "en": "3500",
+              "fr": "3500",
+              "de": "3500",
+              "nl": "3500"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "EZ1_polling_active",
+        "title": {
+          "en": "EZ1 polling is !{{active|not active}}",
+          "nl": "EZ1 polling is !{{actief|niet actief}}",
+          "de": "EZ1-Abfrage ist !{{aktiv|nicht aktiv}}",
+          "fr": "Le sondage EZ1 est !{{actif|inactif}}"
+        },
+        "hint": {
+          "en": "Check if EZ1 polling is active or paused",
+          "nl": "Controleer of EZ1 polling actief of gepauzeerd is",
+          "de": "Überprüfen Sie, ob die EZ1-Abfrage aktiv oder pausiert ist",
+          "fr": "Vérifiez si le sondage EZ1 est actif ou en pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_status",
+        "title": {
+          "en": "EZ1 status is !{{active|not active}}",
+          "nl": "EZ1 status is !{{actief|niet actief}}",
+          "de": "EZ1-Status ist !{{aktiv|nicht aktiv}}",
+          "fr": "Le statut EZ1 est !{{actif|inactif}}"
+        },
+        "hint": {
+          "en": "Check if EZ1 status is active or not",
+          "nl": "Controleer of EZ1 status actief is of niet",
+          "de": "Überprüfen Sie, ob der EZ1-Status aktiv ist oder nicht",
+          "fr": "Vérifiez si le statut EZ1 est actif ou inactif"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "max_DevicePower_EZ1",
+        "title": {
+          "en": "Set EZ1 maximum device power",
+          "nl": "Stel de maximale apparaatstroom van EZ1 in",
+          "de": "Maximale Gerätestromstärke des EZ1 festlegen",
+          "fr": "Définir la puissance maximale de l'appareil EZ1 "
+        },
+        "titleFormatted": {
+          "en": "Set EZ1 maximum device power to [[set_maxPower]] watts",
+          "nl": "Stel de maximale apparaatstroom van EZ1 in op [[set_maxPower]] watt",
+          "de": "Maximale Gerätestromstärke des EZ1 auf [[set_maxPower]] Watt festlegen",
+          "fr": "Définir la puissance maximale de l'appareil EZ1 à [[set_maxPower]] watts"
+        },
+        "hint": {
+          "en": "Control the maximum power output of the EZ1 device",
+          "nl": "Controleer de maximale stroomuitvoer van het EZ1 apparaat",
+          "de": "Steuerung der maximalen Stromausgabe des EZ1-Geräts",
+          "fr": "Contrôle la puissance maximale de sortie du dispositif EZ1"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          },
+          {
+            "type": "text",
+            "name": "set_maxPower",
+            "title": {
+              "en": "Maximum power in watts",
+              "nl": "Maximaal vermogen in watt",
+              "de": "Maximale Leistung in Watt",
+              "fr": "Puissance maximale en watts"
+            },
+            "example": {
+              "en": "500",
+              "fr": "500",
+              "de": "500",
+              "nl": "500"
+            }
+          }
+        ]
+      },
+      {
+        "id": "polling_start_EZ1",
+        "title": {
+          "en": "Start EZ1 polling",
+          "nl": "Start EZ1 polling",
+          "de": "Umfrage EZ1 starten",
+          "fr": "Démarrer le sondage EZ1 "
+        },
+        "hint": {
+          "en": "This overrides pause end time",
+          "nl": "Dit overschrijft de pauze eindtijd",
+          "de": "Dies überschreibt die Pausenendzeit",
+          "fr": "Ceci remplace l'heure de fin de la pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "polling_pause_EZ1",
+        "title": {
+          "en": "Pause EZ1 polling",
+          "nl": "Pauzeer EZ1 polling",
+          "de": "Umfrage EZ1 pausieren",
+          "fr": "Suspendre le EZ1 sondage"
+        },
+        "hint": {
+          "en": "This overrides pause start time",
+          "nl": "Dit overschrijft de pauze starttijd",
+          "de": "Dies überschreibt die Pausenstartzeit",
+          "fr": "Ceci remplace l'heure de début de la pause"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          }
+        ]
+      },
+      {
+        "id": "EZ1_set_on_off",
+        "title": {
+          "en": "Switch the EZ1 on or off",
+          "nl": "Schakel de EZ1 aan of uit",
+          "de": "Schalten Sie den EZ1 ein oder aus",
+          "fr": "Allumer ou éteindre l'EZ1"
+        },
+        "titleFormatted": {
+          "en": "Switch the EZ1 [[state]]",
+          "nl": "Schakel de EZ1 [[state]]",
+          "de": "Schalten Sie den EZ1 [[state]]",
+          "fr": "[[state]] l'EZ1"
+        },
+        "hint": {
+          "en": "Turn solar panel converter on or off",
+          "nl": "Schakel de omzetter aan of uit",
+          "de": "Schalten Sie den Konverter ein oder aus.",
+          "fr": "Mettez le convertisseur en marche ou hors tension"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=ez1"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "on or off",
+              "nl": "aan of uit",
+              "de": "ein oder aus",
+              "fr": "Allumer ou éteindre"
+            },
+            "filters": {
+              "driver_id": "ez1"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "on",
+                  "nl": "aan",
+                  "de": "ein",
+                  "fr": "Allumé"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "off",
+                  "nl": "uit",
+                  "de": "aus",
+                  "fr": "Éteint"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "drivers": [
     {
       "name": {
@@ -89,8 +450,87 @@
       "class": "solarpanel",
       "capabilities": [
         "meter_power",
-        "measure_power"
+        "measure_power",
+        "set_DevicePower",
+        "alarm_offgrid",
+        "alarm_isce1",
+        "alarm_isce2",
+        "alarm_oe",
+        "total_energy",
+        "EZ1_status"
       ],
+      "capabilitiesOptions": {
+        "EZ1_status": {
+          "titleFalse": {
+            "en": "Off",
+            "nl": "Uit",
+            "fr": "Désactivé",
+            "de": "Aus"
+          },
+          "titleTrue": {
+            "en": "On",
+            "nl": "Aan",
+            "fr": "Activé",
+            "de": "Ein"
+          }
+        },
+        "alarm_offgrid": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_isce1": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_isce2": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        },
+        "alarm_oe": {
+          "titleTrue": {
+            "en": "Alarm active",
+            "nl": "Alarm actief",
+            "fr": "Alarme activée",
+            "de": "Alarm aktiv"
+          },
+          "titleFalse": {
+            "en": "No alarm",
+            "nl": "Geen alarm",
+            "fr": "Pas d'alarme",
+            "de": "Kein Alarm"
+          }
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -124,34 +564,103 @@
       "id": "ez1",
       "settings": [
         {
-          "id": "poll_interval",
-          "type": "number",
+          "id": "set_DevicePower",
+          "deprecated": true,
+          "type": "text",
           "label": {
-            "en": "Polling interval",
-            "nl": "Polling interval",
-            "de": "Abfrageintervall",
-            "fr": "Intervalle d'interrogation"
-          },
-          "value": 5,
-          "min": 1,
-          "units": {
-            "en": "minutes",
-            "nl": "minuten",
-            "de": "Minuten",
-            "fr": "minutes"
+            "en": "Set maximum power",
+            "nl": "Stel maximaal vermogen in",
+            "de": "Maximale Leistung einstellen",
+            "fr": "Définir la puissance maximale"
           }
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Polling data",
+            "nl": "Polling gegevens",
+            "de": "Umfragedaten",
+            "fr": "Données de sondage"
+          },
+          "children": [
+            {
+              "id": "pause_start",
+              "type": "text",
+              "label": {
+                "en": "Pause start time (HH:MM)",
+                "nl": "Pauze start tijd (HH:MM)",
+                "de": "Pausenbeginn (HH:MM)",
+                "fr": "Heure de début de la pause (HH:MM)"
+              },
+              "default": "23:00"
+            },
+            {
+              "id": "pause_end",
+              "type": "text",
+              "label": {
+                "en": "Pause end time (HH:MM)",
+                "nl": "Pauze eind tijd (HH:MM)",
+                "de": "Endzeit der Pause (HH:MM)",
+                "fr": "Heure de fin de pause (HH:MM)"
+              },
+              "default": "06:00"
+            },
+            {
+              "id": "poll_interval",
+              "type": "number",
+              "label": {
+                "en": "Polling interval",
+                "nl": "Polling interval",
+                "de": "Abfrageintervall",
+                "fr": "Intervalle d'interrogation"
+              },
+              "value": 5,
+              "min": 1,
+              "units": {
+                "en": "minutes",
+                "nl": "minuten",
+                "de": "Minuten",
+                "fr": "minutes"
+              }
+            },
+            {
+              "id": "pause_by_flowcard",
+              "type": "checkbox",
+              "value": false,
+              "label": {
+                "en": "Perform pauses through flowcards",
+                "nl": "Pauze uitvoeren door flowcards",
+                "de": "Pausen durch Flowcards durchführen",
+                "fr": "Effectuer des pauses à travers des flowcards"
+              }
+            }
+          ]
         }
       ]
     }
   ],
   "capabilities": {
-    "inverters_online": {
-      "type": "string",
+    "alarm_isce1": {
+      "type": "boolean",
+      "capabilitiesOptions": {
+        "titleTrue": {
+          "en": "Short circuit in DC-1",
+          "nl": "Kortsluiting in DC-1",
+          "fr": "Court-circuit dans DC-1",
+          "de": "Kurzschluss in DC-1"
+        },
+        "titleFalse": {
+          "en": "No short circuit in DC-1",
+          "nl": "Geen kortsluiting in DC-1",
+          "fr": "Pas de court-circuit dans DC-1",
+          "de": "Kein Kurzschluss in DC-1"
+        }
+      },
       "title": {
-        "en": "Inverters online",
-        "nl": "Inverters online",
-        "fr": "Onduleurs en ligne",
-        "de": "Wechselrichter online"
+        "en": "Status DC-1",
+        "nl": "Status DC-1",
+        "fr": "Statut DC-1",
+        "de": "Status DC-1"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -160,15 +669,29 @@
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/inverters_online.svg"
+      "icon": "/assets/icons/alarm_power.svg"
     },
-    "measure_polling": {
-      "type": "number",
+    "alarm_isce2": {
+      "type": "boolean",
+      "capabilitiesOptions": {
+        "titleTrue": {
+          "en": "Short circuit in DC-2",
+          "nl": "Kortsluiting in DC-2",
+          "fr": "Court-circuit dans DC-2",
+          "de": "Kurzschluss in DC-2"
+        },
+        "titleFalse": {
+          "en": "No short circuit in DC-2",
+          "nl": "Geen kortsluiting in DC-2",
+          "fr": "Pas de court-circuit dans DC-2",
+          "de": "Kein Kurzschluss in DC-2"
+        }
+      },
       "title": {
-        "en": "Polling this month",
-        "nl": "Polling deze maand",
-        "fr": "Sondage ce mois-ci",
-        "de": "Umfrage in diesem Monat "
+        "en": "Status DC-2",
+        "nl": "Status DC-2",
+        "fr": "Statut DC-2",
+        "de": "Status DC-2"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -177,7 +700,86 @@
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/counter.svg"
+      "icon": "/assets/icons/alarm_power.svg"
+    },
+    "alarm_oe": {
+      "type": "boolean",
+      "capabilitiesOptions": {
+        "titleTrue": {
+          "en": "Output error alarm",
+          "nl": "Outputfoutalarm",
+          "fr": "Erreur de sortie",
+          "de": "Ausgabefehleralarm"
+        },
+        "titleFalse": {
+          "en": "No output error",
+          "nl": "Geen outputfout",
+          "fr": "Pas d'erreur de sortie",
+          "de": "Kein Ausgabefehler"
+        }
+      },
+      "title": {
+        "en": "Output",
+        "nl": "Uitgang",
+        "fr": "Sortie",
+        "de": "Ausgabe"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "insights": false,
+      "icon": "/assets/icons/alarm_generic.svg"
+    },
+    "alarm_offgrid": {
+      "type": "boolean",
+      "capabilitiesOptions": {
+        "titleTrue": {
+          "en": "AC connection alarm on",
+          "nl": "AC verbinding alarm aan",
+          "fr": "Connexion CA activée",
+          "de": "AC-Anschluss Alarm aktiviert"
+        },
+        "titleFalse": {
+          "en": "AC connection alarm off",
+          "nl": "AC verbinding alarm uit",
+          "fr": "Connexion CA désactivée",
+          "de": "AC-Anschluss Alarm deaktiviert"
+        }
+      },
+      "title": {
+        "en": "AC connection",
+        "nl": "AC verbinding",
+        "fr": "Connexion CA",
+        "de": "AC-Anschluss"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "insights": false,
+      "icon": "/assets/icons/grid-off.svg"
+    },
+    "EZ1_status": {
+      "type": "boolean",
+      "title": {
+        "en": "EZ1 Status",
+        "nl": "EZ1 Status",
+        "fr": "Statut EZ1",
+        "de": "EZ1-Status"
+      },
+      "uiComponent": "sensor",
+      "getable": true,
+      "setable": false,
+      "units": {
+        "en": ""
+      },
+      "insights": false,
+      "icon": "/assets/icons/onoff.svg"
     },
     "measure_power": {
       "type": "number",
@@ -213,30 +815,13 @@
       "insights": true,
       "icon": "/assets/icons/measure_power.svg"
     },
-    "month_energy": {
-      "type": "number",
+    "set_DevicePower": {
+      "type": "string",
       "title": {
-        "en": "Energy this month",
-        "nl": "Energie deze maand",
-        "fr": "Puissance ce mois-ci",
-        "de": "Leistung diesen Monat"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "insights": true,
-      "icon": "/assets/icons/measure_power.svg"
-    },
-    "peak_power": {
-      "type": "number",
-      "title": {
-        "en": "Peak power",
-        "nl": "Piekvermogen",
-        "fr": "Puissance de crête",
-        "de": "Spitzenleistung"
+        "en": "Set maximum",
+        "nl": "Ingesteld maximum",
+        "fr": "Valeur maximale",
+        "de": "Maximale Leistung"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -254,23 +839,6 @@
         "nl": "Totaal vermogen",
         "fr": "Puissance totale",
         "de": "Gesamtleistung"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "insights": true,
-      "icon": "/assets/icons/measure_power.svg"
-    },
-    "year_energy": {
-      "type": "number",
-      "title": {
-        "en": "This years energy",
-        "nl": "Vermogen dit jaar",
-        "fr": "Puissance de cette année",
-        "de": "Leistung diesen Jahr"
       },
       "uiComponent": "sensor",
       "getable": true,
