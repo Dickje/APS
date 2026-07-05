@@ -15,42 +15,9 @@ module.exports = class EZ1driver extends Homey.Driver {
     session.setHandler('keys_entered', async data => {
       const { EZ1_address } = data || {};
 
-<<<<<<< HEAD
       if (!EZ1_address || typeof EZ1_address !== 'string') {
         this.log('❌ No valid EZ1 IP address entered');
         throw new Error('No valid IP address entered');
-=======
-    console.log('Pairing...');
-    console.log('IP address:', EZ1_address);
-  });
-
-    session.setHandler("list_devices", async () => {
-    const EZ1_connection = new EZ1_connector();
-    console.log("Connecting to device...");
-
-    const EZ1_address = this.homey.settings.get("EZ1_address");
-    const EZ1_command = 'getDeviceInfo';
-
-    try {
-      const { json: response } = await EZ1_connection.fetchData(EZ1_address, EZ1_command);
-      const payload = response.data || response;
-      const EZ1_ID = response.deviceId || payload.deviceId || payload.DeviceID;
-      const success = (response.message || payload.message) === "SUCCESS";
-      
-      console.log("DeviceID:", EZ1_ID);
-      console.log("DeviceVersion:", payload.devVer);
-      console.log("SSID:", payload.ssid);
-      console.log("ipAddress:", payload.ipAddr);
-      console.log("minPower:", payload.minPower);
-      console.log("maxPower:", payload.maxPower);
-      
-    
-
-      if (success) {
-        console.log("✅ " + EZ1_ID + " detected");
-      } else {
-        console.log("❌ Error: EZ1 not detected");
->>>>>>> 88f8906542b19ab1b5c358f8d372a1bf3b2fb925
       }
 
       this.log('✅ EZ1 IP address received:', EZ1_address);

@@ -1,18 +1,6 @@
-   
-   [
-  {"id": "set_DevicePower",
-  "deprecated": true,
-  "type": "text",
-  "label": {
-    "en": "Set maximum power",
-    "nl": "Stel maximaal vermogen in",
-    "de": "Maximale Leistung einstellen",
-    "fr": "Définir la puissance maximale"
-  }
-},
-
-      {
-  "type": "group",
+[
+    {
+    "type": "group",
   "label": { "en": "Polling data",
              "nl": "Polling gegevens",
              "de": "Umfragedaten",
@@ -41,8 +29,8 @@
     },
     "default": "06:00"
   },
-    
-    {"id": "poll_interval",
+ {
+   "id": "poll_interval",
    "type": "number",
    "label": {
      "en": "Polling interval",
@@ -50,15 +38,14 @@
      "de": "Abfrageintervall",
      "fr": "Intervalle d'interrogation"
    },
-   "value": 5,
-   "min": 1,  
+   "default": 15,
    "units": {
      "en": "minutes",
      "nl": "minuten",
      "de": "Minuten",
      "fr": "minutes"
    }
-},
+  },
   {
    "id": "pause_by_flowcard",
    "type": "checkbox",
@@ -68,7 +55,7 @@
      "nl": "Pauze uitvoeren door flowcards",
      "de": "Pausen durch Flowcards durchführen",
      "fr": "Effectuer des pauses à travers des flowcards"
-    }
+   }
   }
-]}
-   ]
+ ]}
+]

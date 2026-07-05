@@ -1,0 +1,40 @@
+{
+  "name": {
+    "en": "Solarpanels"
+  },
+  "capabilities": [
+    "total_energy",
+    "year_energy",
+    "month_energy",
+    "meter_power",
+    "measure_polling"
+  ], 
+
+  "class": "solarpanel",
+     "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.jpg",
+    "large": "{{driverAssetsPath}}/images/large.jpg",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.jpg"
+  },
+  "energy_exclude": true,
+  "pair": [
+    {
+      "id": "enterkeys"
+     },
+    {
+      "id" : "list_devices",
+      "template": "list_devices",
+      "navigation": {"next": "add_devices"}
+    },
+    {
+       "id": "add_devices",
+       "template": "add_devices"
+    } 
+    ]
+}
