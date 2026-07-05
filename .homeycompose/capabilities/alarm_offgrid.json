@@ -1,0 +1,26 @@
+{
+  "type": "boolean",
+   "capabilitiesOptions":{
+  "titleTrue": { 
+     "en": "AC connection alarm on",
+     "nl": "AC verbinding alarm aan",
+     "fr": "Connexion CA activée",
+     "de": "AC-Anschluss Alarm aktiviert"},
+   "titleFalse": {
+     "en": "AC connection alarm off",    
+     "nl": "AC verbinding alarm uit",
+     "fr": "Connexion CA désactivée",
+     "de": "AC-Anschluss Alarm deaktiviert"}
+   },
+   "title":{
+     "en": "AC connection",
+     "nl": "AC verbinding",
+     "fr": "Connexion CA",
+     "de": "AC-Anschluss"},
+  "uiComponent": "sensor",
+  "getable": true,  
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+   "icon" : "/assets/icons/grid-off.svg"
+}

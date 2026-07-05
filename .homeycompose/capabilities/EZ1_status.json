@@ -1,0 +1,13 @@
+{
+  "type": "boolean",
+  "title": { "en": "EZ1 Status",
+             "nl": "EZ1 Status",
+             "fr": "Statut EZ1",
+             "de": "EZ1-Status" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+  "icon" : "/assets/icons/onoff.svg"
+}

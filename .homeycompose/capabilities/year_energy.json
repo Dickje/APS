@@ -2,9 +2,9 @@
   "type": "number",
   "title": {  
       "en": "This years energy",
-      "nl": "Vermogen dit jaar",
-      "fr": "Puissance de cette année",
-      "de": "Leistung diesen Jahr"},
+      "nl": "Energie dit jaar",
+      "fr": "Énergie de cette année",
+      "de": "Energie diesen Jahr"},
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,

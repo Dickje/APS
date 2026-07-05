@@ -1,0 +1,26 @@
+{
+  "type": "boolean",
+  "capabilitiesOptions":{
+  "titleTrue": { 
+     "en": "Short circuit in DC-1",
+     "nl": "Kortsluiting in DC-1",
+     "fr": "Court-circuit dans DC-1",
+     "de": "Kurzschluss in DC-1"},
+  "titleFalse": {
+     "en": "No short circuit in DC-1",
+     "nl": "Geen kortsluiting in DC-1",
+     "fr": "Pas de court-circuit dans DC-1",
+     "de": "Kein Kurzschluss in DC-1"}
+  },
+  "title": {
+     "en": "Status DC-1",
+     "nl": "Status DC-1",
+     "fr": "Statut DC-1",
+     "de": "Status DC-1"},
+  "uiComponent": "sensor",
+  "getable": true,  
+  "setable": false,
+  "units": { "en": ""},
+  "insights": false,
+   "icon" : "/assets/icons/alarm_power.svg"
+}

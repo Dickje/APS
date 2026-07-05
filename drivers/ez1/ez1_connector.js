@@ -1,49 +1,74 @@
-const net = require('net');
+const http = require('http');
+const { json } = require('stream/consumers');
 
-  class EZ1_connector {
+class EZ1_connector {
 
-  async fetchData(EZ1_address, EZ1_command) {
+  async fetchData(EZ1_address, EZ1_endpoint) {
+    
     EZ1_address = EZ1_address.split('.').map(Number).join('.'); // Normalize the IP
-    console.log(`Command ${EZ1_command.replace(/[\n]/g,"")} to IP address ${EZ1_address}`, '\n');
+    console.error(`Request to http://${EZ1_address}:8050/${EZ1_endpoint}`);
+    let rawData = '';
 
-    //throw new Error('connectionError');
     return new Promise((resolve, reject) => {
-      const client = new net.Socket();
-      client.setTimeout(5000); // 5 seconds timeout
+      let req;
       let hasError = false;
+      
+      const options = {
+        hostname: EZ1_address,
+        port: 8050,
+        path: `/${EZ1_endpoint}`,
+        method: 'GET',
+        timeout: 5000,
+      };
 
-      client.connect(8050, EZ1_address, () => { client.write(EZ1_command, 'utf-8'); });
+      console.log('verbinden met opties', options);
+      
+      try {
+        req = http.request(options, (res) => {
+          console.log('response:', req);
 
-      client.on('error', () => {
-        console.error('❗ Connection error');
-        client.destroy();
-        if (hasError) return;
-        hasError = true;
-         reject (new Error('connectionError'));
-      });
+          res.setEncoding('utf8');
+          let rawData = '';
+          
+          res.on('data', (chunk) => { 
+            rawData += chunk; 
+          });
 
-      client.on('timeout', () => {
-        console.error('⏱️ Timeout error');
-        client.destroy();
-        if (hasError) return;
-        hasError = true;
-        reject (new Error('timeoutError'));
-      });
+          res.on('end', () => {
+            try {
+              let json = JSON.parse(rawData);
+              console.error('Received JSON response:', json);
+              resolve({ raw: rawData, json });
+            } catch (parseError) {
+              console.error('JSON parse error:', parseError);
+              reject(new Error('JSON parse error'));
+            }
+          });
+        });
 
-      client.on('data', (data) => {
-        client.destroy();
+        req.on('timeout', () => {
+          console.error('⏱️ Timeout error');
+          hasError = true;
+          req.destroy();
+          reject(new Error('timeoutError'));
+        });
 
-        const raw = data.toString('utf8');
-        let json;
-        try {
-          json = JSON.parse(raw);
-        } catch (error) {
-          return reject(new Error(`invalid JSON response: ${error.message}`));
-        }
+        req.on('error', (err) => {
+          console.error('⏱️ Connection error:', err.message);
+          if (hasError) return;
+          hasError = true;
+          reject(new Error('connectionerror: ' + err.message));
+        });
 
-        resolve({ raw, json });
-      });
+        req.end();
+      } catch (err) {
+        console.error('Request creation error:', err);
+        reject(err);
+      }
     });
-  }
-  }
+  
+    } 
+ }
+
+
 module.exports = EZ1_connector;

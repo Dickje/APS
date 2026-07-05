@@ -2,9 +2,9 @@
   "type": "number",
   "title": {
       "en": "Total energy",
-      "nl": "Totaal vermogen",
-      "fr": "Puissance totale",
-      "de": "Gesamtleistung"},
+      "nl": "Totale energie",
+      "fr": "Énergie totale",
+      "de": "Gesamtenergie"},
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,

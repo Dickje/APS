@@ -4,9 +4,78 @@
   },
   "class": "solarpanel",
   "capabilities": [
-    "meter_power",
-    "measure_power"
-  ],
+  "meter_power",
+  "measure_power",
+  "set_DevicePower",
+  "alarm_offgrid",
+  "alarm_isce1",
+  "alarm_isce2",
+  "alarm_oe",
+  "total_energy",
+  "EZ1_status"
+],
+"capabilitiesOptions": {
+   "EZ1_status": {
+     "titleFalse": { 
+        "en": "Off",
+        "nl": "Uit",
+        "fr": "Désactivé",
+        "de": "Aus"},
+     "titleTrue": {
+        "en": "On",
+        "nl": "Aan",
+        "fr": "Activé",
+        "de": "Ein"}
+   },
+    "alarm_offgrid": {
+      "titleTrue": { 
+        "en": "Alarm active",
+        "nl": "Alarm actief",
+        "fr": "Alarme activée",
+        "de": "Alarm aktiv"},
+     "titleFalse": {
+        "en": "No alarm",
+        "nl": "Geen alarm",
+        "fr": "Pas d'alarme",
+        "de": "Kein Alarm"}
+    },
+    "alarm_isce1": {
+      "titleTrue": { 
+        "en": "Alarm active",
+        "nl": "Alarm actief",
+        "fr": "Alarme activée",
+        "de": "Alarm aktiv"},
+     "titleFalse": {
+        "en": "No alarm",
+        "nl": "Geen alarm",
+        "fr": "Pas d'alarme",
+        "de": "Kein Alarm"}
+    },
+    "alarm_isce2": {
+      "titleTrue": { 
+        "en": "Alarm active",
+        "nl": "Alarm actief",
+        "fr": "Alarme activée",
+        "de": "Alarm aktiv"},
+     "titleFalse": {
+        "en": "No alarm",
+        "nl": "Geen alarm",
+        "fr": "Pas d'alarme",
+        "de": "Kein Alarm"}
+    },
+    "alarm_oe": {
+      "titleTrue": { 
+        "en": "Alarm active",
+        "nl": "Alarm actief",
+        "fr": "Alarme activée",
+        "de": "Alarm aktiv"},
+     "titleFalse": {
+        "en": "No alarm",
+        "nl": "Geen alarm",
+        "fr": "Pas d'alarme",
+        "de": "Kein Alarm"}
+    }
+},
   "platforms": [
     "local"
   ],

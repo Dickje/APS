@@ -62,13 +62,21 @@ module.exports = class MyECU extends Homey.Device {
 
     await this.getFirmwareAndInverters(await this.getECUbuffer());
 
-    this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
-    console.log('Flowcard polling_pause_ECU triggered');
-    polling_on = false;});
+    // this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
+    // console.log('Flowcard polling_pause_ECU triggered');
+    // polling_on = false;});
+    //
+    // this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async (args, state) => {
+    // console.log('Flowcard polling_start triggered');
+    // polling_on = true;});
 
-    this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async (args, state) => {
-    console.log('Flowcard polling_start triggered');
-    polling_on = true;});
+      this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async () => {
+      console.log('Flowcard polling_pause_ECU triggered');
+      polling_on = false;});
+
+      this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async () => {
+      console.log('Flowcard polling_start triggered');
+      polling_on = true;});
 
     await this.setSettings({
       ECU_ID: ECU_ID,
@@ -200,7 +208,7 @@ async getPowerData(buffer) {
       await this.setStoreValue("peak_power", peak_power);
     }
     if (peakJustReset) {
-      peakJustReset = false;
+      peakJustReset = false
     }
     console.log('Peak power', peak_power);
 
@@ -209,12 +217,12 @@ async getPowerData(buffer) {
               await this.addToTimeline(`Unrealistic power value, (${currentPower} kW) probably an error in communication with the ECU. ECU response: ${buffer}`);
     } else { await this.setCapabilityValue("measure_power", currentPower);
 
-    };
+    }
 
     await this.setCapabilityValue("inverters_online", String(invertersOnline) + "/" + String(inverters));
 
     All_Inverters_Online.registerRunListener(async(args) => {
-      return invertersOnline >= args.amountonline;
+      return invertersOnline >= args.amountonline
     })
 
     await this.setCapabilityValue("peak_power", peak_power);
