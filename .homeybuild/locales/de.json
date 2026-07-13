@@ -18,6 +18,7 @@
     "pause_by_flowcard_incorrect" : "Fehler bei der Änderung der Umfrageauswahl",
     "API call rejected": "API-Aufruf abgelehnt",
     "all_online": "Alle Wechselrichter online"
+    "all_online": "Alle Wechselrichter online",
     "maxDevicePower_incorrect": "Die Leistung muss ein ganzes Zahl von __min__ bis __max__ sein.",
     "Input_is_no_number": "Die Eingabe ist keine gültige Zahl.",
     "connection_error": "Keine Verbindung zum Gerät",
