@@ -38,7 +38,6 @@ async function setCapabilities() {
     await this.addCapability("meter_power");
     await this.setCapabilityOptions("meter_power", {});
     }
-<<<<<<< HEAD
 
     // Status
     if (!this.hasCapability("EZ1_status")) {
@@ -57,8 +56,6 @@ async function setCapabilities() {
     await this.addCapability("set_DevicePower");
     await this.setCapabilityOptions("set_DevicePower", {});
     }
-=======
->>>>>>> 88f8906542b19ab1b5c358f8d372a1bf3b2fb925
 
     console.log("EZ1 capabilities are set.");
     } catch (error) { console.log("Error setting EZ1 capabilities:", error); }      
