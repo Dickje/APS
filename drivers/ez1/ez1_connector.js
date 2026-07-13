@@ -1,4 +1,5 @@
 const http = require('http');
+
 const { json } = require('stream/consumers');
 
 class EZ1_connector {
@@ -7,6 +8,7 @@ class EZ1_connector {
     
     EZ1_address = EZ1_address.split('.').map(Number).join('.'); // Normalize the IP
     console.error(`Request to http://${EZ1_address}:8050/${EZ1_endpoint}`);
+
     let rawData = '';
 
     return new Promise((resolve, reject) => {

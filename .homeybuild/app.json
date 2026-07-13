@@ -1373,10 +1373,10 @@
     "inverters_online": {
       "type": "string",
       "title": {
-        "en": "Inverters online",
-        "nl": "Inverters online",
-        "fr": "Onduleurs en ligne",
-        "de": "Wechselrichter online"
+        "en": "AC connection",
+        "nl": "AC verbinding",
+        "fr": "Connexion CA",
+        "de": "AC-Anschluss"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1385,15 +1385,15 @@
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/inverters_online.svg"
+      "icon": "/assets/icons/grid-off.svg"
     },
-    "measure_polling": {
-      "type": "number",
+    "EZ1_status": {
+      "type": "boolean",
       "title": {
-        "en": "Polling this month",
-        "nl": "Polling deze maand",
-        "fr": "Sondage ce mois-ci",
-        "de": "Umfrage in diesem Monat "
+        "en": "EZ1 Status",
+        "nl": "EZ1 Status",
+        "fr": "Statut EZ1",
+        "de": "EZ1-Status"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -1402,7 +1402,7 @@
         "en": ""
       },
       "insights": false,
-      "icon": "/assets/icons/counter.svg"
+      "icon": "/assets/icons/onoff.svg"
     },
     "measure_power": {
       "type": "number",
@@ -1438,30 +1438,13 @@
       "insights": true,
       "icon": "/assets/icons/measure_power.svg"
     },
-    "month_energy": {
-      "type": "number",
+    "set_DevicePower": {
+      "type": "string",
       "title": {
-        "en": "Energy this month",
-        "nl": "Energie deze maand",
-        "fr": "Puissance ce mois-ci",
-        "de": "Leistung diesen Monat"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "units": {
-        "en": "kWh"
-      },
-      "insights": true,
-      "icon": "/assets/icons/measure_power.svg"
-    },
-    "peak_power": {
-      "type": "number",
-      "title": {
-        "en": "Peak power",
-        "nl": "Piekvermogen",
-        "fr": "Puissance de crête",
-        "de": "Spitzenleistung"
+        "en": "Set maximum",
+        "nl": "Ingesteld maximum",
+        "fr": "Valeur maximale",
+        "de": "Maximale Leistung"
       },
       "uiComponent": "sensor",
       "getable": true,

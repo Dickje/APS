@@ -9,6 +9,84 @@
     "en": "Nothing really"
   },
   "1.4.0": {
-    "en": "Added EZ1 support and minor changes"
+    "en": "Added EZ1 support and minor changes"},
+    
+  "1.0.5": {
+    "en": "changed data handling"
+  },
+  "1.0.6": {
+    "en": "added actioncards"
+  },
+  "1.0.7": {
+    "en": "Resolved an issue that crashed the app with real data, but not with dummy data"
+  },
+  "1.0.8": {
+    "en": "Reverted connectionprocedure to older version"
+  },
+  "1.0.9": {
+    "en": "added log lines"
+  },
+  "1.0.10": {
+    "en": "Fixed a typo"
+  },
+  "1.0.11": {
+    "en": "Removed a line that added random power,for testing"
+  },
+  "1.0.12": {
+    "en": "A lot"
+  },
+  "1.0.13": {
+    "en": "in init , read again the minimum and maximum power of the ez1"
+  },
+  "1.0.14": {
+    "en": "Added some logging"
+  },
+  "1.0.15": {
+    "en": "v15 test"
+  },
+  "1.0.16": {
+    "en": "removed 'getdeviceinfo' from device.js"
+  },
+  "1.0.17": {
+    "en": "Variable name typo corrected"
+  },
+  "1.0.18": {
+    "en": "Changed the powersetting"
+  },
+  "1.0.19": {
+    "en": "maxpowerset defined"
+  },
+  "1.0.20": {
+    "en": "changed the order of some commands"
+  },
+  "1.0.21": {
+    "en": "Fixed another typo"
+  },
+  "1.0.22": {
+    "en": "Changed the onsettings procedure"
+  },
+  "1.0.23": {
+    "en": "Changed the on/ off display as this was inverted"
+  },
+  "1.0.24": {
+    "en": "Something with the power settings"
+  },
+  "1.0.25": {
+    "en": "Changed something to not let the power be set to 0 on start"
+  },
+  "1.0.26": {
+    "en": "Fixed a variable name error"
+  },
+  "1.0.27": {
+    "en": "Revisited the code that makes connection to the EZ"
+  },
+  "1.0.28": {
+    "en": "Nothing, but v27 had a processing error"
+  },
+  "1.0.29": {
+    "en": "Swapped a < and > in the maximum power settings to be able to set the power"
+  },
+  "1.0.30": {
+    "en": "Changed a lot to support multiple devices"
   }
 }
