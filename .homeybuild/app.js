@@ -17,7 +17,6 @@ class MyApp extends Homey.App {
     this.homey.app.pause_end;
     this.log('MyApp has been initialized');
 
-
   }
 };
 

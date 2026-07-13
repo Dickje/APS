@@ -17,8 +17,6 @@
     "pause_by_flowcard_changed" : "Polling choice changed",
     "pause_by_flowcard_incorrect" : "Error in polling choice change",
     "API call rejected": "API call rejected",
-    "all_online": "All inverters online"
-
     "all_online": "All inverters online",
     "maxDevicePower_incorrect": "The input power must be an integer from __min__ to __max__.",
     "Input_is_no_number": "The input is not a valid number.",

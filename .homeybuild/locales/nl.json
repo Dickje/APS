@@ -18,8 +18,6 @@
     "pause_by_flowcard_changed" : "Polling keuze gewijzigd",
     "pause_by_flowcard_incorrect" : "Fout in polling keuze wijziging",
     "API call rejected": "API-aanroep afgewezen",
-    "all_online": "Niet alle omvormers online"
-       
     "all_online": "Niet alle omvormers online",
     "maxDevicePower_incorrect": "Het vermogen moet een heel getal zijn van __min__ tot __max__.",
     "Input_is_no_number": "De invoer is geen geldig getal.",
