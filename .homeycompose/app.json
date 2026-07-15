@@ -1,7 +1,6 @@
 {
-  "id": "nl.dj.ez1",
-
-  "version": "1.0.31",
+  "id": "nl.dj.aps",
+  "version": "1.4.2",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [

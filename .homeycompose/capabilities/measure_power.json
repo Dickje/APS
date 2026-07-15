@@ -1,10 +1,10 @@
 {
   "type": "number",
   "title": { 
-      "en": "Power generated",
-      "nl": "Gegenereerd vermogen",
-      "de": "Erzeugte Leistung",
-      "fr": "Énergie produite"},
+      "en": "Power",
+      "nl": "Vermogen",
+      "de": "Leistung",
+      "fr": "Énergie"},
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,

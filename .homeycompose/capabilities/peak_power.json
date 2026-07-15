@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": { "en": "Peak power",
+             "nl": "Piekvermogen",
+             "fr": "Puissance de crête",
+             "de": "Spitzenleistung" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "W"},
+  "insights": false,
+  "icon" : "/assets/icons/peak_power.svg"
+}
