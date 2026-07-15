@@ -9,8 +9,8 @@
     "en": "Nothing really"
   },
   "1.4.0": {
-    "en": "Added EZ1 support and minor changes"},
-    
+    "en": "Added EZ1 support and minor changes"
+  },
   "1.0.5": {
     "en": "changed data handling"
   },
@@ -88,5 +88,8 @@
   },
   "1.0.30": {
     "en": "Changed a lot to support multiple devices"
+  },
+  "1.4.3": {
+    "en": "Merged the EZ1 test app with this app"
   }
 }
