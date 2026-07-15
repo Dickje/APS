@@ -91,5 +91,8 @@
   },
   "1.4.3": {
     "en": "Merged the EZ1 test app with this app"
+  },
+  "1.4.4": {
+    "en": "Added app icon"
   }
 }
