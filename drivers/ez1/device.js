@@ -413,6 +413,7 @@ module.exports = class MyDevice extends Homey.Device {
    */
     async onDeleted() {
         this.log('Device deleted:', this.getName());
+        this.destroy();
     }
 
   
