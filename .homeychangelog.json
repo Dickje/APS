@@ -94,5 +94,8 @@
   },
   "1.4.4": {
     "en": "Added app icon"
+  },
+  "1.4.5": {
+    "en": "Now showing the ECU firmware version letter"
   }
 }
