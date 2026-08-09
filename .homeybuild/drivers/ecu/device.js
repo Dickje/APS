@@ -339,7 +339,7 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
 
 async getFirmwareAndInverters(buffer) {
   try {
-      const sliced = buffer.subarray(61, 67); // Byte 61-67 for firmware version
+      const sliced = buffer.subarray(61, 68); // Byte 61-67 for firmware version
       firmware = sliced.toString('utf8');
       if (firmware == null) {
       throw new Error("❗ Failed to get firmware from buffer.");
