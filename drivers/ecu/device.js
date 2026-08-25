@@ -330,7 +330,7 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
 
   // Combine all messages into a single return value
   Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit
-  return messages.join('\n');
+  return messages.join('\n')
 
   } catch (err) {
     console.log(`❌ Error in onSettings: ${err.message}`);
@@ -358,7 +358,8 @@ async getFirmwareAndInverters(buffer) {
     }
         console.log('Number of inverters:', inverters);
         console.log('Firmware version:', firmware,'\n');
-        await this.setSettings('ECU_firmware', firmware);
+        //await this.setSettings('ECU_firmware', firmware);
+        this.homey.settings.set('ECU_firmware', firmware);
         return { firmware, inverters };
 };
 

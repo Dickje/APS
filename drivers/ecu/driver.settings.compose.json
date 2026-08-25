@@ -35,7 +35,7 @@
     },
     {
       "id": "ECU_firmware",
-      "type": "label",
+      "type": "text",
       "label": { "en": "The current firmware of ECU",
                 "nl": "De firmware van de ECU",
                 "fr": "Le firmware actuel de l'ECU",
