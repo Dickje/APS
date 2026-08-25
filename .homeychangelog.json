@@ -97,5 +97,8 @@
   },
   "1.4.5": {
     "en": "Now showing the ECU firmware version letter"
+  },
+  "1.4.6": {
+    "en": "Changed the firmware display method"
   }
 }
