@@ -100,5 +100,8 @@
   },
   "1.4.6": {
     "en": "Changed the firmware display method"
+  },
+  "1.4.7": {
+    "en": "Resolved an issue that settings were not saved"
   }
 }
