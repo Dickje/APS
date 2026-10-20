@@ -1,4 +1,20 @@
 {
+    "pair": {
+        "ecu": {
+            "title": "Saisissez les informations de votre ECU"
+        },
+        "ez1": {
+            "title": "Saisissez l'adresse IP de votre EZ1"
+        },
+        "ip_address": "Adresse IP",
+        "connect": "Connecter",
+        "solarpanels": {
+            "title": "Saisissez vos informations d'API"
+        },
+        "api_secret": "Secret API APsystems",
+        "api_key": "Clé API APsystems",
+        "system_identity": "Identité du système APsystems"
+    },
     "IP_address_saved": "L'adresse IP a été enregistrée avec succès.",
     "IP_address_invalid": "Il s'agit d'une adresse IP invalide.",
     "ECU_ID_saved": "L'ID de l'ECU a été enregistré.",

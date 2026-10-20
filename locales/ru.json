@@ -1,0 +1,41 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "Введите данные ECU"
+        },
+        "ez1": {
+            "title": "Введите IP-адрес EZ1"
+        },
+        "ip_address": "IP-адрес",
+        "connect": "Подключить",
+        "solarpanels": {
+            "title": "Введите данные API"
+        },
+        "api_secret": "Секрет API APsystems",
+        "api_key": "Ключ API APsystems",
+        "system_identity": "Идентификатор системы APsystems"
+    },
+    "IP_address_saved": "IP-адрес успешно сохранён.",
+    "IP_address_invalid": "Это недействительный IP-адрес.",
+    "ECU_ID_saved": "ECU-ID сохранён.",
+    "ECU_ID_invalid": "ECU-ID должен содержать 12 цифр.",
+    "Connection_error": "Ошибка соединения ",
+    "ECU_timeout": "Нет ответа от ECU",
+    "ECU_token": "Данные ответа ECU",
+    "ECU_data_failure ": "Ошибка при получении данных от ECU: ",
+    "ECU_connection_failure ": "Ошибка при подключении к ECU",
+    "polling_too_fast": "Интервал менее 5 минут не рекомендуется",
+    "Pause_start_changed": "Время начала паузы изменено",
+    "Pause_start_incorrect": "Неверное время начала паузы",
+    "Pause_end_changed": "Время окончания паузы изменено",
+    "Pause_end_incorrect": "Неверное время окончания паузы",
+    "Polling_interval_changed": "Интервал опроса изменён",
+    "pause_by_flowcard_changed": "Результат опроса изменён",
+    "pause_by_flowcard_incorrect": "Ошибка при изменении выбора опроса",
+    "API call rejected": "API-запрос отклонён",
+    "all_online": "Все инверторы онлайн",
+    "maxDevicePower_incorrect": "Мощность должна быть целым числом от __min__ до __max__.",
+    "Input_is_no_number": "Введённое значение не является допустимым числом.",
+    "connection_error": "Нет соединения с устройством",
+    "timeout_error": "Нет ответа от устройства"
+}

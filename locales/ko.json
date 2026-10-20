@@ -1,0 +1,41 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "ECU 정보를 입력하세요"
+        },
+        "ez1": {
+            "title": "EZ1 IP 주소를 입력하세요"
+        },
+        "ip_address": "IP 주소",
+        "connect": "연결",
+        "solarpanels": {
+            "title": "API 정보를 입력하세요"
+        },
+        "api_secret": "APsystems API 시크릿",
+        "api_key": "APsystems API 키",
+        "system_identity": "APsystems 시스템 ID"
+    },
+    "IP_address_saved": "IP 주소가 성공적으로 저장되었습니다.",
+    "IP_address_invalid": "유효하지 않은 IP 주소입니다.",
+    "ECU_ID_saved": "ECU ID가 저장되었습니다.",
+    "ECU_ID_invalid": "ECU ID는 12자리 숫자여야 합니다.",
+    "Connection_error": "연결 오류 ",
+    "ECU_timeout": "ECU로부터 응답이 없습니다",
+    "ECU_token": "ECU 응답 데이터",
+    "ECU_data_failure ": "ECU에서 데이터를 가져오는 중 오류 발생: ",
+    "ECU_connection_failure ": "ECU 연결 중 오류 발생",
+    "polling_too_fast": "5분 미만의 간격은 권장되지 않습니다",
+    "Pause_start_changed": "휴식 시작 시간이 변경되었습니다",
+    "Pause_start_incorrect": "휴식 시작 시간이 올바르지 않습니다",
+    "Pause_end_changed": "휴식 종료 시간이 변경되었습니다",
+    "Pause_end_incorrect": "휴식 종료 시간이 올바르지 않습니다",
+    "Polling_interval_changed": "폴링 간격이 변경되었습니다",
+    "pause_by_flowcard_changed": "플로우카드 결과가 변경되었습니다",
+    "pause_by_flowcard_incorrect": "플로우카드 선택 변경 중 오류 발생",
+    "API call rejected": "API 호출이 거부되었습니다",
+    "all_online": "모든 인버터가 온라인 상태입니다",
+    "maxDevicePower_incorrect": "출력은 __min__에서 __max__ 사이의 정수여야 합니다.",
+    "Input_is_no_number": "입력값이 올바른 숫자가 아닙니다.",
+    "connection_error": "장치와 연결할 수 없습니다",
+    "timeout_error": "장치로부터 응답이 없습니다"
+}

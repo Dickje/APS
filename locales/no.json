@@ -1,0 +1,41 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "Angi ECU-detaljene dine"
+        },
+        "ez1": {
+            "title": "Angi IP-adressen til EZ1-enheten din"
+        },
+        "ip_address": "IP-adresse",
+        "connect": "Koble til",
+        "solarpanels": {
+            "title": "Angi API-detaljene dine"
+        },
+        "api_secret": "APsystems API-hemmelighet",
+        "api_key": "APsystems API-nøkkel",
+        "system_identity": "APsystems-systemidentitet"
+    },
+    "IP_address_saved": "IP-adressen ble lagret vellykket.",
+    "IP_address_invalid": "Dette er en ugyldig IP-adresse.",
+    "ECU_ID_saved": "ECU-ID-en ble lagret.",
+    "ECU_ID_invalid": "ECU-ID-en må inneholde 12 sifre.",
+    "Connection_error": "Tilkoblingsfeil ",
+    "ECU_timeout": "Ingen respons fra ECU-en",
+    "ECU_token": "ECU-svar-data",
+    "ECU_data_failure ": "Feil ved henting av data fra ECU-en: ",
+    "ECU_connection_failure ": "Feil ved tilkobling til ECU-en",
+    "polling_too_fast": "Et intervall på mindre enn 5 minutter anbefales ikke",
+    "Pause_start_changed" : "Pausens start er endret",
+    "Pause_start_incorrect" : "Pausens starttid er feil",
+    "Pause_end_changed" : "Pausens slutt er endret",
+    "Pause_end_incorrect" : "Pausens sluttid er feil",
+    "Polling_interval_changed": "Pollingintervall endret",
+    "pause_by_flowcard_changed" : "Undersøkelsesresultat endret",
+    "pause_by_flowcard_incorrect" : "Feil ved endring av undersøkelsesvalg",
+    "API call rejected": "API-anrop avvist",
+    "all_online": "Alle invertere online",
+    "maxDevicePower_incorrect": "Effekten må være et helt tall fra __min__ til __max__.",
+    "Input_is_no_number": "Inndata er ikke et gyldig tall.",
+    "connection_error": "Ingen tilkobling til enheten",
+    "timeout_error" : "Ingen respons fra enheten"
+}

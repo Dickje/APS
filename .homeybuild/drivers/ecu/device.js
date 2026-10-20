@@ -62,14 +62,6 @@ module.exports = class MyECU extends Homey.Device {
 
     await this.getFirmwareAndInverters(await this.getECUbuffer());
 
-    // this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async (args, state) => {
-    // console.log('Flowcard polling_pause_ECU triggered');
-    // polling_on = false;});
-    //
-    // this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async (args, state) => {
-    // console.log('Flowcard polling_start triggered');
-    // polling_on = true;});
-
       this.homey.flow.getActionCard('polling_pause_ECU').registerRunListener(async () => {
       console.log('Flowcard polling_pause_ECU triggered');
       polling_on = false;});
@@ -77,17 +69,6 @@ module.exports = class MyECU extends Homey.Device {
       this.homey.flow.getActionCard('polling_start_ECU').registerRunListener(async () => {
       console.log('Flowcard polling_start triggered');
       polling_on = true;});
-
-    await this.setSettings({
-      ECU_ID: ECU_ID,
-      ECU_address: ECU_address,
-      ECU_firmware: firmware,
-      pause_start: pauseStartStr,
-      pause_end: pauseEndStr,
-      poll_interval: pollingInterval,
-      pause_by_flowcard: pause_by_flowcard
-    })
-
 
     //Checks the time every 15 minutes and calls datareset
     setInterval(() => {this.datareset(); }, 15 * 60 * 1000);
@@ -252,95 +233,109 @@ async onSettings({ oldSettings, newSettings, changedKeys }) {
   console.log('🆕 New settings:', newSettings);
   console.log('🔑 Changed keys:', changedKeys);
 
+  const updatedSettings = { ...newSettings };
+
   try {
-  const messages = [];
+    for (const key of changedKeys) {
+      let value = newSettings[key];
+      console.log('Key', key);
+      console.log('Setting', value);
 
-  for (const key of changedKeys) {
-    let value = newSettings[key];
-    console.log('Key', key);
-    console.log('Setting', value);
-
-    if (key === 'ECU_ID') {
-      const isValidECU_ID = /^\d{12}$/.test(value);
-      if (isValidECU_ID) {
-        this.homey.settings.set("ECU_ID", value);
-        messages.push(this.homey.__("ECU_ID_saved"));
-      } else {
-        messages.push(this.homey.__("ECU_ID_invalid"));
-      }
-    }
-
-    if (key === 'ECU_address') {
-      value = value.split('.').map(Number).join('.'); // Normalize the IP by stripping leading zeros
-      const isValidIP = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(value);
-      if (isValidIP) {
-        this.homey.settings.set("ECU_address", value);
-        //messages.push('✅ IP address was successfully saved.');
-        messages.push('✅ ' + this.homey.__("IP_address_saved"));
-      } else {
-        //messages.push('❌ Invalid IP address.');
-        messages.push('❌ ' +  this.homey.__("IP_address_invalid"));
-      }
-    }
-
-    if (key === 'pause_by_flowcard') {
-      // Validate the new value (not the old variable)
-      this.homey.settings.set("pause_by_flowcard", value);
-      pause_by_flowcard = value;
-      messages.push(this.homey.__("Pause_by_flowcard_changed"));
-    }
-
-    if (key === 'pause_start') {
-      // Validate the new value (not the old variable)
-      if (isValidTimeFormat(value)) {
-        this.homey.settings.set("pause_start", value);
-        pauseStartStr = value.trim();
-        messages.push(this.homey.__("Pause_start_changed"));
-      } else {
-        messages.push(this.homey.__("Pause_start_incorrect"));
-      }
-    }
-
-    if (key === 'pause_end') {
-      if (isValidTimeFormat(value)) {
-        this.homey.settings.set("pause_end", value);
-        pauseEndStr = value.trim();
-        messages.push(this.homey.__("Pause_end_changed"));
-      } else {
-        messages.push(this.homey.__("Pause_end_incorrect"));
-      }
-    }
-
-    if (key === 'poll_interval') {
-        const pollingIntervalnum = Number(pollingInterval);
-        if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 1 && pollingIntervalnum < 61) {
-          this.homey.settings.set("polling_interval", value);
-          pollingInterval=value;
-          messages.push(this.homey.__("Polling_interval_changed"));
-         if (pollingIntervalnum < 5) {messages.push(this.homey.__("polling_too_fast"));}
-
-
-
-          await this.pollLoop(); // Restart polling with new interval
-        } else {
-            messages.push(this.homey.__("Polling_interval_incorrect"));
+      if (key === 'ECU_ID') {
+        const isValidECU_ID = /^\d{12}$/.test(value);
+        if (!isValidECU_ID) {
+          throw new Error(this.homey.__("ECU_ID_invalid"));
         }
-    }
-  }
 
-  // Combine all messages into a single return value
-  Promise.resolve().then(() => this.onInit()); // To prevent that setSettings is still running when callin onInit
-  return messages.join('\n');
+      }
+
+      if (key === 'ECU_address') {
+        // Normaliseer het IP-adres
+        const normalizedIP = value.split('.').map(Number).join('.');
+        const isValidIP = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}$/.test(normalizedIP);
+        
+        if (!isValidIP) {
+          throw new Error('❌ ' + this.homey.__("IP_address_invalid"));
+        }
+          this.homey.notifications.createNotification({
+          excerpt: this.homey.__("IP_address_saved")
+          }).catch(err => this.error('Notification error:', err));
+          updatedSettings['ECU_address'] = normalizedIP;
+      }
+
+      if (key === 'pause_by_flowcard') {
+        this.pause_by_flowcard = value; 
+        this.homey.notifications.createNotification({
+        excerpt: this.homey.__("pause_by_flowcard_changed")
+          }).catch(err => this.error('Notification error:', err));
+        updatedSettings['pause_by_flowcard'] = value;
+      }
+      
+
+      if (key === 'pause_start') {
+        if (!isValidTimeFormat(value)) {
+          throw new Error(this.homey.__("Pause_start_incorrect"));
+        }
+        this.pauseStartStr = value.trim();
+        this.homey.notifications.createNotification({
+        excerpt: this.homey.__("Pause_start_changed")
+          }).catch(err => this.error('Notification error:', err));
+        updatedSettings['pause_start'] = this.pauseStartStr;
+      }
+
+      if (key === 'pause_end') {
+        if (!isValidTimeFormat(value)) {
+          throw new Error(this.homey.__("Pause_end_incorrect"));
+        }
+        this.pauseEndStr = value.trim();
+        this.homey.notifications.createNotification({
+        excerpt: this.homey.__("Pause_end_changed")
+          }).catch(err => this.error('Notification error:', err));
+        updatedSettings['pause_end'] = this.pauseEndStr;
+      }
+
+      if (key === 'poll_interval') {
+      const pollingIntervalnum = Number(value);
+        if (Number.isInteger(pollingIntervalnum) && pollingIntervalnum > 0 && pollingIntervalnum < 61) {
+         
+          if (pollingIntervalnum < 5) {
+            this.setWarning(this.homey.__("polling_too_fast"));
+          } else {
+            this.unsetWarning();
+          }
+
+          this.homey.notifications.createNotification({
+            excerpt: this.homey.__("Polling_interval_changed")
+          }).catch(err => this.error('Notification error:', err));
+
+        } else {
+          throw new Error(this.homey.__("Polling_interval_incorrect"));
+        }
+      }
+    }
+    setImmediate(async () => {
+      try {
+        await this.pollLoop(); 
+      } catch (err) {
+        this.error('Error restarting pollLoop:', err);
+      }
+    });
+
+    return updatedSettings;
 
   } catch (err) {
     console.log(`❌ Error in onSettings: ${err.message}`);
+    throw err; 
   }
-};
+}
+
 
 async getFirmwareAndInverters(buffer) {
   try {
-      const sliced = buffer.subarray(61, 68); // Byte 61-67 for firmware version
+      const sliced = buffer.subarray(61, 67); // Byte 61-66 for firmware version
       firmware = sliced.toString('utf8');
+      console.log ('Firmware: ', firmware);
+      console.log ('Firmware type:', typeof(firmware));
       if (firmware == null) {
       throw new Error("❗ Failed to get firmware from buffer.");
       }
@@ -358,7 +353,8 @@ async getFirmwareAndInverters(buffer) {
     }
         console.log('Number of inverters:', inverters);
         console.log('Firmware version:', firmware,'\n');
-        await this.setSettings('ECU_firmware', firmware);
+        //await this.setSettings('ECU_firmware', firmware);
+        this.setSettings('ECU_firmware', firmware);
         return { firmware, inverters };
 };
 

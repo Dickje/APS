@@ -1,0 +1,41 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "أدخل تفاصيل وحدة ECU"
+        },
+        "ez1": {
+            "title": "أدخل عنوان IP لوحدة EZ1"
+        },
+        "ip_address": "عنوان IP",
+        "connect": "اتصال",
+        "solarpanels": {
+            "title": "أدخل تفاصيل واجهة API الخاصة بك"
+        },
+        "api_secret": "سر واجهة API الخاصة بـ APsystems",
+        "api_key": "مفتاح API الخاص بـ APsystems",
+        "system_identity": "معرّف نظام APsystems"
+    },
+    "IP_address_saved": "تم حفظ عنوان IP بنجاح.",
+    "IP_address_invalid": "هذا عنوان IP غير صالح.",
+    "ECU_ID_saved": "تم حفظ معرف ECU.",
+    "ECU_ID_invalid": "يجب أن يحتوي معرف ECU على 12 رقمًا.",
+    "Connection_error": "خطأ في الاتصال ",
+    "ECU_timeout": "لا توجد استجابة من وحدة ECU",
+    "ECU_token": "بيانات استجابة ECU",
+    "ECU_data_failure ": "حدث خطأ أثناء جلب البيانات من وحدة ECU: ",
+    "ECU_connection_failure ": "حدث خطأ أثناء الاتصال بوحدة ECU",
+    "polling_too_fast": "لا يُنصح بفاصل زمني أقل من 5 دقائق",
+    "Pause_start_changed": "تم تغيير وقت بدء الاستراحة",
+    "Pause_start_incorrect": "وقت بدء الاستراحة غير صحيح",
+    "Pause_end_changed": "تم تغيير وقت انتهاء الاستراحة",
+    "Pause_end_incorrect": "وقت انتهاء الاستراحة غير صحيح",
+    "Polling_interval_changed": "تم تغيير فترة الاستعلام",
+    "pause_by_flowcard_changed": "تم تغيير نتيجة بطاقة التدفق",
+    "pause_by_flowcard_incorrect": "حدث خطأ أثناء تغيير اختيار بطاقة التدفق",
+    "API call rejected": "تم رفض طلب الـ API",
+    "all_online": "جميع العواكس متصلة",
+    "maxDevicePower_incorrect": "يجب أن تكون القدرة رقمًا صحيحًا بين __min__ و __max__.",
+    "Input_is_no_number": "الإدخال ليس رقمًا صالحًا.",
+    "connection_error": "لا يوجد اتصال بالجهاز",
+    "timeout_error": "لا توجد استجابة من الجهاز"
+}

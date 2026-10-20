@@ -27,10 +27,10 @@
 </style>
 
 <form class="homey-form homey-solarpanels-form" onsubmit="onConnect(event)">
-  <h1 class="homey-title">Please enter your API details</h1>
+  <h1 class="homey-title" data-i18n="pair.solarpanels.title"></h1>
 
   <div class="homey-form-group">
-    <label class="homey-form-label" for="apiSecret">APsystems API secret</label>
+    <label class="homey-form-label" for="apiSecret" data-i18n="pair.api_secret"></label>
     <input
       class="homey-form-input"
       type="text"
@@ -40,7 +40,7 @@
       value=""
     />
 
-    <label class="homey-form-label" for="apiKey">APsystems API key</label>
+    <label class="homey-form-label" for="apiKey" data-i18n="pair.api_key"></label>
     <input
       class="homey-form-input"
       type="text"
@@ -50,7 +50,7 @@
       value=""
     />
 
-    <label class="homey-form-label" for="sid">APsystems system identity</label>
+    <label class="homey-form-label" for="sid" data-i18n="pair.system_identity"></label>
     <input
       class="homey-form-input"
       type="text"
@@ -64,8 +64,8 @@
   <button
     class="homey-button-primary-full homey-solarpanels-submit-button"
     type="submit"
+    data-i18n="pair.connect"
   >
-    Verbinden
   </button>
 </form>
 

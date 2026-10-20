@@ -4,7 +4,6 @@ const Homey = require('homey');
 const EZ1_connector = require('./ez1_connector');
 const { isValidTimeFormat, isPaused } = require('../../lib/apslib');
 const { setCapabilities } = require('../../lib/setEZ1capabilities');
-const { randomInt } = require('crypto');
 const { settings } = require('cluster');
 const debug = false; //Enable error reporting if true
 
@@ -246,7 +245,7 @@ module.exports = class MyDevice extends Homey.Device {
       const isce1 = data.isce1 === "1";
       const isce2 = data.isce2 === "1";
       const oe = data.oe === "1";
-
+0
       await this.setCapabilityValue("alarm_offgrid", og);
       await this.setCapabilityValue("alarm_isce1", isce1);
       await this.setCapabilityValue("alarm_isce2", isce2);
@@ -264,7 +263,7 @@ module.exports = class MyDevice extends Homey.Device {
    * onAdded is called when the user adds the device, called just after pairing.
    */
   async onAdded() {
-    console.log('MyDevice has been added');
+    console.log(this.getName(), ' has been added');
   }
 
   async onSettings({ oldSettings, newSettings, changedKeys }) {

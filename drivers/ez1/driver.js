@@ -11,7 +11,7 @@ module.exports = class EZ1driver extends Homey.Driver {
 
   async onPair(session) {
 
-    // 1) IP-adres invoeren tijdens pairing
+    console.log('Pairing started');
     session.setHandler('keys_entered', async data => {
       const { EZ1_address } = data || {};
 
@@ -25,12 +25,12 @@ module.exports = class EZ1driver extends Homey.Driver {
       session.EZ1_address = EZ1_address;
     });
 
-    // 2) Device-lijst teruggeven aan Homey
+    
     session.setHandler('list_devices', async () => {
       try {
         const EZ1_address =
           session.EZ1_address ||
-          this.homey.settings.get('EZ1_address'); // fallback als je het toch app-breed wilt houden
+          this.homey.settings.get('EZ1_address'); // fallback
 
         if (!EZ1_address) {
           this.log('❌ No EZ1 IP address available for list_devices');

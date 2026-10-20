@@ -1,4 +1,20 @@
 {
+    "pair": {
+    "ecu": {
+      "title": "Voer de gegevens van uw ECU in"
+    },
+    "ez1": {
+      "title": "Voer het IP-adres van uw EZ1 in"
+    },
+    "ip_address": "IP-adres",
+    "connect": "Verbinden",
+    "solarpanels": {
+      "title": "Voer uw API-gegevens in"
+    },
+    "api_secret": "APsystems API-geheim",
+    "api_key": "APsystems API-sleutel",
+    "system_identity": "APsystems-systeemidentiteit"
+  },
     "IP_address_saved": "Het IP adres is opgeslagen.",
     "IP_address_invalid": "Het IP adres is ongeldig.",
     "ECU_ID_saved": "ECU serienummer is opgeslagen.",

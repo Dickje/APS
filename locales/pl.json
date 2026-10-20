@@ -1,0 +1,42 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "Wprowadź dane ECU"
+        },
+        "ez1": {
+            "title": "Wprowadź adres IP urządzenia EZ1"
+        },
+        "ip_address": "Adres IP",
+        "connect": "Połącz",
+        "solarpanels": {
+            "title": "Wprowadź dane API"
+        },
+        "api_secret": "Sekret API APsystems",
+        "api_key": "Klucz API APsystems",
+        "system_identity": "Tożsamość systemu APsystems"
+    },
+    "IP_address_saved": "Adres IP został zapisany.",
+    "IP_address_invalid": "To jest nieprawidłowy adres IP.",
+    "ECU_ID_saved": "Identyfikator ECU został zapisany.",
+    "ECU_ID_invalid": "Identyfikator ECU musi zawierać 12 cyfr.",
+    "Connection_error": "Błąd połączenia ",
+    "ECU_timeout": "Brak odpowiedzi od ECU",
+    "ECU_token": "Dane odpowiedzi ECU",
+    "ECU_data_failure ": "Błąd podczas pobierania danych z ECU: ",
+    "ECU_connection_failure ": "Błąd podczas łączenia z ECU",
+    "polling_too_fast": "Nie zaleca się interwału krótszego niż 5 minut",
+    "Pause_start_changed": "Czas rozpoczęcia przerwy został zmieniony",
+    "Pause_start_incorrect": "Nieprawidłowy czas rozpoczęcia przerwy",
+    "Pause_end_changed": "Czas zakończenia przerwy został zmieniony",
+    "Pause_end_incorrect": "Nieprawidłowy czas zakończenia przerwy",
+    "Polling_interval_changed": "Interwał odpytywania został zmieniony",
+    "pause_by_flowcard_changed": "Wynik ankiety został zmieniony",
+    "pause_by_flowcard_incorrect": "Błąd podczas zmiany wyboru ankiety",
+    "API call rejected": "Wywołanie API zostało odrzucone",
+    "all_online": "Wszystkie inwertery online",
+    "maxDevicePower_incorrect": "Moc musi być liczbą całkowitą od __min__ do __max__.",
+    "Input_is_no_number": "Wprowadzona wartość nie jest prawidłową liczbą.",
+    "connection_error": "Brak połączenia z urządzeniem",
+    "timeout_error": "Brak odpowiedzi od urządzenia"
+}
+  

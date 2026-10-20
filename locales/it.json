@@ -1,0 +1,41 @@
+{
+    "pair": {
+        "ecu": {
+            "title": "Inserisci i dati della tua ECU"
+        },
+        "ez1": {
+            "title": "Inserisci l'indirizzo IP della tua EZ1"
+        },
+        "ip_address": "Indirizzo IP",
+        "connect": "Connetti",
+        "solarpanels": {
+            "title": "Inserisci i dati della tua API"
+        },
+        "api_secret": "Segreto API APsystems",
+        "api_key": "Chiave API APsystems",
+        "system_identity": "Identità del sistema APsystems"
+    },
+    "IP_address_saved": "L'indirizzo IP è stato salvato correttamente.",
+    "IP_address_invalid": "Questo indirizzo IP non è valido.",
+    "ECU_ID_saved": "L'ID ECU è stato salvato.",
+    "ECU_ID_invalid": "L'ID ECU deve contenere 12 cifre.",
+    "Connection_error": "Errore di connessione ",
+    "ECU_timeout": "Nessuna risposta dall'ECU",
+    "ECU_token": "Dati di risposta ECU",
+    "ECU_data_failure ": "Errore nel recupero dei dati dall'ECU: ",
+    "ECU_connection_failure ": "Errore di connessione all'ECU",
+    "polling_too_fast": "Un intervallo inferiore a 5 minuti non è consigliato",
+    "Pause_start_changed" : "L'inizio della pausa è cambiato",
+    "Pause_start_incorrect" : "L'orario di inizio pausa è errato",
+    "Pause_end_changed" : "La fine della pausa è cambiata",
+    "Pause_end_incorrect" : "L'orario di fine pausa è errato",
+    "Polling_interval_changed": "Intervallo di polling modificato",
+    "pause_by_flowcard_changed" : "Risultato del sondaggio modificato",
+    "pause_by_flowcard_incorrect" : "Errore durante la modifica della selezione del sondaggio",
+    "API call rejected": "Chiamata API rifiutata",
+    "all_online": "Tutti gli inverter online",
+    "maxDevicePower_incorrect": "La potenza deve essere un numero intero da __min__ a __max__.",
+    "Input_is_no_number": "L'input non è un numero valido.",
+    "connection_error": "Nessuna connessione al dispositivo",
+    "timeout_error" : "Nessuna risposta dal dispositivo"
+}
